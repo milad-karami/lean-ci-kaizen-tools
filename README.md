@@ -67,6 +67,7 @@ Choose what goes into the report: cover page, management summary with traffic li
 
 ### More features
 
+- **Changeover time:** set how many takts the line stops at every variant change. With 0 the changeover runs without a stop (as in the video). Higher values show why larger lots or bigger stores pay off, and ✨ Optimize takes it into account
 - Pallet size freely selectable or coupled to the lot size
 - Four ready-made scenarios (video scenario, balanced case, bottleneck case, your own scenario)
 - Floating mini player; the page stays scrollable while the simulation runs
@@ -104,6 +105,7 @@ Choose what goes into the report: cover page, management summary with traffic li
 
 **2026-10-10**
 - English version of the tool; English is now the default, German stays available
+- New parameter **changeover time** (takts of line stop per variant change), included in KPIs, narration, exports and the PDF report
 
 </details>
 
@@ -128,6 +130,7 @@ Using the tools for learning is explicitly welcome. If you develop the tool furt
 - Animierte Szene „Fabrik live“: Werker, Rüstwechsel, Loading cart, LKW, Fehlmengen-Alarm
 - Schritt-für-Schritt-Ablauf mit Live-Erklärung
 - **✨ Optimieren:** kleinste Kanban-Anzahl mit 0 Fehlmengen (optional auch die Losgröße)
+- **Rüstzeit:** wie viele Takte die Linie bei jedem Variantenwechsel stillsteht. Bei 0 läuft das Rüsten ohne Stopp (wie im Video). Fließt in Kennzahlen, Optimierung, Export und PDF-Bericht ein
 - **📄 PDF-Bericht** für Führungskräfte und Kunden mit wählbaren Inhalten
 - Bereiche per Drag & Drop, Mini-Player, Glossar, FAQ, Quiz, Speichern und Export
 
