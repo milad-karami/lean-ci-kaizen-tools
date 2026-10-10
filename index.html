@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lean · KVP · Kaizen – Lern-Werkzeuge</title>
+<meta name="description" content="Kostenlose interaktive Werkzeuge zu Lean, KVP und Kaizen – direkt im Browser.">
+<style>
+  :root{--navy:#14213d;--gold:#f2c94c;--pink:#ef7fb3;--blue:#3b6fd6;--ink:#eef2fb;--muted:#9aa8c4}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);
+    background:radial-gradient(1200px 600px at 80% -10%,#263e64 0%,transparent 60%),var(--navy)}
+  main{max-width:880px;margin:0 auto;padding:56px 20px 40px}
+  .kick{font:700 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+  h1{font-size:clamp(30px,6vw,48px);line-height:1.05;margin:14px 0 12px;letter-spacing:-.02em}
+  h1 span{background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);font-size:17px;line-height:1.55;max-width:640px;margin:0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:36px}
+  .card{display:block;text-decoration:none;color:inherit;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;padding:20px;transition:transform .2s,border-color .2s,background .2s}
+  .card:hover{transform:translateY(-3px);border-color:var(--gold);background:rgba(242,201,76,.08)}
+  .card .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--pink)}
+  .card h2{font-size:20px;margin:8px 0 6px}
+  .card p{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 14px}
+  .card .go{font-weight:700;color:var(--gold)}
+  .card.soon{opacity:.55;pointer-events:none}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:var(--muted);line-height:1.6}
+  footer a{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <div class="kick">Lean · KVP · Kaizen</div>
+  <h1>Interaktive <span>Lern-Werkzeuge</span></h1>
+  <p class="lede">Kostenlos und direkt im Browser, ohne Installation und Anmeldung. Jedes Werkzeug ist eine einzige HTML-Datei und läuft auch offline.</p>
+
+  <div class="grid">
+    <a class="card" href="kanban-regelkreislauf.html">
+      <div class="tag">Pull &amp; Kanban</div>
+      <h2>Kanban-Regelkreisläufe simulieren</h2>
+      <p>Leveling-Withdraw-Kanban (Heijunka) Schritt für Schritt: animierte Fabrik, automatische Optimierung auf 0 Fehlmengen und PDF-Bericht.</p>
+      <span class="go">Öffnen →</span>
+    </a>
+    <div class="card soon">
+      <div class="tag">Demnächst</div>
+      <h2>Weitere Werkzeuge</h2>
+      <p>Weitere Lean-, KVP- und Kaizen-Werkzeuge folgen.</p>
+    </div>
+  </div>
+
+  <footer>
+    Weiterentwicklung: <a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> ·
+    Original-Tools: John Naska (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>), veröffentlicht mit seiner Genehmigung ·
+    <a href="https://github.com/iPbaz/lean-kvp-kaizen-tools" target="_blank" rel="noopener">Quellcode auf GitHub</a>
+  </footer>
+</main>
+</body>
+</html>
