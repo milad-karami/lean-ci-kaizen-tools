@@ -1,46 +1,96 @@
 # Lean · CI · Kaizen – interactive learning tools
 
-**🇬🇧 [English](#english) · 🇩🇪 [Deutsch](#deutsch)**
+**Free, browser-based simulations for learning Lean, continuous improvement (CI) and Kaizen. No installation, no account, works offline.**
 
-**▶ Live:** https://milad-karami.github.io/lean-ci-kaizen-tools/
+[![Live demo](https://img.shields.io/badge/%E2%96%B6%20Live%20demo-open%20in%20browser-f2c94c?style=for-the-badge&labelColor=14213d)](https://milad-karami.github.io/lean-ci-kaizen-tools/)
+[![Languages](https://img.shields.io/badge/languages-English%20%7C%20Deutsch-3b6fd6?style=for-the-badge&labelColor=14213d)](#deutsch)
+[![Single HTML file](https://img.shields.io/badge/single%20HTML%20file-no%20install-ef7fb3?style=for-the-badge&labelColor=14213d)](#how-to-use)
 
-| Tool | 🇬🇧 English | 🇩🇪 Deutsch |
-|---|---|---|
-| **Kanban control loops** (Kanban-Regelkreisläufe) | [open](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) | [öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) |
+**🇬🇧 English** · 🇩🇪 [Deutsch](#deutsch)
+
+<a href="https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html"><img src="docs/screenshots/hero.png" alt="Kanban control loops – start screen of the tool" width="100%"></a>
+
+## Tools
+
+| Tool | What you learn | 🇬🇧 English | 🇩🇪 Deutsch |
+|---|---|---|---|
+| **Kanban control loops** | How a leveled pull system (Heijunka) replenishes stock, why shortages happen and how to size kanban loops | [**Open**](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) |
+
+More tools are on the way.
 
 ---
 
-## English
+## Kanban control loops – a guided tour
 
-Free, interactive tools for learning and practising Lean methods, continuous improvement (CI / KVP) and Kaizen.
-Every tool is **a single HTML file**: open it in your browser and you're done. No installation, no account, and it also works offline.
+The tool simulates a **leveling withdrawal kanban**, step by step:
+customer withdrawal → lot size formation post → sequenced kanban chute → 4 stations (one-piece flow) → loading cart → product store → shipping.
+You set demand, product store size (number of kanban cards) and lot size, press **▶ Play** and watch the loop work. Or watch it break.
 
-### Kanban control loops – features
+### 🏭 Live factory: see what the numbers mean
 
-- Pull simulation of a leveling withdrawal kanban (Heijunka): withdrawal → lot size formation post → sequenced kanban chute → 4 stations (one-piece flow) → loading cart → shipping
-- Step-by-step simulation with live explanations
-- Animated “Factory live” scene: workers, changeovers, loading cart, truck, shortage alarm
-- **✨ Optimize:** automatically finds the smallest number of kanban cards with zero shortages (optionally also the lot size)
-- **📄 PDF report** for managers and customers, with selectable sections: management summary with traffic light, KPIs, inventory chart, recommendation, glossary
+An animated factory scene runs in sync with the simulation. Workers move when their station is busy, the “Changeover!” bubble appears when a new variant arrives, the loading cart brings finished lots back, boxes fly to shipping, the truck leaves when a pallet is full, and an alarm goes off on a shortage.
+
+![Animated factory scene with four workers, product store, lot post, shipping area and truck](docs/screenshots/factory.png)
+
+### 🧭 Step-by-step flow with live explanation
+
+A 7-step flow bar highlights what is happening right now, and a plain-language narration explains every takt.
+
+![Seven-step flow bar and live narration](docs/screenshots/flow.png)
+
+### 📋 The full board: schedule, product store, chute, lot post, line
+
+Everything from the original training board in one place. Shortages are marked in red in the withdrawing schedule. Every section can be rearranged by **drag & drop**.
+
+<details>
+<summary>Show the full board</summary>
+
+![Withdrawing schedule, product store, live factory, chute, lot size formation post and production line](docs/screenshots/board.png)
+
+</details>
+
+### ✨ Optimize: zero shortages with the fewest cards
+
+One click searches for the smallest number of kanban cards that still serves every customer request. It can optionally optimize the lot size too, explains the rule behind the result, and has *Undo* and *Play results* buttons.
+
+![Optimization result: 13 shortages reduced to 0](docs/screenshots/optimize.png)
+
+### 📄 PDF report for managers and customers
+
+Choose what goes into the report: cover page, management summary with traffic light, KPIs explained in plain language, configuration, process diagram, inventory chart, problems, recommendation, factory view, glossary and sources. Then save it as a PDF.
+
+<p>
+  <img src="docs/screenshots/report-dialog.png" alt="Report dialog with selectable sections" width="32%">
+  &nbsp;
+  <img src="docs/screenshots/report-pages.png" alt="Pages of the PDF report" width="64%">
+</p>
+
+### More features
+
 - Pallet size freely selectable or coupled to the lot size
-- Rearrange sections via drag & drop, floating mini player
-- Save and load simulations, export as Markdown, JSON or Obsidian note
+- Four ready-made scenarios (video scenario, balanced case, bottleneck case, your own scenario)
+- Floating mini player; the page stays scrollable while the simulation runs
+- Glossary (“terms explained simply”), FAQ and a quiz
+- Save and load simulations; export as Markdown, JSON or Obsidian note
+- English and German version, linked to each other
 
-### How to use
+## How to use
 
-- **Online:** open the links above.
-- **Offline:** download `kanban-control-loops.html` (English) or `kanban-regelkreislauf.html` (German) and double-click it to open it in your browser (Chrome, Edge, Firefox or Safari).
-- **PDF report:** click “📄 Report (PDF)” → select sections → choose “Save as PDF” in the print dialog. Chrome and Edge give the best result.
+- **Online:** open the [live demo](https://milad-karami.github.io/lean-ci-kaizen-tools/).
+- **Offline:** download [`kanban-control-loops.html`](kanban-control-loops.html) (English) or [`kanban-regelkreislauf.html`](kanban-regelkreislauf.html) (German) and double-click it. It works in Chrome, Edge, Firefox and Safari.
+- **PDF report:** click **📄 Report (PDF)**, select sections, then choose **Save as PDF** in the print dialog. Chrome and Edge give the best result.
 
-### Origin, authorship & permission
+## Origin, authorship & permission
 
 - **Original tool:** John Naska, [mokka.solutions](https://www.mokka.solutions/). The structure, simulation logic and interface of the original tool are his work.
 - **Subject-matter basis:** explainer video [“Leveling withdraw Kanban”](https://www.youtube.com/watch?v=buD22g8wNWw). The video is only linked, not embedded or copied. All rights remain with its creators.
 - **Further development:** [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/), October 2026.
 - Published **with the permission of John Naska**, crediting him by name and marking all changes.
 
-### Changes compared to the original (2026-10-09)
+<details>
+<summary><b>Changes compared to the original</b></summary>
 
+**2026-10-09**
 - Logic bugs fixed:
   - pallet size selectable instead of a fixed 4
   - the line keeps flowing when there are gaps
@@ -51,9 +101,13 @@ Every tool is **a single HTML file**: open it in your browser and you're done. N
 - Animated factory scene with cartoon illustrations, live narration, 7-step flow bar
 - PDF report with selectable sections
 - Drag & drop of sections, mini player; the page stays scrollable while playing
-- English version of the tool (2026-10-10)
 
-### License
+**2026-10-10**
+- English version of the tool; English is now the default, German stays available
+
+</details>
+
+## License
 
 This repository has **no open-source license**. All rights to the original tool remain with John Naska (mokka.solutions).
 Using the tools for learning is explicitly welcome. If you develop the tool further or pass it on, please keep the chain of origin visible: video → John Naska (mokka.solutions) → this version (Milad Karami), each with the date and a short description of your own changes.
@@ -62,50 +116,36 @@ Using the tools for learning is explicitly welcome. If you develop the tool furt
 
 ## Deutsch
 
-*Deutsche Fassung – das Werkzeug gibt es auch auf Deutsch: [Kanban-Regelkreisläufe](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html).*
+**Kostenlose Lern-Simulationen zu Lean, KVP und Kaizen, direkt im Browser. Ohne Installation, ohne Konto, auch offline.**
 
-Kostenlose, interaktive Werkzeuge zum Lernen und Üben von Lean-Methoden, kontinuierlichem Verbesserungsprozess (KVP) und Kaizen.
-Jedes Werkzeug ist **eine einzige HTML-Datei**: im Browser öffnen, fertig. Es braucht keine Installation und kein Konto, und es läuft auch offline.
+| Werkzeug | Deutsch | Englisch |
+|---|---|---|
+| **Kanban-Regelkreisläufe simulieren** | [**Öffnen**](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) | [Open](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) |
 
-### Kanban-Regelkreisläufe – Funktionen
+### Funktionen
 
 - Pull-Simulation eines Leveling-Withdraw-Kanban (Heijunka): Entnahme → Lot-Post → Chute → 4 Stationen (One-Piece-Flow) → Loading cart → Versand
-- Schritt-für-Schritt-Simulation mit Live-Erklärung
 - Animierte Szene „Fabrik live“: Werker, Rüstwechsel, Loading cart, LKW, Fehlmengen-Alarm
-- **✨ Optimieren:** findet automatisch die kleinste Kanban-Anzahl mit 0 Fehlmengen (optional auch die Losgröße)
-- **📄 PDF-Bericht** für Führungskräfte und Kunden mit wählbaren Inhalten: Management-Zusammenfassung mit Ampel, Kennzahlen, Bestandsverlauf, Empfehlung, Glossar
-- Palettengröße frei wählbar oder an die Losgröße gekoppelt
-- Bereiche per Drag & Drop anordnen, schwebender Mini-Player
-- Simulationen speichern und laden, Export als Markdown, JSON oder Obsidian-Notiz
+- Schritt-für-Schritt-Ablauf mit Live-Erklärung
+- **✨ Optimieren:** kleinste Kanban-Anzahl mit 0 Fehlmengen (optional auch die Losgröße)
+- **📄 PDF-Bericht** für Führungskräfte und Kunden mit wählbaren Inhalten
+- Bereiche per Drag & Drop, Mini-Player, Glossar, FAQ, Quiz, Speichern und Export
+
+Die Screenshots oben zeigen die englische Fassung. Die deutsche Fassung ist inhaltlich identisch.
 
 ### Nutzung
 
-- **Online:** Links oben öffnen.
-- **Offline:** HTML-Datei herunterladen und per Doppelklick im Browser öffnen (Chrome, Edge, Firefox oder Safari).
-- **PDF-Bericht:** Button „📄 Bericht (PDF)“ → Inhalte auswählen → im Druckdialog „Als PDF sichern“. Die beste Darstellung liefern Chrome und Edge.
+- **Online:** [Live-Demo](https://milad-karami.github.io/lean-ci-kaizen-tools/) öffnen und oben rechts „🇩🇪 Deutsch“ wählen.
+- **Offline:** [`kanban-regelkreislauf.html`](kanban-regelkreislauf.html) herunterladen und per Doppelklick öffnen.
+- **PDF-Bericht:** „📄 Bericht (PDF)“ → Inhalte wählen → im Druckdialog „Als PDF sichern“.
 
 ### Herkunft, Urheberschaft & Genehmigung
 
-- **Original-Tool:** John Naska, [mokka.solutions](https://www.mokka.solutions/). Aufbau, Simulationslogik und Oberfläche des Ursprungs-Tools stammen von ihm.
-- **Fachliche Grundlage:** Erklärvideo [„Leveling withdraw Kanban“](https://www.youtube.com/watch?v=buD22g8wNWw). Das Video wird nur verlinkt, nicht eingebettet oder vervielfältigt. Die Rechte daran liegen bei den jeweiligen Urheberinnen und Urhebern.
-- **Weiterentwicklung:** [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/), Oktober 2026.
-- Die Veröffentlichung erfolgt **mit Genehmigung von John Naska**, unter Nennung seines Namens und mit Kennzeichnung der Änderungen.
-
-### Änderungen gegenüber dem Original (09.10.2026)
-
-- Logikfehler behoben:
-  - Palettengröße wählbar statt fest 4
-  - Linie läuft bei Lücken weiter
-  - Verklemmungs-Erkennung, wenn die Kanban-Anzahl kleiner als die Losgröße ist
-  - Fehlmengen-Urteil nur bei 0 Fehlmengen „grün“
-  - Sicherheitsgrenze skaliert mit dem Bedarf
-- Neue Funktion „✨ Optimieren“ (0 Fehlmengen bei minimaler Kanban-Anzahl)
-- Animierte Fabrik-Szene mit Cartoon-Illustrationen, Live-Erzählung, 7-Schritte-Ablaufleiste
-- PDF-Bericht mit wählbaren Abschnitten
-- Drag & Drop der Bereiche, Mini-Player; die Seite bleibt während der Wiedergabe scrollbar
-- Englische Fassung des Werkzeugs (10.10.2026)
+- **Original-Tool:** John Naska, [mokka.solutions](https://www.mokka.solutions/)
+- **Fachliche Grundlage:** Erklärvideo [„Leveling withdraw Kanban“](https://www.youtube.com/watch?v=buD22g8wNWw). Das Video ist nur verlinkt. Die Rechte daran liegen bei den jeweiligen Urheberinnen und Urhebern.
+- **Weiterentwicklung:** [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/), Oktober 2026
+- Veröffentlicht **mit Genehmigung von John Naska**, unter Nennung seines Namens und mit Kennzeichnung der Änderungen (siehe „Changes compared to the original“ oben).
 
 ### Lizenz
 
-Für dieses Repository gibt es **keine Open-Source-Lizenz**. Die Rechte am Original-Tool liegen bei John Naska (mokka.solutions).
-Die Nutzung zum Lernen ist ausdrücklich erwünscht. Wer das Tool weiterentwickeln oder weitergeben möchte, nennt bitte die Herkunftskette: Video → John Naska (mokka.solutions) → diese Fassung (Milad Karami), jeweils mit Datum und einer kurzen Beschreibung der eigenen Änderungen.
+Keine Open-Source-Lizenz. Die Rechte am Original-Tool liegen bei John Naska (mokka.solutions). Die Nutzung zum Lernen ist ausdrücklich erwünscht. Bei Weitergabe bitte die Herkunftskette nennen: Video → John Naska (mokka.solutions) → diese Fassung (Milad Karami).
