@@ -2,11 +2,11 @@
 
 **🇬🇧 [English](#english) · 🇩🇪 [Deutsch](#deutsch)**
 
-**▶ Live:** https://milad-karami.github.io/lean-kvp-kaizen-tools/
+**▶ Live:** https://milad-karami.github.io/lean-ci-kaizen-tools/
 
 | Tool | 🇬🇧 English | 🇩🇪 Deutsch |
 |---|---|---|
-| **Kanban control loops** (Kanban-Regelkreisläufe) | [open](https://milad-karami.github.io/lean-kvp-kaizen-tools/kanban-control-loops.html) | [öffnen](https://milad-karami.github.io/lean-kvp-kaizen-tools/kanban-regelkreislauf.html) |
+| **Kanban control loops** (Kanban-Regelkreisläufe) | [open](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) | [öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) |
 
 ---
 
@@ -62,7 +62,7 @@ Using the tools for learning is explicitly welcome. If you develop the tool furt
 
 ## Deutsch
 
-*Deutsche Fassung – das Werkzeug gibt es auch auf Deutsch: [Kanban-Regelkreisläufe](https://milad-karami.github.io/lean-kvp-kaizen-tools/kanban-regelkreislauf.html).*
+*Deutsche Fassung – das Werkzeug gibt es auch auf Deutsch: [Kanban-Regelkreisläufe](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html).*
 
 Kostenlose, interaktive Werkzeuge zum Lernen und Üben von Lean-Methoden, kontinuierlichem Verbesserungsprozess (KVP) und Kaizen.
 Jedes Werkzeug ist **eine einzige HTML-Datei**: im Browser öffnen, fertig. Es braucht keine Installation und kein Konto, und es läuft auch offline.
