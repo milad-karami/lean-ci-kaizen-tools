@@ -3,14 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lean · KVP · Kaizen – Lern-Werkzeuge</title>
-<meta name="description" content="Kostenlose interaktive Werkzeuge zu Lean, KVP und Kaizen – direkt im Browser.">
+<title>Lean · KVP · Kaizen – Lern-Werkzeuge / Learning tools</title>
+<meta name="description" content="Kostenlose interaktive Werkzeuge zu Lean, KVP und Kaizen – direkt im Browser. Free interactive Lean, CI and Kaizen tools in your browser.">
 <style>
   :root{--navy:#14213d;--gold:#f2c94c;--pink:#ef7fb3;--blue:#3b6fd6;--ink:#eef2fb;--muted:#9aa8c4}
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);
     background:radial-gradient(1200px 600px at 80% -10%,#263e64 0%,transparent 60%),var(--navy)}
-  main{max-width:880px;margin:0 auto;padding:56px 20px 40px}
+  main{max-width:880px;margin:0 auto;padding:56px 20px 40px;position:relative}
+  .langs{position:absolute;top:20px;right:20px;display:flex;gap:6px}
+  .langs button{appearance:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--ink);
+    font:600 13px system-ui,sans-serif;padding:6px 11px;border-radius:999px;cursor:pointer}
+  .langs button[aria-pressed="true"]{background:var(--gold);color:var(--navy);border-color:var(--gold)}
   .kick{font:700 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
   h1{font-size:clamp(30px,6vw,48px);line-height:1.05;margin:14px 0 12px;letter-spacing:-.02em}
   h1 span{background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -18,41 +22,71 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:36px}
   .card{display:block;text-decoration:none;color:inherit;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
     border-radius:16px;padding:20px;transition:transform .2s,border-color .2s,background .2s}
-  .card:hover{transform:translateY(-3px);border-color:var(--gold);background:rgba(242,201,76,.08)}
+  a.card:hover{transform:translateY(-3px);border-color:var(--gold);background:rgba(242,201,76,.08)}
   .card .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--pink)}
   .card h2{font-size:20px;margin:8px 0 6px}
   .card p{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 14px}
   .card .go{font-weight:700;color:var(--gold)}
-  .card.soon{opacity:.55;pointer-events:none}
+  .card .alt{display:block;margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .card .alt a{color:var(--ink)}
+  .card.soon{opacity:.55}
   footer{margin-top:48px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:var(--muted);line-height:1.6}
   footer a{color:var(--ink)}
+  [data-lang="en"] .de,[data-lang="de"] .en{display:none}
 </style>
 </head>
-<body>
+<body data-lang="de">
 <main>
-  <div class="kick">Lean · KVP · Kaizen</div>
-  <h1>Interaktive <span>Lern-Werkzeuge</span></h1>
-  <p class="lede">Kostenlos und direkt im Browser, ohne Installation und Anmeldung. Jedes Werkzeug ist eine einzige HTML-Datei und läuft auch offline.</p>
+  <div class="langs" role="group" aria-label="Sprache / Language">
+    <button type="button" data-set="de" aria-pressed="true">🇩🇪 Deutsch</button>
+    <button type="button" data-set="en" aria-pressed="false">🇬🇧 English</button>
+  </div>
+
+  <div class="kick">Lean · <span class="de">KVP</span><span class="en">CI</span> · Kaizen</div>
+  <h1><span class="de">Interaktive <span>Lern-Werkzeuge</span></span><span class="en">Interactive <span>learning tools</span></span></h1>
+  <p class="lede de">Kostenlos und direkt im Browser, ohne Installation und Anmeldung. Jedes Werkzeug ist eine einzige HTML-Datei und läuft auch offline.</p>
+  <p class="lede en">Free and right in your browser, with no installation and no sign-up. Every tool is a single HTML file and also works offline.</p>
 
   <div class="grid">
-    <a class="card" href="kanban-regelkreislauf.html">
+    <a class="card de" href="kanban-regelkreislauf.html">
       <div class="tag">Pull &amp; Kanban</div>
       <h2>Kanban-Regelkreisläufe simulieren</h2>
       <p>Leveling-Withdraw-Kanban (Heijunka) Schritt für Schritt: animierte Fabrik, automatische Optimierung auf 0 Fehlmengen und PDF-Bericht.</p>
       <span class="go">Öffnen →</span>
     </a>
+    <a class="card en" href="kanban-regelkreislauf-en.html">
+      <div class="tag">Pull &amp; Kanban</div>
+      <h2>Simulate Kanban control loops</h2>
+      <p>Leveling withdrawal kanban (Heijunka) step by step: animated factory, automatic optimization to zero shortages and a PDF report.</p>
+      <span class="go">Open →</span>
+    </a>
     <div class="card soon">
-      <div class="tag">Demnächst</div>
-      <h2>Weitere Werkzeuge</h2>
-      <p>Weitere Lean-, KVP- und Kaizen-Werkzeuge folgen.</p>
+      <div class="tag"><span class="de">Demnächst</span><span class="en">Coming soon</span></div>
+      <h2><span class="de">Weitere Werkzeuge</span><span class="en">More tools</span></h2>
+      <p><span class="de">Weitere Lean-, KVP- und Kaizen-Werkzeuge folgen.</span><span class="en">More Lean, CI and Kaizen tools are on the way.</span></p>
     </div>
   </div>
 
   <footer>
-    Weiterentwicklung: <a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> ·
-    Original-Tools: John Naska (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>), veröffentlicht mit seiner Genehmigung ·
-    <a href="https://github.com/iPbaz/lean-kvp-kaizen-tools" target="_blank" rel="noopener">Quellcode auf GitHub</a>
+    <span class="de">Weiterentwicklung:</span><span class="en">Further development:</span>
+    <a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> ·
+    <span class="de">Original-Tools: John Naska (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>), veröffentlicht mit seiner Genehmigung</span>
+    <span class="en">Original tools: John Naska (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>), published with his permission</span> ·
+    <a href="https://github.com/milad-karami/lean-kvp-kaizen-tools" target="_blank" rel="noopener"><span class="de">Quellcode auf GitHub</span><span class="en">Source code on GitHub</span></a>
   </footer>
 </main>
+<script>
+(function(){
+  var KEY='leanTools.lang';
+  function set(l){
+    document.body.dataset.lang=l; document.documentElement.lang=l;
+    document.querySelectorAll('.langs button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set===l)); });
+    try{ localStorage.setItem(KEY,l); }catch(e){}
+  }
+  var saved=null; try{ saved=localStorage.getItem(KEY); }catch(e){}
+  set(saved || ((navigator.language||'de').toLowerCase().indexOf('de')===0 ? 'de' : 'en'));
+  document.querySelectorAll('.langs button').forEach(function(b){ b.addEventListener('click',function(){ set(b.dataset.set); }); });
+})();
+</script>
 </body>
 </html>
