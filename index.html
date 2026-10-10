@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lean · KVP · Kaizen – Lern-Werkzeuge / Learning tools</title>
-<meta name="description" content="Kostenlose interaktive Werkzeuge zu Lean, KVP und Kaizen – direkt im Browser. Free interactive Lean, CI and Kaizen tools in your browser.">
+<title>Lean · CI · Kaizen – Interactive learning tools</title>
+<meta name="description" content="Free interactive Lean, continuous improvement (CI) and Kaizen tools – right in your browser. Also available in German.">
 <style>
   :root{--navy:#14213d;--gold:#f2c94c;--pink:#ef7fb3;--blue:#3b6fd6;--ink:#eef2fb;--muted:#9aa8c4}
   *{box-sizing:border-box}
@@ -35,11 +35,11 @@
   [data-lang="en"] .de,[data-lang="de"] .en{display:none}
 </style>
 </head>
-<body data-lang="de">
+<body data-lang="en">
 <main>
-  <div class="langs" role="group" aria-label="Sprache / Language">
-    <button type="button" data-set="de" aria-pressed="true">🇩🇪 Deutsch</button>
-    <button type="button" data-set="en" aria-pressed="false">🇬🇧 English</button>
+  <div class="langs" role="group" aria-label="Language / Sprache">
+    <button type="button" data-set="en" aria-pressed="true">🇬🇧 English</button>
+    <button type="button" data-set="de" aria-pressed="false">🇩🇪 Deutsch</button>
   </div>
 
   <div class="kick">Lean · <span class="de">KVP</span><span class="en">CI</span> · Kaizen</div>
@@ -54,7 +54,7 @@
       <p>Leveling-Withdraw-Kanban (Heijunka) Schritt für Schritt: animierte Fabrik, automatische Optimierung auf 0 Fehlmengen und PDF-Bericht.</p>
       <span class="go">Öffnen →</span>
     </a>
-    <a class="card en" href="kanban-regelkreislauf-en.html">
+    <a class="card en" href="kanban-control-loops.html">
       <div class="tag">Pull &amp; Kanban</div>
       <h2>Simulate Kanban control loops</h2>
       <p>Leveling withdrawal kanban (Heijunka) step by step: animated factory, automatic optimization to zero shortages and a PDF report.</p>
@@ -84,7 +84,7 @@
     try{ localStorage.setItem(KEY,l); }catch(e){}
   }
   var saved=null; try{ saved=localStorage.getItem(KEY); }catch(e){}
-  set(saved || ((navigator.language||'de').toLowerCase().indexOf('de')===0 ? 'de' : 'en'));
+  set(saved==='de' ? 'de' : 'en'); // English by default, German as an option
   document.querySelectorAll('.langs button').forEach(function(b){ b.addEventListener('click',function(){ set(b.dataset.set); }); });
 })();
 </script>
