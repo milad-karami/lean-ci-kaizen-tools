@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc"><title id="title">Lean · CI · Kaizen Toolkit</title><desc id="desc">Four continuous improvement arrows around a kanban card.</desc><style>
+.cycle{transform-origin:32px 32px;animation:cycle-turn 10s linear infinite}
+.card{animation:card-lift 10s ease-in-out infinite}
+@keyframes cycle-turn{to{transform:rotate(360deg)}}
+@keyframes card-lift{0%,35%,65%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.cycle,.card{animation:none!important}}
+</style><g class="cycle"><path transform="rotate(0 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#f2c94c"/><path transform="rotate(90 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#ef7fb3"/><path transform="rotate(180 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#3b6fd6"/><path transform="rotate(270 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#4fd1c5"/></g><g class="card"><rect x="22" y="19" width="20" height="27" rx="4" fill="#f6f4ef" stroke="#14213d" stroke-width="2"/><path d="M26 26h12" stroke="#3b6fd6" stroke-width="3" stroke-linecap="round"/><rect x="26" y="32" width="4" height="8" rx="1" fill="#ef7fb3"/><rect x="34" y="32" width="4" height="8" rx="1" fill="#4fd1c5"/></g></svg>

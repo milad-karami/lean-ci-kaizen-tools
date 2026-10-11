@@ -1,0 +1,96 @@
+/* ===== Lean · CI · Kaizen Toolkit – gemeinsame Ebene (Header, Hero, Bericht) ===== */
+:root{--tk-navy:#14213d;--tk-navy-2:#0b1530;--tk-gold:#f2c94c;--tk-pink:#ef7fb3;--tk-blue:#3b6fd6;--tk-teal:#4fd1c5}
+
+/* --- Top-Leiste --- */
+.tk-bar{background:linear-gradient(90deg,var(--tk-navy-2),var(--tk-navy) 60%,#1d2f55);color:#e9eefb;
+  font:500 13px/1.3 "IBM Plex Sans","Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;border-bottom:1px solid rgba(255,255,255,.08)}
+.tk-bar-in{max-width:1280px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.tk-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;flex:none}
+.tk-brand svg,.tk-brand img{width:30px;height:30px;flex:none}
+.tk-brand b{display:block;font:800 14px/1.1 "Archivo",system-ui,sans-serif;letter-spacing:-.01em}
+.tk-brand small{display:block;font:600 10px/1.2 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.2em;color:var(--tk-gold)}
+.tk-steps{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none}
+.tk-steps::-webkit-scrollbar{display:none}
+.tk-steps li{flex:none}
+.tk-steps a{display:flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;color:rgba(233,238,251,.62);
+  text-decoration:none;font-weight:600;font-size:12px;white-space:nowrap;border:1px solid transparent;transition:background .2s,color .2s}
+.tk-steps a i{font-style:normal;width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;
+  background:rgba(255,255,255,.1);font:800 10.5px "Archivo",sans-serif;color:#fff}
+.tk-steps a:hover{background:rgba(255,255,255,.08);color:#fff}
+.tk-steps li.cur a{background:rgba(242,201,76,.16);border-color:rgba(242,201,76,.55);color:#fff}
+.tk-steps li.cur a i{background:var(--tk-gold);color:#1b1406}
+.tk-steps li.done a i{background:rgba(79,209,197,.35)}
+.tk-nav{display:flex;align-items:center;gap:6px;flex:none}
+.tk-nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);
+  border-radius:9px;padding:5px 10px;font-weight:700;font-size:12.5px;white-space:nowrap;transition:background .2s}
+.tk-nav a:hover{background:rgba(255,255,255,.16)}
+.tk-nav a[aria-disabled="true"]{opacity:.35;pointer-events:none}
+@media(max-width:860px){.tk-bar-in{gap:10px;padding:8px 14px}.tk-steps{order:3;flex-basis:100%}.tk-nav .tk-lbl{display:none}}
+
+/* --- Hero im Toolkit-Look (dunkel, wie Kanban-Tool und Website) --- */
+html body header.hero{border:none!important;color:#e9eefb;box-shadow:0 24px 48px -28px rgba(11,21,48,.7)!important;overflow:hidden;
+  background:radial-gradient(700px 320px at 85% 0%,rgba(242,201,76,.20),transparent 60%),
+    radial-gradient(600px 300px at 0% 100%,rgba(239,127,179,.18),transparent 60%),
+    linear-gradient(135deg,#0b1220 0%,#14213d 55%,#1d2f55 100%)!important;padding:34px 38px 30px!important}
+html body header.hero::before{opacity:.07!important;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)!important;
+  background-size:28px 28px!important;-webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent)}
+html body header.hero::after{display:none}
+html body header.hero .kicker{color:var(--tk-gold)!important}
+html body header.hero h1{color:#fff!important;position:relative;z-index:1}
+html body header.hero h1 > span{background:linear-gradient(90deg,#f2c94c,#ef7fb3)!important;-webkit-background-clip:text!important;background-clip:text!important;
+  color:transparent!important;border:none!important;box-shadow:none!important;transform:none!important;padding:0!important}
+html body header.hero p.lede{color:#b9c4dc!important;position:relative;z-index:1}
+html body header.hero p.lede b,html body header.hero p.lede strong{color:#fff}
+html body header.hero .term{color:#fff;border-bottom-color:rgba(242,201,76,.8)}
+html body header.hero .btn{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.24);box-shadow:none}
+html body header.hero .btn:hover{background:rgba(255,255,255,.16)}
+html body header.hero .btn.video{background:linear-gradient(180deg,#e0453a,#b02a20);border-color:#8a1d15}
+html body header.hero .btn.tk-rep-btn{background:var(--tk-gold);color:#1b1406;border-color:#c9a12d;font-weight:800}
+html body header.hero .btn svg.ico{stroke:#fff}
+html body header.hero .hero-actions{position:relative;z-index:1}
+html body header.hero > .tk-hero-art{position:absolute!important;right:26px;top:50%;transform:translateY(-50%);width:min(34%,400px);aspect-ratio:480/300;pointer-events:none;opacity:.95;z-index:0;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.35))}
+html body header.hero > .tk-hero-art svg{width:100%;height:100%;display:block}
+html body header.hero:has(.tk-hero-art) h1,html body header.hero:has(.tk-hero-art) .kicker,html body header.hero:has(.tk-hero-art) p.lede{max-width:min(62%,86ch)}
+.tk-phase{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;padding:4px 11px 4px 5px;border-radius:999px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);font:700 12px/1 "IBM Plex Sans",system-ui,sans-serif;color:#fff;position:relative;z-index:1}
+.tk-phase i{font-style:normal;width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;background:var(--tk-gold);color:#1b1406;font:900 11px "Archivo",sans-serif}
+@media(max-width:900px){html body header.hero > .tk-hero-art{display:none}html body header.hero h1,html body header.hero .kicker,html body header.hero p.lede{max-width:none!important}
+  html body header.hero{padding:26px 22px 22px!important}}
+
+/* --- Footer-Hinweis dieser Fassung --- */
+.tk-credit{border-left:3px solid var(--tk-gold)!important;padding-left:11px}
+.tk-credit a{font-weight:700}
+
+/* --- Bericht-Dialog --- */
+.tk-rep-back{position:fixed;inset:0;z-index:9999;background:rgba(11,21,48,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:5vh 14px;overflow:auto}
+.tk-rep-back.open{display:flex}
+.tk-rep{width:min(720px,100%);background:#fffdf8;color:#1e1c17;border-radius:16px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);overflow:hidden;
+  font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.tk-rep-head{background:linear-gradient(135deg,#0b1220,#14213d 60%,#1d2f55);color:#fff;padding:18px 22px;display:flex;align-items:center;gap:14px}
+.tk-rep-head svg{width:34px;height:34px;flex:none}
+.tk-rep-head h2{margin:0;font:800 19px/1.2 "Archivo",system-ui,sans-serif}
+.tk-rep-head small{display:block;color:var(--tk-gold);font:600 11px "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase}
+.tk-rep-x{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:9px;width:34px;height:34px;font-size:18px;cursor:pointer}
+.tk-rep-body{padding:18px 22px 20px}
+.tk-rep label.tk-f{display:block;font:600 11px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#1f4e63;margin:0 0 5px}
+.tk-rep input[type=text],.tk-rep textarea{width:100%;box-sizing:border-box;border:1.5px solid #d9d3c6;border-radius:10px;padding:9px 11px;font:inherit;background:#fff;margin-bottom:12px}
+.tk-rep textarea{min-height:58px;resize:vertical}
+.tk-rep-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:620px){.tk-rep-row{grid-template-columns:1fr}}
+.tk-rep-presets{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 10px}
+.tk-rep-presets button,.tk-rep-actions button{appearance:none;border:1.5px solid #b8b0a0;background:#fff;border-radius:9px;padding:6px 11px;font:600 13px inherit;cursor:pointer}
+.tk-rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;max-height:42vh;overflow:auto;padding-right:4px}
+@media(max-width:620px){.tk-rep-grid{grid-template-columns:1fr}}
+.tk-rep-opt{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1.5px solid #d9d3c6;border-radius:10px;background:#faf7f0;cursor:pointer}
+.tk-rep-opt:has(input:checked){border-color:#1f4e63;background:#e8eff4}
+.tk-rep-opt input{margin-top:3px;accent-color:#1f4e63;width:16px;height:16px;flex:none}
+.tk-rep-opt b{display:block;font-size:13px}
+.tk-rep-opt small{display:block;font-size:11.5px;color:#5c574d;line-height:1.35}
+.tk-rep-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tk-rep-actions .tk-go{background:#14213d;color:#fff;border-color:#14213d;font-weight:800}
+.tk-rep-hint{font-size:12px;color:#5c574d;margin-top:10px}
+.tk-rep-err{color:#9c3a26;font-size:13px;margin-top:8px}
+@media print{.tk-bar{display:none}}
+
+html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}

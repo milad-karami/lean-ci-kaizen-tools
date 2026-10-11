@@ -1,22 +1,40 @@
-# Lean · CI · Kaizen – interactive learning tools
+# Lean · CI · Kaizen Toolkit
 
-**Free, browser-based simulations for learning Lean, continuous improvement (CI) and Kaizen. No installation, no account, works offline.**
+**15 free, interactive tools for Lean, continuous improvement (CI / KVP), Six Sigma and Kaizen – organised along the improvement process, each with a PDF report. No installation, no account, works offline.**
 
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20Live%20demo-open%20in%20browser-f2c94c?style=for-the-badge&labelColor=14213d)](https://milad-karami.github.io/lean-ci-kaizen-tools/)
-[![Languages](https://img.shields.io/badge/languages-English%20%7C%20Deutsch-3b6fd6?style=for-the-badge&labelColor=14213d)](#deutsch)
-[![Single HTML file](https://img.shields.io/badge/single%20HTML%20file-no%20install-ef7fb3?style=for-the-badge&labelColor=14213d)](#how-to-use)
+[![Tools](https://img.shields.io/badge/tools-15-3b6fd6?style=for-the-badge&labelColor=14213d)](#tools)
+[![PDF report](https://img.shields.io/badge/PDF%20report-in%20every%20tool-ef7fb3?style=for-the-badge&labelColor=14213d)](#how-to-use)
 
 **🇬🇧 English** · 🇩🇪 [Deutsch](#deutsch)
 
-<a href="https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html"><img src="docs/screenshots/hero.png" alt="Kanban control loops – start screen of the tool" width="100%"></a>
+<a href="https://milad-karami.github.io/lean-ci-kaizen-tools/"><img src="docs/screenshots/hub.png" alt="Lean · CI · Kaizen Toolkit – start page with the improvement process" width="100%"></a>
 
 ## Tools
 
-| Tool | What you learn | 🇬🇧 English | 🇩🇪 Deutsch |
-|---|---|---|---|
-| **Kanban control loops** | How a leveled pull system (Heijunka) replenishes stock, why shortages happen and how to size kanban loops | [**Open**](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) |
+The tools follow **DMAIC** – the Six Sigma improvement cycle – with a strategic context phase in front:
+**Context → Define → Measure → Analyze → Improve → Control.** Every tool has the same toolkit header (process navigation,
+previous / next tool), a **📄 PDF report** with selectable sections, saving of your work in the browser and Markdown /
+JSON / Obsidian export. The tools are in German; the Kanban simulation is also available in English.
 
-More tools are on the way.
+| Phase | Tool | What it does | Open |
+|---|---|---|---|
+| 0 · Context & strategy | **STEP / PEST analysis** | Scan the macro environment: social, technological, economic and political factors. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) |
+| 0 · Context & strategy | **Five Forces** | Porter's industry structure: rivalry, suppliers, buyers, new entrants, substitutes. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) |
+| 0 · Context & strategy | **SWOT analysis (incl. TOWS)** | Strengths, weaknesses, opportunities, threats – turned into strategic options. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) |
+| 1 · Define | **SIPOC** | Scope the process: suppliers, inputs, process steps, outputs, customers. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) |
+| 1 · Define | **Kano model** | Classify customer requirements: basic, performance and delighter features. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) |
+| 1 · Define | **CTQ analysis** | Translate the voice of the customer into measurable critical-to-quality specs. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) |
+| 2 · Measure | **Process walk-through (Gemba)** | Capture the process on site: think in systems, observe, document. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) |
+| 2 · Measure | **OEE calculator** | Overall equipment effectiveness = availability × performance × quality – with loss analysis. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) |
+| 3 · Analyze | **Value stream mapping (current & future)** | Make material and information flow visible, find lead time and waste. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) |
+| 3 · Analyze | **Ishikawa diagram** | Collect and rate causes systematically (6M) – instead of treating symptoms. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) |
+| 4 · Improve | **SMED calculator** | Cut changeover time: move internal to external steps, parallelise, standardise. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) |
+| 4 · Improve | **EPEI calculator** | Every part every interval: derive lot size and supermarket from changeover and capacity. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) |
+| 4 · Improve | **Heijunka** | Level production by volume and mix – a steady flow instead of waves. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) |
+| 4 · Improve | **Kanban control loops** | Pull simulation with an animated factory, optimisation to zero shortages and changeover time. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) |
+| 5 · Control | **PDCA cycle** | Plan – Do – Check – Act: secure improvements, standardise and keep turning. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
+
 
 ---
 
@@ -78,7 +96,7 @@ Choose what goes into the report: cover page, management summary with traffic li
 ## How to use
 
 - **Online:** open the [live demo](https://milad-karami.github.io/lean-ci-kaizen-tools/).
-- **Offline:** download [`kanban-control-loops.html`](kanban-control-loops.html) (English) or [`kanban-regelkreislauf.html`](kanban-regelkreislauf.html) (German) and double-click it. It works in Chrome, Edge, Firefox and Safari.
+- **Offline:** download any file from the [`tools/`](tools/) folder and double-click it. It works in Chrome, Edge, Firefox and Safari.
 - **PDF report:** click **📄 Report (PDF)**, select sections, then choose **Save as PDF** in the print dialog. Chrome and Edge give the best result.
 
 ## Origin, authorship & permission
@@ -118,11 +136,25 @@ Using the tools for learning is explicitly welcome. If you develop the tool furt
 
 ## Deutsch
 
-**Kostenlose Lern-Simulationen zu Lean, KVP und Kaizen, direkt im Browser. Ohne Installation, ohne Konto, auch offline.**
+**15 kostenlose, interaktive Werkzeuge zu Lean, KVP, Six Sigma und Kaizen – entlang des Verbesserungsprozesses (Kontext → Define → Measure → Analyze → Improve → Control), jedes mit PDF-Bericht. Ohne Installation, ohne Konto, auch offline.**
 
-| Werkzeug | Deutsch | Englisch |
-|---|---|---|
-| **Kanban-Regelkreisläufe simulieren** | [**Öffnen**](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-regelkreislauf.html) | [Open](https://milad-karami.github.io/lean-ci-kaizen-tools/kanban-control-loops.html) |
+| Phase | Werkzeug | Wofür | Öffnen |
+|---|---|---|---|
+| 0 · Kontext & Strategie | **STEP- / PEST-Analyse** | Makro-Umfeld systematisch scannen: soziale, technologische, ökonomische und politische Einflüsse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) |
+| 0 · Kontext & Strategie | **Five Forces** | Branchenstruktur nach Porter: Rivalität, Lieferanten, Kunden, neue Anbieter, Substitute. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) |
+| 0 · Kontext & Strategie | **SWOT-Analyse (inkl. TOWS)** | Stärken, Schwächen, Chancen, Risiken – und daraus strategische Optionen ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) |
+| 1 · Define · Definieren | **SIPOC** | Den Prozess abgrenzen: Lieferanten, Inputs, Prozessschritte, Outputs, Kunden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) |
+| 1 · Define · Definieren | **Kano-Modell** | Kundenanforderungen einordnen: Basis-, Leistungs- und Begeisterungsmerkmale. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) |
+| 1 · Define · Definieren | **CTQ-Analyse** | Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) |
+| 2 · Measure · Messen | **Prozess-Begehung (Gemba)** | Den Prozess vor Ort erfassen: systemisch denken, beobachten, dokumentieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) |
+| 2 · Measure · Messen | **OEE-Rechner** | Gesamtanlageneffektivität = Verfügbarkeit × Leistung × Qualität – mit Verlustanalyse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) |
+| 3 · Analyze · Analysieren | **Wertstromanalyse (IST & SOLL)** | Material- und Informationsfluss sichtbar machen, Durchlaufzeit und Verschwendung finden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) |
+| 3 · Analyze · Analysieren | **Ishikawa-Diagramm** | Ursachen strukturiert sammeln und bewerten (6M) – statt nur Symptome zu behandeln. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) |
+| 4 · Improve · Verbessern | **SMED-Rechner** | Rüstzeit verkürzen: interne in externe Schritte verlagern, parallelisieren, standardisieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) |
+| 4 · Improve · Verbessern | **EPEI-Rechner** | Every Part Every Interval: Losgröße und Supermarkt aus Rüstzeit und Kapazität ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) |
+| 4 · Improve · Verbessern | **Heijunka** | Produktion nach Menge und Variantenmix nivellieren – gleichmäßiger Fluss statt Wellen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) |
+| 4 · Improve · Verbessern | **Kanban-Regelkreisläufe** | Pull-Simulation mit animierter Fabrik, Optimierung auf 0 Fehlmengen und Rüstzeit. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [Englisch](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) |
+| 5 · Control · Sichern | **PDCA-Zyklus** | Plan – Do – Check – Act: Verbesserungen absichern, standardisieren und weiterdrehen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
 
 ### Funktionen
 

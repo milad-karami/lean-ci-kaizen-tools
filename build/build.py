@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""Baut die Toolkit-Fassung aller Tools: src/tools/*.html + gemeinsame Ebene -> tools/*.html.
+
+Usage:  python3 build/build.py
+Die gemeinsame Ebene (Top-Leiste, Hero im Toolkit-Look, Illustration, PDF-Bericht, Footer-Hinweis) wird
+eingefügt, ohne den Code der Tools zu verändern. Änderungen an den Tools selbst gehören nach src/tools/.
+"""
+import json
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+B = ROOT / "build"
+CFG = json.loads((B / "toolkit.json").read_text(encoding="utf-8"))
+CSS = (B / "layer.css").read_text(encoding="utf-8")
+JS = (B / "layer.js").read_text(encoding="utf-8")
+
+PLACEHOLDER_LOGO = ('<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+                    '<circle cx="32" cy="32" r="24" fill="none" stroke="#f2c94c" stroke-width="6" stroke-dasharray="34 4"/>'
+                    '<rect x="25" y="22" width="14" height="20" rx="3" fill="#ef7fb3"/></svg>')
+
+
+def read_svg(path, fallback=""):
+    if not path.exists():
+        return fallback
+    s = path.read_text(encoding="utf-8")
+    s = re.sub(r"<\?xml[^>]*\?>", "", s)
+    s = re.sub(r"<!DOCTYPE[^>]*>", "", s)
+    return s.strip()
+
+
+LOGO = read_svg(ROOT / "assets" / "logo.svg", PLACEHOLDER_LOGO)
+PHASES = {p["id"]: p for p in CFG["phases"]}
+TOOLS = CFG["tools"]
+
+T = {
+    "de": {"all": "Alle Tools", "prev": "Vorheriges Tool", "next": "Nächstes Tool", "phase": "Phase",
+           "toolkit": "Toolkit", "nav": "Toolkit-Navigation"},
+    "en": {"all": "All tools", "prev": "Previous tool", "next": "Next tool", "phase": "Phase",
+           "toolkit": "Toolkit", "nav": "Toolkit navigation"},
+}
+
+
+def esc(s):
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def js_json(obj):
+    # sicher in <script> einbetten
+    return json.dumps(obj, ensure_ascii=False).replace("</", "<\\/")
+
+
+def brand_bar(tool, lang):
+    t = T[lang]
+    idx = TOOLS.index(tool)
+    prev_t = TOOLS[idx - 1] if idx > 0 else None
+    next_t = TOOLS[idx + 1] if idx < len(TOOLS) - 1 else None
+    cur_n = PHASES[tool["phase"]]["n"]
+    steps = []
+    for p in CFG["phases"]:
+        cls = "cur" if p["n"] == cur_n else ("done" if p["n"] < cur_n else "")
+        label = p["short_" + lang]
+        cur_attr = ' aria-current="step"' if cls == "cur" else ""
+        steps.append(f'<li class="{cls}"><a href="../index.html#phase-{p["id"]}" title="{esc(p[lang])}"'
+                     f'{cur_attr}><i>{p["n"]}</i><span>{esc(label)}</span></a></li>')
+
+    def nav_link(t2, cls, arrow, title):
+        if not t2:
+            return f'<a class="{cls}" aria-disabled="true">{arrow}</a>'
+        name = t2[lang]
+        return (f'<a class="{cls}" href="{t2["id"]}.html" title="{esc(title)}: {esc(name)}">'
+                + (f'{arrow} <span class="tk-lbl">{esc(name)}</span>' if cls == "tk-prev" else f'<span class="tk-lbl">{esc(name)}</span> {arrow}')
+                + '</a>')
+
+    return (f'<nav class="tk-bar" aria-label="{t["nav"]}"><div class="tk-bar-in">'
+            f'<a class="tk-brand" href="../index.html" title="Lean · CI · Kaizen Toolkit">{LOGO}'
+            f'<span><b>Lean · CI · Kaizen</b><small>{t["toolkit"].upper()}</small></span></a>'
+            f'<ol class="tk-steps">{"".join(steps)}</ol>'
+            f'<div class="tk-nav">{nav_link(prev_t, "tk-prev", "‹", t["prev"])}'
+            f'<a class="tk-all" href="../index.html#tools">{t["all"]}</a>'
+            f'{nav_link(next_t, "tk-next", "›", t["next"])}</div></div></nav>')
+
+
+def footer_block(lang):
+    if lang == "en":
+        return ('<div class="fblock tk-credit"><h4>This toolkit version</h4>Further developed by '
+                '<a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> '
+                '(October 2026): unified design, process navigation, PDF report and bug fixes – see the '
+                '<a href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">change log on GitHub</a>. '
+                'Original tool: John Naska (mokka.solutions), published with his permission.</div>')
+    return ('<div class="fblock tk-credit"><h4>Diese Toolkit-Fassung</h4>Weiterentwickelt von '
+            '<a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> '
+            '(Oktober 2026): einheitliches Design, Prozess-Navigation, PDF-Bericht und Fehlerkorrekturen – siehe '
+            '<a href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">Änderungsprotokoll auf GitHub</a>. '
+            'Original-Tool: John Naska (mokka.solutions), veröffentlicht mit seiner Genehmigung.</div>')
+
+
+def once(s, pattern, repl, what, flags=0):
+    new, n = re.subn(pattern, repl, s, count=1, flags=flags)
+    if n != 1:
+        raise SystemExit(f"Einfügepunkt nicht gefunden: {what}")
+    return new
+
+
+def build_tool(tool, src_name, out_name, lang="de"):
+    s = (ROOT / "src" / "tools" / src_name).read_text(encoding="utf-8")
+    phase = PHASES[tool["phase"]]
+    art = read_svg(ROOT / "assets" / "illustrations" / f'{tool["id"]}.svg')
+    special = tool.get("special") == "kanban"
+    cfg = {"id": tool["id"], "title": tool[lang], "phaseN": phase["n"], "phaseName": phase[lang],
+           "logo": LOGO, "art": art, "lang": lang, "noReport": special}
+    head = (f'<style id="tk-style">{CSS}</style>\n'
+            f'<script id="tk-cfg">window.TK_CFG={js_json(cfg)};</script>\n'
+            f'<script id="tk-layer">{JS}</script>\n')
+    s = once(s, r"<body[^>]*>", lambda m: m.group(0) + "\n" + brand_bar(tool, lang), "<body>")
+    chip = (f'<div class="tk-hero-art" aria-hidden="true">{art}</div>' if art else "") + \
+           f'<div class="tk-phase"><i>{phase["n"]}</i>{T[lang]["phase"]} {phase["n"]} · {esc(phase[lang])}</div>'
+    s = once(s, r'<header class="hero"[^>]*>', lambda m: m.group(0) + chip, "header.hero")
+    if not special:
+        s = once(s, r'<footer class="foot">', lambda m: m.group(0) + footer_block(lang), "footer.foot")
+    s = once(s, r"<title>([^<]*)</title>",
+             lambda m: f"<title>{m.group(1)} · Lean · CI · Kaizen Toolkit</title>", "<title>")
+    # Kopf-Einschub zuletzt: das Layer-Skript enthält selbst Tags wie <body> als Text
+    s = once(s, r"</head>", lambda m: head + "</head>", "</head>")
+    out = ROOT / "tools" / out_name
+    out.write_text(s, encoding="utf-8")
+    return out
+
+
+def main():
+    (ROOT / "tools").mkdir(exist_ok=True)
+    built = []
+    for tool in TOOLS:
+        built.append(build_tool(tool, tool["src"], f'{tool["id"]}.html', "de"))
+        if tool.get("en_file"):
+            built.append(build_tool(tool, tool["en_file"], tool["en_file"], "en"))
+    for p in built:
+        print(f"built {p.relative_to(ROOT)}  ({p.stat().st_size // 1024} KB)")
+
+
+if __name__ == "__main__":
+    main()
