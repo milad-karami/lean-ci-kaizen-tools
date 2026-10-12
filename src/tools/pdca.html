@@ -1938,7 +1938,8 @@ function parseNum(s){
   return /^[-+]?\d*\.?\d+$/.test(s)?parseFloat(s):NaN;
 }
 const fmtN=n=>Number.isFinite(n)?n.toLocaleString(`de-DE`,{maximumFractionDigits:2}):`–`;
-const fmtP=n=>Number.isFinite(n)?Math.round(n*100).toLocaleString(`de-DE`)+` %`:`–`;
+// FIX (Toolkit): „-0 %“ bei unveränderter Kennzahl (Senken: −1×0 = −0) – +0 macht daraus 0.
+const fmtP=n=>Number.isFinite(n)?(Math.round(n*100)+0).toLocaleString(`de-DE`)+` %`:`–`;
 /* Soll-Ist-Vergleich eines Durchlaufs */
 function calc(c,kpi){
   kpi=kpi||D.kpi;
@@ -2510,6 +2511,7 @@ function doSaveAs(){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey); // FIX (Toolkit): sonst öffnete das Tool nach dem Neuladen wieder die Vorlage statt des gerade gespeicherten Vorhabens.
   persistProjects(); refreshDropdown(); clearDirty('saved');
   closeSaveDialog();
   toast('Als „'+name+'" gespeichert');
@@ -2902,6 +2904,7 @@ function applyImport(res,fname){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey); // FIX (Toolkit): importiertes Vorhaben auch nach dem Neuladen wieder öffnen (vorher Vorlage).
   D=deepClone(D2);
   refreshDropdown(); renderAll(); clearDirty();
   setImpNote(`„${fname}" importiert`,false);

@@ -1483,7 +1483,15 @@ let DATA=EXAMPLES.video.make();
 
 function textOn(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);const lum=(0.299*r+0.587*g+0.114*b)/255;return lum>0.62?'#1A1A1A':'#FFFFFF';}
 function scheduleClassical(variants,totalCells){const sorted=[...variants].filter(v=>v.demand>0).sort((a,b)=>b.demand-a.demand);const result=new Array(totalCells).fill(null);let pos=0;for(const v of sorted){for(let i=0;i<v.demand&&pos<totalCells;i++){result[pos++]=v.id;}}return result;}
-function computeWeeklyBasic(variants,slotsPerWeek,weeksPerMonth){const basic=variants.map(v=>({...v,weekly:Math.floor(v.demand/weeksPerMonth),frac:(v.demand/weeksPerMonth)-Math.floor(v.demand/weeksPerMonth)}));const basicSum=basic.reduce((s,v)=>s+v.weekly,0);let deficit=slotsPerWeek-basicSum;if(deficit<0)deficit=0;if(deficit>0){const ranked=basic.map((v,i)=>({idx:i,frac:v.frac,demand:v.demand})).sort((a,b)=>b.frac-a.frac||b.demand-a.demand).slice(0,deficit);ranked.forEach(r=>{basic[r.idx].weekly+=1;});}return basic;}
+function computeWeeklyBasic(variants,slotsPerWeek,weeksPerMonth){const basic=variants.map(v=>({...v,weekly:Math.floor(v.demand/weeksPerMonth),frac:(v.demand/weeksPerMonth)-Math.floor(v.demand/weeksPerMonth)}));const basicSum=basic.reduce((s,v)=>s+v.weekly,0);let deficit=slotsPerWeek-basicSum;if(deficit<0)deficit=0;if(deficit>0){
+  // FIX (Toolkit): Nur aufrunden, wenn (Wochen−1) × Basiswoche den Monatsbedarf nicht übersteigt. Vorher bekamen bei freier Kapazität auch
+  // Varianten ohne Rest oder mit Bedarf 0 ein Stück je Basiswoche – der Monat produzierte mehr als bestellt.
+  const k=weeksPerMonth-1, fits=i=>(basic[i].weekly+1)*k<=basic[i].demand;
+  const ranked=basic.map((v,i)=>({idx:i,frac:v.frac,demand:v.demand})).sort((a,b)=>b.frac-a.frac||b.demand-a.demand).filter(r=>fits(r.idx)).slice(0,deficit);ranked.forEach(r=>{basic[r.idx].weekly+=1;});
+  // FIX (Toolkit): Passt die Ausgleichswoche dann nicht in eine Woche, gingen Stücke verloren – weiter aufrunden (größter verbleibender Rest zuerst), solange die Basiswoche Platz hat.
+  let sum=basicSum+ranked.length, last=basic.reduce((s,v)=>s+Math.max(0,v.demand-v.weekly*k),0);
+  while(sum<slotsPerWeek&&last>slotsPerWeek){let j=-1;basic.forEach((v,i)=>{if(fits(i)&&(j<0||v.demand-v.weekly*k>basic[j].demand-basic[j].weekly*k))j=i;});if(j<0)break;basic[j].weekly++;sum++;last-=k;}
+}return basic;}
 function distributeEvenly(items,totalSlots,phase){if(phase==null)phase=0.5;const tickets=[];items.forEach(it=>{for(let i=0;i<it.count;i++){tickets.push({id:it.id,pos:(i+phase)*totalSlots/it.count});}});tickets.sort((a,b)=>a.pos-b.pos);const result=new Array(totalSlots).fill(null);tickets.forEach((t,idx)=>{if(idx<totalSlots)result[idx]=t.id;});return result;}
 function firstOccurrenceMap(schedule,ids){const map={};ids.forEach(id=>{map[id]=-1;});schedule.forEach((id,idx)=>{if(id&&map[id]===-1)map[id]=idx;});return map;}
 
@@ -1786,9 +1794,10 @@ function buildMarkdown(){
     `Arbeitszeit: ${D.hpd} Std./Tag · ${D.dpw} Tage/Woche · ${D.wpm} Wochen/Monat`,
     `Kapazität: ${D.totalCapacity} h · Bedarf: ${D.totalDemand} h · Auslastung: ${D.totalCapacity>0?dez((D.totalDemand/D.totalCapacity)*100,1):'0'} %`,'',
     '## Varianten & Monatsbedarf','| Variante | Bedarf (h) |','|---|---|'];
-  DATA.variants.forEach(v=>L.push('| '+v.name+' | '+v.demand+' |'));
+  // FIX (Toolkit): „|“ im Variantennamen zerbrach die Markdown-Tabellen – wird maskiert (mdCell).
+  DATA.variants.forEach(v=>L.push('| '+mdCell(v.name)+' | '+v.demand+' |'));
   L.push('','## Wochenaufteilung','| Variante | Monat | Basiswoche | Ausgleichswoche |','|---|---|---|---|');
-  D.weeklyBasic.forEach((wb,i)=>L.push('| '+DATA.variants[i].name+' | '+DATA.variants[i].demand+' | '+wb.weekly+' | '+D.lastWeek[i].lastWeek+' |'));
+  D.weeklyBasic.forEach((wb,i)=>L.push('| '+mdCell(DATA.variants[i].name)+' | '+DATA.variants[i].demand+' | '+wb.weekly+' | '+D.lastWeek[i].lastWeek+' |'));
   L.push('','## Kennzahlen','| | Klassisch | Heijunka |','|---|---|---|',
     '| Wartezeit (Tage) | '+D.classWait+' | '+D.heiWait+' |',
     '| Wertschöpfungsanteil (%) | '+dez(D.vaC*100,1)+' | '+dez(D.vaH*100,1)+' |',
@@ -1805,7 +1814,7 @@ function buildObsidian(){
     '> [!info] Klassisch → Heijunka','> Wartezeit: **'+D.classWait+' → '+D.heiWait+' Tage** · Wertschöpfung: **'+dez(D.vaC*100,1)+' → '+dez(D.vaH*100,1)+' %**','',
     '## Rahmen','- Arbeitszeit: '+D.hpd+' h × '+D.dpw+' T × '+D.wpm+' W = '+D.totalCapacity+' h Kapazität','- Bedarf: '+D.totalDemand+' h','',
     '## Wochenaufteilung','| Variante | Monat | Basiswoche | Ausgleich |','|---|---|---|---|'];
-  D.weeklyBasic.forEach((wb,i)=>L.push('| '+DATA.variants[i].name+' | '+DATA.variants[i].demand+' | '+wb.weekly+' | '+D.lastWeek[i].lastWeek+' |'));
+  D.weeklyBasic.forEach((wb,i)=>L.push('| '+mdCell(DATA.variants[i].name)+' | '+DATA.variants[i].demand+' | '+wb.weekly+' | '+D.lastWeek[i].lastWeek+' |'));
   L.push('','> [!warning] SMED ist der Zwilling','> Heijunka erhöht die Rüstwechsel ('+D.classChanges+' → '+D.heiChanges+'). Ohne SMED bricht die Kapazität ein.','',
     '## Mindmap',FENCE+'mermaid','mindmap','  root((Heijunka))','    Mengenglaettung','    Typenglaettung','    Basiswoche','      Groesster-Rest','    Ausgleichswoche','    Wirkung','      Wartezeit','      Wertschoepfung','    SMED',FENCE,'');
   L.push(stateComment()); return L.join('\n');
@@ -1815,7 +1824,9 @@ el('#expJson').addEventListener('click',()=>download(slug()+'-heijunka.json',bui
 el('#expObs').addEventListener('click',()=>download(slug()+'-heijunka.md',buildObsidian(),'text/markdown;charset=utf-8'));
 
 /* ---------- import (Datei wieder laden) ---------- */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA)+' -->';}
+// FIX (Toolkit): „-->“ in einem Namen beendete den Kommentar vorzeitig – Re-Import scheiterte. „>“ als \u003e (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA).replace(/>/g,'\\u003e')+' -->';}
+const mdCell=s=>String(s==null?'':s).replace(/\|/g,'\\|');
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -1826,7 +1837,7 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(s,fname){DATA=A.shape(s)||s;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();renderStepTabs();showStep(1);setImpNote('\u2713 \u201E'+(fname||'Datei')+'\u201C geladen',false);}
+function applyImport(s,fname){/* FIX (Toolkit): ungültige/fremde Datei nicht als Zustand übernehmen (vorher DATA=s → Absturz, Tool danach unbenutzbar) */const sh=A.shape(s);if(!sh)throw new Error('keine Heijunka-Daten');DATA=sh;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();renderStepTabs();showStep(1);setImpNote('\u2713 \u201E'+(fname||'Datei')+'\u201C geladen',false);}
 el('#importBtn').addEventListener('click',()=>el('#importFile').click());
 el('#importFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{applyImport(importFromText(r.result),file.name);}catch(err){setImpNote('\u26A0 Datei konnte nicht gelesen werden',true);}finally{e.target.value='';}};r.onerror=()=>{setImpNote('\u26A0 Lesefehler',true);};r.readAsText(file);});
 
@@ -2076,7 +2087,8 @@ const A={
     });
     if(variants.length<2) return null;
     const ph=Number(x.phase);
-    const mb=Array.isArray(x.manualBasic)?x.manualBasic.slice(0,2000).map(v=>String(v)).filter(v=>seen[v]):null;
+    // FIX (Toolkit): leere Slots (null) behalten – sonst passte die Länge nicht mehr zur Woche und die manuelle Reihenfolge ging beim Laden verloren.
+    const mb=Array.isArray(x.manualBasic)?x.manualBasic.slice(0,2000).map(v=>v==null?null:String(v)).filter(v=>v===null||seen[v]):null;
     return { hoursPerDay:int(x.hoursPerDay,1,24,8), daysPerWeek:int(x.daysPerWeek,1,7,5), weeksPerMonth:int(x.weeksPerMonth,1,8,4),
              showCust:x.showCust!==false, phase:[0,0.5,1].includes(ph)?ph:0.5, variants, manualBasic:(mb&&mb.length)?mb:null };
   },
