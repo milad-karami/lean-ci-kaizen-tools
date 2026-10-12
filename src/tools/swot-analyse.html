@@ -1538,7 +1538,8 @@ function buildMarkdown(){
   listMd(L,'O','Chancen (extern)'); listMd(L,'T','Bedrohungen (extern)');
   L.push('## TOWS – Strategische Optionen');
   TOWS_KEYS.forEach(k=>{L.push('### '+k+' – '+TOWS_DEF[k].title+' ('+TOWS_DEF[k].combo+')');
-    const a=state.tows[k]||[];if(!a.length)L.push('- _(keine)_');a.forEach(x=>L.push('- [ ] '+x));L.push('');});
+    // FIX (Toolkit): mehrzeilige Strategien eingerückt fortsetzen – sonst gingen Folgezeilen beim Import verloren
+    const a=state.tows[k]||[];if(!a.length)L.push('- _(keine)_');a.forEach(x=>L.push('- [ ] '+String(x).replace(/\n/g,'\n  ')));L.push('');});
   return L.join('\n');
 }
 function mmClean(s){return (s||'').replace(/["()\[\]{};#]/g,' ').replace(/\s+/g,' ').trim();}
@@ -1551,7 +1552,7 @@ function buildObsidian(){
     const a=state[q]||[];if(!a.length)L.push('> - —');a.forEach((x,i)=>L.push('> - '+q+(i+1)+': '+x));L.push('');});
   L.push('## TOWS – Strategische Optionen');
   TOWS_KEYS.forEach(k=>{L.push('### '+k+' · '+TOWS_DEF[k].title+' ('+TOWS_DEF[k].combo+')');
-    const a=state.tows[k]||[];if(!a.length)L.push('- [ ] —');a.forEach(x=>L.push('- [ ] '+x));L.push('');});
+    const a=state.tows[k]||[];if(!a.length)L.push('- [ ] —');a.forEach(x=>L.push('- [ ] '+String(x).replace(/\n/g,'\n  ')));L.push('');});   // FIX (Toolkit): wie oben, mehrzeilige Strategien
   L.push('## Mindmap',FENCE+'mermaid','mindmap','  root(('+mmClean(state.object||'SWOT')+'))');
   QUADS.forEach(q=>{L.push('    '+QUAD[q].name);(state[q]||[]).forEach(x=>L.push('      '+mmClean(x)));});
   L.push(FENCE,'');
@@ -1575,14 +1576,17 @@ function importText(text){
   let m=text.match(/^\*\*Betrachtungsobjekt:\*\*\s*(.*)$/m);
   if(m){const x=m[1].trim();s.object=(x==='—')?'':x;}
   else { for(let i=0;i<lines.length;i++){ if(/^>\s*\[!info\]/.test(lines[i])){s.object=grabCallout(lines,i);break;} } }
-  let curTows=null;
+  let curTows=null, lastT=-1;
   for(const raw of lines){ const line=raw.replace(/\s+$/,'');
+    // FIX (Toolkit): eingerückte Folgezeilen gehören zur vorherigen Strategie (mehrzeilige Textfelder)
+    if(curTows&&lastT>=0&&/^  /.test(raw)){ s.tows[curTows][lastT]+='\n'+raw.slice(2); continue; }
+    lastT=-1;
     const sm=line.match(/^(?:>\s*)?-\s*([SWOT])\d+:\s*(.*)$/);
     if(sm){ s[sm[1]].push(sm[2].trim()); continue; }
     const hm=line.match(/^###\s+(SO|ST|WO|WT)\b/);
     if(hm){ curTows=hm[1]; continue; }
     if(/^#{1,6}\s/.test(line)){ curTows=null; continue; }
-    if(curTows){ const tm=line.match(/^-\s*\[[ xX]?\]\s*(.*)$/); if(tm){ const t=tm[1].trim(); if(t&&t!=='—')s.tows[curTows].push(t); } }
+    if(curTows){ const tm=line.match(/^-\s*\[[ xX]?\]\s*(.*)$/); if(tm){ const t=tm[1].trim(); if(t&&t!=='—'){ s.tows[curTows].push(t); lastT=s.tows[curTows].length-1; } } }
   }
   return s;
 }

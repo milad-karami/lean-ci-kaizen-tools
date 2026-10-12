@@ -1693,7 +1693,8 @@ function buildJSON(){
   return JSON.stringify({produkt:state.scenario,befragte:respCount(),merkmale:state.features.map(f=>{const c=collate(f),w=winner(f);
     return {merkmal:f.n,verteilung:c,ergebnis:w?CATS[w].name:null,code:w,antworten:f.responses};})},null,2);
 }
-function stateComment(){return '<!-- kano-data: '+JSON.stringify({scenario:state.scenario,features:state.features.map(f=>({n:f.n,responses:f.responses}))})+' -->';}
+// FIX (Toolkit): »-->« in Nutzertext beendete den HTML-Kommentar vorzeitig – Antworten gingen beim Import verloren. '>' als \u003e maskieren (gültiges JSON).
+function stateComment(){return '<!-- kano-data: '+JSON.stringify({scenario:state.scenario,features:state.features.map(f=>({n:f.n,responses:f.responses}))}).replace(/>/g,'\\u003e')+' -->';}
 function buildMarkdown(){
   const L=['# Kano-Analyse','','**Produkt / Service:** '+(state.scenario||'—'),'**Befragte:** '+respCount(),'','## Ergebnisse je Merkmal',''];
   state.features.forEach((f,i)=>{const c=collate(f),w=winner(f);

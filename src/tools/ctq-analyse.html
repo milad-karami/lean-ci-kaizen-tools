@@ -2430,11 +2430,13 @@ function loadKey(key, silent){
     const id=key.slice(3), ex=RAW[id]||RAW.restaurant;
     curKey='ex:'+id; curId=id;
     state=ensureShape(deepClone(ex));
+    spec=ensureSpec(null);   // FIX (Toolkit): Ansichtseinstellungen (Schwelle, gewähltes CTQ) des vorher offenen Projekts blieben an der Vorlage hängen – wie loadExample() zurücksetzen
   }
   safeSet(K_LAST, curKey);
   const sel=el('#exampleSel'); if(sel) sel.value=curKey;
   renderAll();
-  if(!silent) updateDirtyUI();
+  // FIX (Toolkit): nach dem Verwerfen und Wechseln galt der Stand weiter als ungespeichert (Punkt, erneute Rückfragen) und der verworfene Entwurf blieb im Speicher
+  if(!silent) clearDirty();
 }
 function projectBaseKey(){
   if(curKey.startsWith('ex:')) return curKey.slice(3);
@@ -2490,6 +2492,7 @@ function doSaveAs(){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey);   // FIX (Toolkit): sonst öffnete das Tool beim nächsten Start wieder die Vorlage statt der gespeicherten Analyse
   persistProjects(); refreshDropdown(); clearDirty('saved');
   closeSaveDialog();
   toast('Als „'+name+'" gespeichert');
@@ -2619,7 +2622,8 @@ el('#projModal').addEventListener('click',e=>{
     toast('Alle Analysen gelöscht');
     return;
   }
-  if(b.dataset.pmLoad){ loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
+  // FIX (Toolkit): Laden aus der Liste verwarf ungespeicherte Änderungen ohne Rückfrage
+  if(b.dataset.pmLoad){ if(dirty && !confirm('Es gibt noch nicht fest gespeicherte Änderungen.\nTrotzdem wechseln?')) return; loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
   if(b.dataset.pmRen){ renameProject(b.dataset.pmRen); return; }
   if(b.dataset.pmDel){ deleteProject(b.dataset.pmDel); return; }
   if(b.dataset.pmRestore){ restoreProject(b.dataset.pmRestore); return; }
@@ -2815,6 +2819,11 @@ function buildObsidian(){
   L.push(FENCE,'');
   return L.join('\n');
 }
+// FIX (Toolkit): Zeilenumbrüche in den Textfeldern zerlegten Markdown/Obsidian – beim Import gingen Text sowie ganze Anforderungen samt CTQs verloren. Für diese beiden Exporte Umbrüche zu Leerzeichen zusammenfassen (JSON behält sie).
+function oneLine(x){return typeof x==='string'?x.replace(/\s*\n\s*/g,' '):Array.isArray(x)?x.map(oneLine):(x&&typeof x==='object')?Object.fromEntries(Object.keys(x).map(k=>[k,oneLine(x[k])])):x;}
+const buildMarkdownRaw=buildMarkdown, buildObsidianRaw=buildObsidian;
+buildMarkdown=function(){const s0=state;state=oneLine(state);try{return buildMarkdownRaw();}finally{state=s0;}};
+buildObsidian=function(){const s0=state;state=oneLine(state);try{return buildObsidianRaw();}finally{state=s0;}};
 el('#expMd').addEventListener('click',()=>download(fnameBase()+'.md',buildMarkdown(),'text/markdown;charset=utf-8'));
 el('#expJson').addEventListener('click',()=>download(fnameBase()+'.json',buildJSON(),'application/json;charset=utf-8'));
 el('#expObs').addEventListener('click',()=>download(fnameBase()+'-obsidian.md',buildObsidian(),'text/markdown;charset=utf-8'));
@@ -2910,7 +2919,8 @@ function assignMatrix(lines,s){
   rows.forEach((row,ri)=>{ const c=flat[ri]; if(!c)return; const g=n=>{const i=col(n);return i>=0?(row[i]||''):'';};
     if(neu){
       c.method=g('Messmethode'); c.lsl=toNum(g('USG')); c.target=toNum(g('Ziel')); c.usl=toNum(g('OSG')); c.rate=toNum(g('Zul. Fehlerquote')); c.vox=voxParse(g('Kundendaten'));
-      if(!c.metric&&g('CTQ-Merkmal'))c.metric=g('CTQ-Merkmal'); if(!c.unit&&g('Einheit'))c.unit=g('Einheit');
+      // FIX (Toolkit): Merkmal und Einheit aus den eigenen Tabellenspalten übernehmen – »[« im Merkmal verfälschte sonst die Aufteilung »Merkmal [Einheit]«
+      if(col('CTQ-Merkmal')>=0){ c.metric=g('CTQ-Merkmal'); c.unit=g('Einheit'); }
     }else{
       /* alte Tabelle (Version 1): Need | Driver | CTQ | Spezifikation | KPI | Messmethode */
       const m=migrateCtq({metric:c.metric,unit:c.unit,type:isNum(c.usl)?'max':(isNum(c.lsl)?'min':'max'),a:isNum(c.usl)?c.usl:(isNum(c.lsl)?c.lsl:''),spec:g('Spezifikation'),kpi:g('KPI'),method:g('Messmethode')});
@@ -2991,6 +3001,7 @@ function applyImport(res, fname){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey);   // FIX (Toolkit): importierte Analyse auch beim nächsten Start wieder öffnen
   state=deepClone(data);
   spec=ensureSpec(importedSpec||null);
   refreshDropdown(); renderAll();
@@ -3310,7 +3321,7 @@ function init(){
   loadProjectsFromStorage();
 
   const emb=readEmbedded();
-  let restored=false;
+  let restored=false, fromDraft=false;
 
   if(emb && emb.data){
     if(emb.projects && typeof emb.projects==='object'){
@@ -3336,7 +3347,7 @@ function init(){
       if(curKey.startsWith('p:')) curId=PROJECTS[curKey.slice(2)].base||'restaurant'; else curId=curKey.slice(3);
       state=ensureShape(deepClone(draftJ.data));
       spec=ensureSpec(deepClone(draftJ.spec));
-      bootNote='Letzter Arbeitsstand wiederhergestellt';
+      bootNote='Letzter Arbeitsstand wiederhergestellt'; fromDraft=true;
       restored=true;
     }else{
       curKey=emb.curKey||'ex:restaurant';
@@ -3360,7 +3371,7 @@ function init(){
           if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:restaurant';
           state=ensureShape(deepClone(j.data));
           spec=ensureSpec(deepClone(j.spec));
-          bootNote='↻ Letzter Arbeitsstand automatisch wiederhergestellt';
+          bootNote='↻ Letzter Arbeitsstand automatisch wiederhergestellt'; fromDraft=true;
           restored=true;
         }
       }catch(e){}
@@ -3396,6 +3407,11 @@ function init(){
   renderSteps();
   faqRender();
   clearDirty();
+  /* FIX (Toolkit): ein wiederhergestellter Entwurf galt als gespeichert – clearDirty() löschte ihn sogar; weicht er vom gespeicherten Stand ab, bleibt er ungesichert */
+  if(fromDraft){
+    const basis=curKey.startsWith('p:') ? (PROJECTS[curKey.slice(2)]||{}).data : RAW[curKey.slice(3)];
+    if(!basis || JSON.stringify(ensureShape(deepClone(basis)))!==JSON.stringify(state)) markDirty();
+  }
 
   if(bootNote){ setTimeout(()=>{ toast(bootNote); bootNote=null; },500); }
 }
