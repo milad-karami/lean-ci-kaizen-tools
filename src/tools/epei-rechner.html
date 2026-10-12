@@ -1785,7 +1785,8 @@ function buildMarkdown(){const c=calc(),p=c.p;
   const L=['# EPEI-Berechnung: '+EXAMPLES[curId].label,'',
     '## Maschinendaten','- Zykluszeit: '+de(p.cycleTime)+' min/Stk','- Rüstzeit je Umrüstung: '+de(p.setupTime)+' min','- Kleinstörungen: '+de(p.downtimeRate)+' %','- Schichten: '+p.shifts+' × '+de(p.shiftDuration)+' min, Pause '+de(p.breakPerShift)+' min/Schicht','- Sicherheitsbestand: '+de(p.safety)+' Tage','',
     '## Produktspektrum','| Variante | Bedarf/Tag | Laufzeit/Tag | Losgröße (Stk) | Supermarkt (Stk) |','|---|---|---|---|---|'];
-  DATA.products.forEach(pr=>L.push('| '+pr.name+' | '+de(pr.demand,0)+' | '+fmtH(pr.demand*p.cycleTime)+' | '+(c.feasible?de(Math.round(pr.demand*c.epeiPlan),0):'—')+' | '+(c.feasible?de(Math.round(pr.demand*(c.epeiPlan+p.safety)),0):'—')+' |'));
+  // FIX (Toolkit): „|“ im Variantennamen zerbrach die Markdown-Tabelle – wird maskiert.
+  DATA.products.forEach(pr=>L.push('| '+String(pr.name).replace(/\|/g,'\\|')+' | '+de(pr.demand,0)+' | '+fmtH(pr.demand*p.cycleTime)+' | '+(c.feasible?de(Math.round(pr.demand*c.epeiPlan),0):'—')+' | '+(c.feasible?de(Math.round(pr.demand*(c.epeiPlan+p.safety)),0):'—')+' |'));
   L.push('','## Ergebnis',
     '- Betriebszeit: '+fmtH(c.brutto)+' · Pausen: '+fmtH(c.pausen)+' · Kleinstörungen: '+fmtH(c.stoer),
     '- Laufzeit: '+fmtH(c.laufzeit)+' · Freie Kapazität: '+fmtH(c.frei),
@@ -1817,7 +1818,8 @@ el('#expJson').addEventListener('click',()=>download(slug()+'-epei.json',buildJS
 el('#expObs').addEventListener('click',()=>download(slug()+'-epei.md',buildObsidian(),'text/markdown;charset=utf-8'));
 
 /* ---------- import (Datei wieder laden) ---------- */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA)+' -->';}
+// FIX (Toolkit): „-->“ in einem Namen beendete den Kommentar vorzeitig – Re-Import scheiterte. „>“ als \u003e (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -1828,7 +1830,8 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(s,fname){DATA=A.shape(s)||s;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();setImpNote('\u2713 \u201E'+(fname||'Datei')+'\u201C geladen',false);}
+// FIX (Toolkit): Ungültige Daten überschrieben DATA (A.shape(s)||s) und ließen das Tool kaputt zurück – jetzt Fehler vor dem Überschreiben.
+function applyImport(s,fname){const d=A.shape(s);if(!d)throw new Error('ungültige Daten');DATA=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();setImpNote('\u2713 \u201E'+(fname||'Datei')+'\u201C geladen',false);}
 el('#importBtn').addEventListener('click',()=>el('#importFile').click());
 el('#importFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{applyImport(importFromText(r.result),file.name);}catch(err){setImpNote('\u26A0 Datei konnte nicht gelesen werden',true);}finally{e.target.value='';}};r.onerror=()=>{setImpNote('\u26A0 Lesefehler',true);};r.readAsText(file);});
 
@@ -2045,9 +2048,10 @@ function wizSummary(){
   return {title:'EPEI berechnet',
     lead:'Das EPEI sagt, in welchem Abstand <b>jede Variante einmal</b> produziert wird – daraus folgen Losgrößen und die nötige Supermarkt-Reichweite.',
     stats:[{v:c.n,l:'Varianten',k:'info'},
-           {v:((c.laufzeit||0)/60).toFixed(1)+' h',l:'Laufzeit/Tag',k:'info'},
-           {v:((c.frei||0)/60).toFixed(1)+' h',l:'freie Kapazität',k:(c.frei>0?'ok':'warn')},
-           {v:c.feasible?(c.epeiPlan||c.epei).toFixed(1)+' Tage':'—',l:'EPEI',k:(c.feasible?'ok':'warn')}],
+           // FIX (Toolkit): deutsches Zahlenformat (vorher „5.0 h“, „4.0 Tage“ per toFixed).
+           {v:de((c.laufzeit||0)/60)+' h',l:'Laufzeit/Tag',k:'info'},
+           {v:de((c.frei||0)/60)+' h',l:'freie Kapazität',k:(c.frei>0?'ok':'warn')},
+           {v:c.feasible?de(c.epeiPlan||c.epei)+' Tage':'—',l:'EPEI',k:(c.feasible?'ok':'warn')}],
     offen:offen, fixLabel:'Eingaben prüfen',
     okText:'Die Rechnung geht auf: Rüstzeiten passen in die freie Kapazität.'};
 }
@@ -2097,7 +2101,7 @@ const A={
     const num=(v,lo,hi,d)=>{ const n=Number(String(v).replace(',','.')); return Number.isFinite(n)?Math.max(lo,Math.min(hi,n)):d; };
     const q=x.p, d=EXAMPLES.leer.p;
     const p={ cycleTime:num(q.cycleTime,0,1440,d.cycleTime), setupTime:num(q.setupTime,0,10000,d.setupTime),
-              downtimeRate:num(q.downtimeRate,0,99,d.downtimeRate), shifts:Math.round(num(q.shifts,1,3,d.shifts)),
+              downtimeRate:num(q.downtimeRate,0,99,d.downtimeRate), shifts:num(q.shifts,1,24,d.shifts), // FIX (Toolkit): war auf 1–3 begrenzt und gerundet – 4 Schichten wurden beim Laden still zu 3 (Eingabefeld erlaubt mehr).
               shiftDuration:num(q.shiftDuration,1,1440,d.shiftDuration), breakPerShift:num(q.breakPerShift,0,480,d.breakPerShift),
               safety:num(q.safety,0,365,d.safety) };
     const products=(Array.isArray(x.products)?x.products:[]).filter(o=>o && typeof o==='object').slice(0,30)
