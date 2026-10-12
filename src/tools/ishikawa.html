@@ -3600,7 +3600,7 @@ function ensureShape(x){
     dx: Math.round(Number(cat.dx)||0), dy: Math.round(Number(cat.dy)||0),
     causes: Array.isArray(cat.causes) ? cat.causes.map(c=>({
       t: String(c.t||''),
-      p: Number(c.p)||0,
+      p: Math.max(0,Math.min(3,Math.round(Number(c.p)||0))),   // FIX (Toolkit): Bewertung auf 0–3 begrenzen (Importe)
       fav: !!c.fav,
       subs: whyNorm(c.subs,2)
     })) : []
@@ -4046,10 +4046,14 @@ el('#addCat').addEventListener('click',()=>{
 el('#openIntro').addEventListener('click',()=>{
   const box=el('#introBox'); box.open=true; box.scrollIntoView({behavior:'smooth',block:'start'});
 });
+/* FIX (Toolkit): Ursachen nach Kategoriename übernehmen statt nach Position –
+   sonst landeten z. B. „Methode"-Ursachen unter „Maschine" */
+function presetCats(names){
+  const key=s=>String(s||'').trim().toLowerCase();
+  return names.map(nm=>{ const o=state.cats.find(c=>key(c.name)===key(nm)); return {name:nm,causes:o?o.causes:[]}; });
+}
 els('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
-  const names=PRESETS[b.dataset.preset];
-  const old=state.cats;
-  state.cats=names.map((nm,i)=> old[i] ? {name:nm,causes:old[i].causes} : {name:nm,causes:[]});
+  state.cats=presetCats(PRESETS[b.dataset.preset]);
   render(); markDirty();
 }));
 
@@ -4434,7 +4438,7 @@ function buildObsidian(){
   const FENCE='\u0060\u0060\u0060';
   const today=new Date().toISOString().slice(0,10);
   const L=['---','tags: [ishikawa, ursache-wirkung, qualitaetsmanagement]','erstellt: '+today,'---','',
-           '# Ishikawa-Diagramm','','> [!question] Problem','> '+state.problem,'','## Ursachen nach Kategorien'];
+           '# Ishikawa-Diagramm','','> [!question] Problem','> '+state.problem.replace(/\n/g,'\n> '),'','## Ursachen nach Kategorien'];   // FIX (Toolkit): mehrzeiliges Problem bleibt im Callout
   state.cats.forEach(cat=>{
     L.push('### '+cat.name);
     cat.causes.forEach(u=>{
@@ -4493,17 +4497,19 @@ function importJSON(j){
       t:String(u.text||''),
       p:(typeof u.wahrscheinlichkeit==='number')?u.wahrscheinlichkeit:(PW[u.wahrscheinlichkeit]||0),
       fav:!!u.favorit,
-      subs:Array.isArray(u.unterursachen)?u.unterursachen.map(x=>String(x)):[]
+      subs:Array.isArray(u.unterursachen)?u.unterursachen:[]   // FIX (Toolkit): Warum-Kette ist verschachtelt ({t,subs}) – String(x) ergab „[object Object]"; whyNorm normalisiert beide Formen
     }))});
   });
   return normState(s);
 }
 function importMarkdown(text){
   const lines=text.split('\n'); const s={problem:'',cats:[]};
-  let cur=null,lastCause=null,inFav=false,m;
+  let cur=null,lastCause=null,inFav=false,m,inProb=false;
   for(const raw of lines){
     const line=raw.replace(/\s+$/,'');
-    if(m=line.match(/^\*\*Problem:\*\*\s*(.*)$/)){s.problem=m[1];continue;}
+    if(m=line.match(/^\*\*Problem:\*\*\s*(.*)$/)){s.problem=m[1];inProb=true;continue;}
+    // FIX (Toolkit): Folgezeilen eines mehrzeiligen Problems bis zur Leerzeile mitlesen
+    if(inProb){ if(line&&!line.startsWith('#')){ s.problem+='\n'+line; continue; } inProb=false; }
     if(line.startsWith('## ')){
       const name=line.slice(3).trim();
       if(name.indexOf('Favoriten')>=0||name.indexOf('⭐')>=0){inFav=true;cur=null;continue;}
@@ -4600,6 +4606,7 @@ function applyImport(res, fname){
   state=deepClone(data);
   refreshDropdown(); render();
   clearDirty();
+  if(window.WB) WB.kontext();   // FIX (Toolkit): Rückgängig-Verlauf der vorherigen Analyse nicht in die importierte übernehmen
   setImpNote('✓ „'+(fname||'Datei')+'" importiert',false);
   toast('Import erfolgreich');
 }
@@ -4751,7 +4758,7 @@ el('#wizTop').addEventListener('click',e=>{
   if(b.id==='wdSave'){saveCurrent();return;}
   if(b.id==='wdAgain'){guided=true;gstep=1;el('#focusSwitch').classList.add('on');el('#focusSwitch').setAttribute('aria-checked','true');applyGuided();scrollWiz();return;}
   if(b.id==='wdClose'){el('#wizTop').innerHTML='';return;}
-  if(b.dataset.wpre){const names=PRESETS[b.dataset.wpre],old=state.cats;state.cats=names.map((nm,i)=>old[i]?{name:nm,causes:old[i].causes}:{name:nm,causes:[]});render();gCat=1;markDirty();applyGuided();return;}
+  if(b.dataset.wpre){state.cats=presetCats(PRESETS[b.dataset.wpre]);render();gCat=1;markDirty();applyGuided();return;} // FIX (Toolkit): Zuordnung nach Name
   if(b.id==='wdFix'){guided=true;gstep=3;el('#focusSwitch').classList.add('on');el('#focusSwitch').setAttribute('aria-checked','true');applyGuided();scrollWiz();return;}
 });
 el('#focusSwitch').addEventListener('click',()=>{

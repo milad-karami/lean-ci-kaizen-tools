@@ -1390,19 +1390,23 @@ function metrics(){
   const red=intIst>0?(intIst-intOpt)/intIst:0;
   return {s1,s2,s3,intIst,int2,ext2,intOpt,extOpt,gesamtIst,gesamtOpt,red};
 }
+// FIX (Toolkit): Vorzeichen der Reduktion – bei längerer optimierter Zeit stand dort „−-25 %“.
+const redTxt=r=>(r<0?'+':'−')+Math.abs(r*100).toFixed(0)+' %';
 
 /* ===== KPIs ===== */
 function renderKpis(){
   const m=metrics();
+  // FIX (Toolkit): Einheit war fest „s“ (auch bei Minuten-Beispielen) und Zahlen ungerundet (0.30000000000000004) – jetzt EINH() und zn().
   el('#kpis').innerHTML=`
-    <div class="kpi int"><div class="kl">${tip('Interne Rüstzeit','interne_ruestzeit')} (Stillstand)</div><div class="kv">${m.intIst}<span class="arrow">→</span><span class="to">${m.intOpt}</span> <small>s</small></div><div class="ks">Ist → optimiert · die Maschine steht</div></div>
-    <div class="kpi ext"><div class="kl">${tip('Externe Rüstzeit','externe_ruestzeit')} (parallel)</div><div class="kv">0<span class="arrow">→</span><span class="to">${m.extOpt}</span> <small>s</small></div><div class="ks">parallel zum laufenden Prozess</div></div>
-    <div class="kpi tot"><div class="kl">Gesamt-Rüstaufwand</div><div class="kv">${m.gesamtIst}<span class="arrow">→</span>${m.gesamtOpt} <small>s</small></div><div class="ks">interne + externe Arbeit</div></div>
-    <div class="kpi red"><div class="kl">Weniger Stillstand</div><div class="kv">−${(m.red*100).toFixed(0)} %</div><div class="ks">${zt(m.intIst)} → ${zt(m.intOpt)} interne Rüstzeit</div></div>`;
+    <div class="kpi int"><div class="kl">${tip('Interne Rüstzeit','interne_ruestzeit')} (Stillstand)</div><div class="kv">${zn(m.intIst)}<span class="arrow">→</span><span class="to">${zn(m.intOpt)}</span> <small>${EINH()}</small></div><div class="ks">Ist → optimiert · die Maschine steht</div></div>
+    <div class="kpi ext"><div class="kl">${tip('Externe Rüstzeit','externe_ruestzeit')} (parallel)</div><div class="kv">0<span class="arrow">→</span><span class="to">${zn(m.extOpt)}</span> <small>${EINH()}</small></div><div class="ks">parallel zum laufenden Prozess</div></div>
+    <div class="kpi tot"><div class="kl">Gesamt-Rüstaufwand</div><div class="kv">${zn(m.gesamtIst)}<span class="arrow">→</span>${zn(m.gesamtOpt)} <small>${EINH()}</small></div><div class="ks">interne + externe Arbeit</div></div>
+    <div class="kpi red"><div class="kl">Weniger Stillstand</div><div class="kv">${redTxt(m.red)}</div><div class="ks">${zt(m.intIst)} → ${zt(m.intOpt)} interne Rüstzeit</div></div>`;
 }
 
 /* ===== 3 stages viz ===== */
-const SCALE=12, MINW=30, GAP=70, BASEPROC=240;
+// FIX (Toolkit): SCALE ist jetzt variabel (siehe renderStages).
+let SCALE=12; const MINW=30, GAP=70, BASEPROC=240;
 const segW=sec=>sec>0?Math.max(MINW,Math.round(sec*SCALE)):0;
 function stageRow(no,sub,d,withExt,proc){
   const ttList=k=>esc(d.lists[k].join(' · ')||'—');
@@ -1428,6 +1432,9 @@ function stageRow(no,sub,d,withExt,proc){
 }
 function renderStages(){
   const m=metrics();
+  // FIX (Toolkit): Maßstab an die verfügbare Breite anpassen – bei Minuten-Beispielen (z. B. 195 min × 12 px) wurden die Balken über 3000 px breit, die Summen lagen außerhalb des Sichtbereichs. Kaffee-Beispiel bleibt bei 12 px.
+  const W0=(el('#stages').clientWidth||1000)-36-34-28-180, extMax=Math.max(m.ext2,m.extOpt);
+  SCALE=Math.min(12,Math.max(1,Math.min((W0-BASEPROC)/Math.max(1,m.intIst),(W0-GAP)/Math.max(1,m.intIst+extMax))));
   // process block wide enough that the two external blocks keep a real gap (like the screenshot)
   let proc=BASEPROC;
   [m.s2,m.s3].forEach(d=>{const need=segW(d.extPre)+segW(d.extPost)+GAP-segW(d.intPost);if(need>proc)proc=need;});
@@ -1472,7 +1479,7 @@ function renderEkuv(){
     <td>${zt(r.s.opt)}</td>
     <td class="save">${r.save>0?'−'+zt(r.save)+'':zt(0)}</td></tr>`).join('');
   el('#ekuv').innerHTML=`
-    <div class="info-box"><b>Hebel:</b> Jeder Schritt, der extern (parallel) gerüstet wird, verschwindet komplett aus dem Maschinenstillstand. Jeder intern bleibende Schritt zählt nur noch mit seiner optimierten Dauer. Summe der Ersparnis: <b>${zt(m.intIst)} → ${zt(m.intOpt)}</b> Stillstand (−${(m.red*100).toFixed(0)} %).</div>
+    <div class="info-box"><b>Hebel:</b> Jeder Schritt, der extern (parallel) gerüstet wird, verschwindet komplett aus dem Maschinenstillstand. Jeder intern bleibende Schritt zählt nur noch mit seiner optimierten Dauer. Summe der Ersparnis: <b>${zt(m.intIst)} → ${zt(m.intOpt)}</b> Stillstand (${redTxt(m.red)}).</div>
     <table class="atbl"><thead><tr><th>Rüst-Teilschritt</th><th>Ist</th><th>Klassifikation</th><th>EKUV-Hebel</th><th>optimiert</th><th>Stillstand-Ersparnis</th></tr></thead><tbody>${body}</tbody></table>
     <h4 style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:16px 0 6px">Die vier EKUV-Hebel</h4>
     <div class="ekuv-legend">
@@ -1602,11 +1609,13 @@ function buildMarkdown(){const m=metrics();
   const L=['# SMED · '+EXAMPLES[curId].label,'',`Prozess (läuft währenddessen): ${DATA.procLabel}`,'',
     '## Kennzahlen','| | Wert |','|---|---|',
     '| Interne Rüstzeit (Stillstand) | '+zt(m.intIst)+' → '+zt(m.intOpt)+' |',
-    '| Externe Rüstzeit (parallel) | 0 s → '+zt(m.extOpt)+' |',
+    // FIX (Toolkit): „0 s“ war fest verdrahtet (falsch bei Minuten); Vorzeichen über redTxt.
+    '| Externe Rüstzeit (parallel) | '+zt(0)+' → '+zt(m.extOpt)+' |',
     '| Gesamt-Rüstaufwand | '+zt(m.gesamtIst)+' → '+zt(m.gesamtOpt)+' |',
-    '| Weniger Stillstand | −'+(m.red*100).toFixed(0)+' % |','',
+    '| Weniger Stillstand | '+redTxt(m.red)+' |','',
     '## Rüstschritte','| Schritt | Ist ('+EINH()+') | Phase | Klassifikation | EKUV | optim. ('+EINH()+') |','|---|---|---|---|---|---|'];
-  DATA.steps.forEach(s=>L.push('| '+s.name+' | '+s.base+' | '+(s.phase==='vor'?'vor':'nach')+' | '+(s.parallel?'extern':'intern')+' | '+(s.ekuv?EKUVNAME[s.ekuv]:'—')+' | '+s.opt+' |'));
+  // FIX (Toolkit): „|“ im Schrittnamen zerbrach die Markdown-Tabelle – wird maskiert.
+  DATA.steps.forEach(s=>L.push('| '+mdCell(s.name)+' | '+s.base+' | '+(s.phase==='vor'?'vor':'nach')+' | '+(s.parallel?'extern':'intern')+' | '+(s.ekuv?EKUVNAME[s.ekuv]:'—')+' | '+s.opt+' |'));
   L.push('','## Die drei Stufen',
     '1. **Ist (alles intern):** '+zt(m.intIst)+' interne Rüstzeit.',
     '2. **Intern → Extern:** '+zt(m.int2)+' intern · '+zt(m.ext2)+' extern.',
@@ -1619,9 +1628,9 @@ function buildJSON(){const m=metrics();return JSON.stringify({beispiel:EXAMPLES[
   kennzahlen:{interne_ruestzeit_ist:m.intIst,interne_ruestzeit_opt:m.intOpt,externe_ruestzeit_opt:m.extOpt,gesamt_ist:m.gesamtIst,gesamt_opt:m.gesamtOpt,reduktion_stillstand_proz:+(m.red*100).toFixed(1)},_state:DATA},null,2);}
 function buildObsidian(){const m=metrics(),FENCE='\u0060\u0060\u0060',today=new Date().toISOString().slice(0,10);
   const L=['---','tags: [smed, ruesten, lean, ekuv]','beispiel: '+EXAMPLES[curId].label,'erstellt: '+today,'---','','# SMED · '+EXAMPLES[curId].label,'',
-    '> [!info] Maschinenstillstand','> Interne Rüstzeit: **'+zt(m.intIst)+' → '+zt(m.intOpt)+'** (−'+(m.red*100).toFixed(0)+' %)','',
+    '> [!info] Maschinenstillstand','> Interne Rüstzeit: **'+zt(m.intIst)+' → '+zt(m.intOpt)+'** ('+redTxt(m.red)+')','',
     '## Rüstschritte','| Schritt | Ist | Klassifikation | EKUV | optim. |','|---|---|---|---|---|'];
-  DATA.steps.forEach(s=>L.push('| '+s.name+' | '+zt(s.base)+' | '+(s.parallel?'extern':'intern')+' | '+(s.ekuv?EKUVNAME[s.ekuv]:'—')+' | '+zt(s.opt)+' |'));
+  DATA.steps.forEach(s=>L.push('| '+mdCell(s.name)+' | '+zt(s.base)+' | '+(s.parallel?'extern':'intern')+' | '+(s.ekuv?EKUVNAME[s.ekuv]:'—')+' | '+zt(s.opt)+' |'));
   L.push('','> [!tip] EKUV','> Eliminieren · Kombinieren · Umstellen · Vereinfachen – Verschwendung im Rüsten minimieren.','',
     '## Mindmap',FENCE+'mermaid','mindmap','  root((SMED))','    Intern->Extern','      parallel ruesten','    EKUV','      Eliminieren','      Kombinieren','      Umstellen','      Vereinfachen','    Wirkung','      kleine Lose','      Heijunka',FENCE,'',stateComment());
   return L.join('\n');
@@ -1630,7 +1639,9 @@ el('#expMd').addEventListener('click',()=>download('smed-'+curId+'.md',buildMark
 el('#expJson').addEventListener('click',()=>download('smed-'+curId+'.json',buildJSON(),'application/json;charset=utf-8'));
 el('#expObs').addEventListener('click',()=>download('smed-'+curId+'-obsidian.md',buildObsidian(),'text/markdown;charset=utf-8'));
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA)+' -->';}
+// FIX (Toolkit): „-->“ in einem Namen beendete den Kommentar vorzeitig – Re-Import scheiterte. „>“ als > (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA).replace(/>/g,'\\u003e')+' -->';}
+const mdCell=s=>String(s==null?'':s).replace(/\|/g,'\\|');
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -1641,7 +1652,8 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(s,fname){DATA=A.shape(s)||s;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();renderStepTabs();showStep(1);setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
+// FIX (Toolkit): Ungültige Daten überschrieben DATA (A.shape(s)||s) und ließen das Tool kaputt zurück – jetzt Fehler vor dem Überschreiben.
+function applyImport(s,fname){const d=A.shape(s);if(!d)throw new Error('ungültige Daten');DATA=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);stepCur=1;renderAll();renderStepTabs();showStep(1);setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
 el('#importBtn').addEventListener('click',()=>el('#importFile').click());
 el('#importFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{applyImport(importFromText(r.result),file.name);}catch(err){setImpNote('\u26a0 Datei konnte nicht gelesen werden',true);}finally{e.target.value='';}};r.onerror=()=>{setImpNote('\u26a0 Lesefehler',true);};r.readAsText(file);});
 

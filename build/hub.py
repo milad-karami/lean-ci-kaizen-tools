@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CFG = json.loads((ROOT / "build" / "toolkit.json").read_text(encoding="utf-8"))
 BASE = "https://milad-karami.github.io/lean-ci-kaizen-tools/"
+REPO = "https://github.com/milad-karami/lean-ci-kaizen-tools"
 
 
 def esc(s):
@@ -22,9 +23,10 @@ def card(t):
     en_link = (f'<a class="alt en" href="tools/{t["en_file"]}">English version →</a>'
                f'<a class="alt de" href="tools/{t["en_file"]}">Englische Version →</a>') if t.get("en_file") else ""
     return (f'<article class="card"><a class="hit" href="{href}" aria-label="{esc(t["en"])}"></a>'
-            f'<div class="art"><img src="assets/illustrations/{t["id"]}.svg" alt="" loading="lazy" width="480" height="300"></div>'
+            f'<div class="art"><img src="assets/illustrations/{t["id"]}.webp" alt="" loading="lazy" width="960" height="600"></div>'
             f'<div class="cb"><h3>{bi(t["en"], t["de"])}</h3><p>{bi(t["sum_en"], t["sum_de"])}</p>'
             f'<div class="meta">{langs}<span class="pill gold">PDF</span>'
+            f'<a class="pill ver" href="{REPO}/blob/main/changelog/{t["id"]}.md" title="Changelog">v{t["version"]}</a>'
             f'<span class="go">{bi("Open →", "Öffnen →")}</span></div>{en_link}</div></article>')
 
 
@@ -87,8 +89,8 @@ HTML = f"""<!DOCTYPE html>
   .btn.primary{{background:var(--gold);color:var(--navy);border-color:var(--gold)}}
   .btn:hover{{filter:brightness(1.08)}}
   .facts{{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}}
-  .facts span{{font-size:12.5px;font-weight:600;color:#dbe3f3;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:5px 11px;background:rgba(255,255,255,.05)}}
-  .hero-art img{{width:100%;height:auto;display:block;filter:drop-shadow(0 24px 40px rgba(0,0,0,.35))}}
+  .facts>span{{font-size:12.5px;font-weight:600;color:#dbe3f3;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:5px 11px;background:rgba(255,255,255,.05)}}
+  .hero-art img{{width:100%;height:auto;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 60px -20px rgba(0,0,0,.55)}}
   .steps{{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:0;padding:0 0 30px;counter-reset:s}}
   .steps a{{display:block;text-decoration:none;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 12px 11px;position:relative;transition:background .2s,transform .2s}}
   .steps a:hover{{background:rgba(242,201,76,.14);transform:translateY(-2px)}}
@@ -111,14 +113,17 @@ HTML = f"""<!DOCTYPE html>
   .card{{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}}
   .card:hover{{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(20,33,61,.45);border-color:#c9c2b2}}
   .card .hit{{position:absolute;inset:0;z-index:1}}
-  .card .art{{background:linear-gradient(180deg,#f9f7f2,#f1eee6);padding:10px 14px 4px;aspect-ratio:480/300}}
-  .card .art img{{width:100%;height:100%;display:block}}
+  .card .art{{background:#f7f4ee;aspect-ratio:1.6;overflow:hidden}}
+  .card .art img{{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s}}
+  .card:hover .art img{{transform:scale(1.04)}}
   .cb{{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}}
   .cb h3{{margin:0 0 6px;font-size:17px}}
   .cb p{{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.5;flex:1}}
   .meta{{display:flex;align-items:center;gap:6px}}
   .pill{{font-size:11px;font-weight:800;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}}
   .pill.gold{{background:#fff7d9;border-color:#ecddaa;color:#7a5c0c}}
+  .pill.ver{{position:relative;z-index:2;text-decoration:none;font-family:"IBM Plex Mono",ui-monospace,monospace}}
+  .pill.ver:hover{{color:var(--navy);border-color:var(--navy)}}
   .go{{margin-left:auto;font-weight:800;color:var(--blue);font-size:14px}}
   .alt{{position:relative;z-index:2;margin-top:8px;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none}}
   footer{{margin-top:40px;background:var(--navy);color:#b9c4dc;font-size:13.5px;line-height:1.6}}
@@ -151,7 +156,7 @@ HTML = f"""<!DOCTYPE html>
         </div>
         <div class="facts"><span>{bi("Free", "Kostenlos")}</span><span>{bi("No install", "Ohne Installation")}</span><span>{bi("Works offline", "Läuft offline")}</span><span>{bi("PDF report in every tool", "PDF-Bericht in jedem Tool")}</span><span>{bi("Tools in German · Kanban also in English", "Tools auf Deutsch · Kanban auch auf Englisch")}</span></div>
       </div>
-      <div class="hero-art"><img src="assets/illustrations/toolkit-hero.svg" alt="" width="960" height="360"></div>
+      <div class="hero-art"><img src="assets/illustrations/toolkit-hero.webp" alt="" width="1400" height="875"></div>
     </div>
     {stepper()}
   </div>
@@ -171,6 +176,7 @@ HTML = f"""<!DOCTYPE html>
       {bi("Further development:", "Weiterentwicklung:")} <a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> ·
       {bi("Original tools: John Naska", "Original-Tools: John Naska")} (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>), {bi("published with his permission", "veröffentlicht mit seiner Genehmigung")} ·
       <a href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">{bi("Source code & change log on GitHub", "Quellcode & Änderungsprotokoll auf GitHub")}</a>
+      · <a href="{REPO}/releases" target="_blank" rel="noopener">{bi("All versions (releases)", "Alle Versionen (Releases)")}</a>
     </div>
   </div>
 </footer>

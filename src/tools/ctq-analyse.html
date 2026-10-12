@@ -1801,7 +1801,8 @@ const K_LAST=NS+'.lastActive';
 let storeOK=true;
 try{ localStorage.setItem(NS+'.__t','1'); localStorage.removeItem(NS+'.__t'); }catch(e){ storeOK=false; }
 const safeGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
-function safeSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ storeOK=false; return false; } }
+// FIX (Toolkit): Ein voller Speicher setzte storeOK dauerhaft auf false – die Warnung erschien nie und Speichern blieb bis zum Neuladen gesperrt.
+function safeSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 const safeDel=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
 
 let PROJECTS={};
@@ -1937,8 +1938,6 @@ function scheduleAutosave(){
   }, 3000);
 }
 function showStorageFullWarning(){
-  if(!storeOK) return;
-  storeOK=false;
   toast('Speicher voll – bitte alte Analysen löschen.');
   updateSaveStatus('error');
 }
@@ -2430,11 +2429,12 @@ function loadKey(key, silent){
     const id=key.slice(3), ex=RAW[id]||RAW.restaurant;
     curKey='ex:'+id; curId=id;
     state=ensureShape(deepClone(ex));
+    spec=ensureSpec(null);   // FIX (Toolkit): Schwelle/CTQ-Auswahl des vorher geöffneten Projekts nicht in die Vorlage übernehmen
   }
   safeSet(K_LAST, curKey);
   const sel=el('#exampleSel'); if(sel) sel.value=curKey;
   renderAll();
-  if(!silent) updateDirtyUI();
+  if(!silent) clearDirty();   // FIX (Toolkit): nach dem Wechsel blieb »noch nicht gespeichert« stehen, obwohl die Änderungen verworfen wurden
 }
 function projectBaseKey(){
   if(curKey.startsWith('ex:')) return curKey.slice(3);
@@ -2619,7 +2619,8 @@ el('#projModal').addEventListener('click',e=>{
     toast('Alle Analysen gelöscht');
     return;
   }
-  if(b.dataset.pmLoad){ loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
+  // FIX (Toolkit): »Laden« verwarf ungespeicherte Änderungen ohne Rückfrage (wie im Auswahlfeld nachfragen)
+  if(b.dataset.pmLoad){ if(dirty && !confirm('Es gibt noch nicht fest gespeicherte Änderungen.\nTrotzdem wechseln?')) return; loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
   if(b.dataset.pmRen){ renameProject(b.dataset.pmRen); return; }
   if(b.dataset.pmDel){ deleteProject(b.dataset.pmDel); return; }
   if(b.dataset.pmRestore){ restoreProject(b.dataset.pmRestore); return; }
@@ -2761,7 +2762,9 @@ function buildJSON(){
       requirement:r.pr,ctqs:r.ctqs.map(c=>({ctq_merkmal:c.metric,einheit:c.unit,messmethode:c.method,spezifikation:specJson(c),kundendaten:voxJson(c)}))}))})),
     ctq_translation_matrix:matrix},null,2);
 }
-function mxRow(c){return '| '+c.map(x=>(S(x)||'—').replace(/\|/g,'\\|')).join(' | ')+' |';}
+// FIX (Toolkit): Zeilenumbrüche aus mehrzeiligen Feldern zerbrachen Tabelle/Liste im Export – beim Import gingen Messmethoden und Grenzen verloren bzw. wurden falsch zugeordnet.
+const L1=s=>S(s).replace(/\s*\n\s*/g,' ');
+function mxRow(c){return '| '+c.map(x=>(L1(x)||'—').replace(/\|/g,'\\|')).join(' | ')+' |';}
 const MX_HEAD=['Qualitätstreiber','Anforderung','CTQ-Merkmal','Einheit','Messmethode','USG','Ziel','OSG','Fehler, wenn','Zul. Fehlerquote %','Kundendaten (Wert=% zufrieden)'];
 function buildMatrixTable(){
   const L=['| '+MX_HEAD.join(' | ')+' |','|'+MX_HEAD.map(()=>'---').join('|')+'|'];
@@ -2779,17 +2782,17 @@ function checkLines(){
   })));
   return L.length?['## Prüfhinweise','',...L,'']:[];
 }
-function treeLine(r){return '- '+(r.pr||'(Anforderung)')+' → '+(r.ctqs.length?r.ctqs.map(c=>'**'+(ctqLabel(c)||'(Merkmal)')+'**').join(' · '):'_(kein CTQ)_');}
+function treeLine(r){return '- '+(L1(r.pr)||'(Anforderung)')+' → '+(r.ctqs.length?r.ctqs.map(c=>'**'+(L1(ctqLabel(c))||'(Merkmal)')+'**').join(' · '):'_(kein CTQ)_');}
 function buildMarkdown(){
   const v=state.voc;
-  const L=['# CTQ-Analyse: '+(state.need||'—'),'',
+  const L=['# CTQ-Analyse: '+(L1(state.need)||'—'),'',
     '## Kundenstimme → Anforderung',
-    '1. **O-Ton:** '+(v.quote||'—'),
-    '2. **Kernproblem:** '+(v.issue||'—'),
-    '3. **Anforderung:** '+(v.req||'—'),'',
+    '1. **O-Ton:** '+(L1(v.quote)||'—'),
+    '2. **Kernproblem:** '+(L1(v.issue)||'—'),
+    '3. **Anforderung:** '+(L1(v.req)||'—'),'',
     '## CTQ-Baum','','_Bedürfnis → Qualitätstreiber → Leistungsanforderung → CTQ (messbares Merkmal [Einheit]); je Anforderung ein oder mehrere CTQs_',''];
-  L.push('**Bedürfnis:** '+(state.need||'—'),'');
-  state.drivers.forEach(d=>{L.push('### '+(d.name||'(Qualitätstreiber)'));
+  L.push('**Bedürfnis:** '+(L1(state.need)||'—'),'');
+  state.drivers.forEach(d=>{L.push('### '+(L1(d.name)||'(Qualitätstreiber)'));
     d.reqs.forEach(r=>L.push(treeLine(r)));
     if(!d.reqs.length)L.push('- _(keine Anforderungen)_');L.push('');});
   L.push('## CTQ-Spezifikation (Übersetzungsmatrix)','','_USG/OSG = untere/obere Spezifikationsgrenze. Ein leeres Grenzfeld bedeutet: einseitige Spezifikation._','',...buildMatrixTable(),'',...checkLines());
@@ -2799,16 +2802,16 @@ function mmClean(s){return (s||'').replace(/["()\[\]{};#]/g,' ').replace(/\s+/g,
 function buildObsidian(){
   const FENCE='\u0060\u0060\u0060';const today=new Date().toISOString().slice(0,10);const v=state.voc;
   const L=['---','tags: [ctq, voice-of-customer, six-sigma, define]','erstellt: '+today,'---','',
-    '# CTQ-Analyse: '+(state.need||'—'),'',
-    '> [!quote] Kundenstimme','> '+(v.quote||'—'),'',
-    '> [!warning] Kernproblem','> '+(v.issue||'—'),'',
-    '> [!success] Anforderung','> '+(v.req||'—'),'',
+    '# CTQ-Analyse: '+(L1(state.need)||'—'),'',
+    '> [!quote] Kundenstimme','> '+(S(v.quote).replace(/\n/g,'\n> ')||'—'),'',
+    '> [!warning] Kernproblem','> '+(S(v.issue).replace(/\n/g,'\n> ')||'—'),'',
+    '> [!success] Anforderung','> '+(S(v.req).replace(/\n/g,'\n> ')||'—'),'',
     '## CTQ-Baum'];
-  state.drivers.forEach(d=>{L.push('### '+(d.name||'(Qualitätstreiber)'));
+  state.drivers.forEach(d=>{L.push('### '+(L1(d.name)||'(Qualitätstreiber)'));
     d.reqs.forEach(r=>L.push(treeLine(r)));
     if(!d.reqs.length)L.push('- ');L.push('');});
   L.push('> [!todo] CTQ-Spezifikation prüfen');
-  state.drivers.forEach(d=>d.reqs.forEach(r=>r.ctqs.forEach(c=>L.push('> - [ ] '+(reqState(c)==='err'?'⚠ ':'')+(ctqLabel(c)||'(Merkmal)')+': '+(specKind(c)==='none'?'Grenze fehlt':specWords(c)+(isNum(c.target)?' (Ziel '+fmtNum(c.target)+uS(c)+')':'')+' – Fehler, wenn '+defectWords(c))))));
+  state.drivers.forEach(d=>d.reqs.forEach(r=>r.ctqs.forEach(c=>L.push('> - [ ] '+(reqState(c)==='err'?'⚠ ':'')+(L1(ctqLabel(c))||'(Merkmal)')+': '+(specKind(c)==='none'?'Grenze fehlt':specWords(c)+(isNum(c.target)?' (Ziel '+fmtNum(c.target)+uS(c)+')':'')+' – Fehler, wenn '+defectWords(c))))));
   L.push('','## CTQ-Spezifikation (Übersetzungsmatrix)','',...buildMatrixTable(),'',...checkLines());
   L.push('## Mindmap',FENCE+'mermaid','mindmap','  root(('+mmClean(state.need||'CTQ')+'))');
   state.drivers.forEach(d=>{L.push('    '+mmClean(d.name));d.reqs.forEach(r=>{L.push('      '+mmClean(r.pr));r.ctqs.forEach(c=>L.push('        '+mmClean(ctqLabel(c)||'Merkmal')));});});
@@ -2985,9 +2988,9 @@ function applyImport(res, fname){
     Object.keys(extraTrash).forEach(id=>{ const p=ensureProject(extraTrash[id]); if(p){ p.deleted=Number(p.deleted)||Date.now(); TRASH[id]=p; } });
     persistTrash();
   }
-  const id=newProjId();
+  const id=newProjId();   // FIX (Toolkit): Projekt speicherte die Spezifikations-Einstellungen der vorher offenen Analyse statt der importierten
   const label=(fname||'Import').replace(/\.(md|markdown|json|txt|html?)$/i,'').trim()+' · Import';
-  PROJECTS[id]={ id, label, base:'leer', note:'', data:deepClone(data), spec:deepClone(importedSpec||spec), updated:Date.now(), created:Date.now() };
+  PROJECTS[id]={ id, label, base:'leer', note:'', data:deepClone(data), spec:ensureSpec(importedSpec||null), updated:Date.now(), created:Date.now() };
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
@@ -3310,7 +3313,7 @@ function init(){
   loadProjectsFromStorage();
 
   const emb=readEmbedded();
-  let restored=false;
+  let restored=false, fromDraft=false;
 
   if(emb && emb.data){
     if(emb.projects && typeof emb.projects==='object'){
@@ -3337,7 +3340,7 @@ function init(){
       state=ensureShape(deepClone(draftJ.data));
       spec=ensureSpec(deepClone(draftJ.spec));
       bootNote='Letzter Arbeitsstand wiederhergestellt';
-      restored=true;
+      restored=true; fromDraft=true;
     }else{
       curKey=emb.curKey||'ex:restaurant';
     if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:restaurant';
@@ -3361,7 +3364,7 @@ function init(){
           state=ensureShape(deepClone(j.data));
           spec=ensureSpec(deepClone(j.spec));
           bootNote='↻ Letzter Arbeitsstand automatisch wiederhergestellt';
-          restored=true;
+          restored=true; fromDraft=true;
         }
       }catch(e){}
     }
@@ -3396,6 +3399,8 @@ function init(){
   renderSteps();
   faqRender();
   clearDirty();
+  // FIX (Toolkit): wiederhergestellter Arbeitsstand galt als gespeichert und der Entwurf wurde gelöscht – beim nächsten Schließen ging er verloren
+  if(fromDraft) markDirty();
 
   if(bootNote){ setTimeout(()=>{ toast(bootNote); bootNote=null; },500); }
 }

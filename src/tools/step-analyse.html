@@ -1747,7 +1747,8 @@ function buildObsidian(){
   L.push('','## Mindmap',FENCE+'mermaid','mindmap','  root(('+mmClean(state.object||'STEP-Analyse')+'))');
   curCats().forEach(k=>{
     L.push('    '+mmClean(CATS[k].name));
-    facOf(k).forEach(f=>L.push('      '+mmClean(f.t)+(f.kind==='chance'?' (+)':f.kind==='risiko'?' (-)':'')));
+    // FIX (Toolkit): »(+)«/»(-)« ist in Mermaid-Mindmaps eine Knotenform – der Faktorname verschwand, sichtbar war nur »+«/»-«
+    facOf(k).forEach(f=>L.push('      '+mmClean(f.t)+(f.kind==='chance'?' +':f.kind==='risiko'?' -':'')));
   });
   L.push(FENCE,'');
   L.push(stateComment());return L.join('\n');
@@ -1757,7 +1758,8 @@ el('#expJson').addEventListener('click',()=>download(slug()+'.json',buildJSON(),
 el('#expObs').addEventListener('click',()=>download(slug()+'.md',buildObsidian(),'text/markdown;charset=utf-8'));
 
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(state)+' -->';}
+// FIX (Toolkit): »-->« im Nutzertext beendete den Kommentar vorzeitig – Import schlug fehl; als JSON-Escape \u003e schreiben
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(state).replace(/-->/g,'--\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}

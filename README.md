@@ -17,26 +17,33 @@ The tools follow **DMAIC** – the Six Sigma improvement cycle – with a strate
 previous / next tool), a **📄 PDF report** with selectable sections, saving of your work in the browser and Markdown /
 JSON / Obsidian export. The tools are in German; the Kanban simulation is also available in English.
 
-| Phase | Tool | What it does | Open |
-|---|---|---|---|
-| 0 · Context & strategy | **STEP / PEST analysis** | Scan the macro environment: social, technological, economic and political factors. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) |
-| 0 · Context & strategy | **Five Forces** | Porter's industry structure: rivalry, suppliers, buyers, new entrants, substitutes. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) |
-| 0 · Context & strategy | **SWOT analysis (incl. TOWS)** | Strengths, weaknesses, opportunities, threats – turned into strategic options. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) |
-| 1 · Define | **SIPOC** | Scope the process: suppliers, inputs, process steps, outputs, customers. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) |
-| 1 · Define | **Kano model** | Classify customer requirements: basic, performance and delighter features. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) |
-| 1 · Define | **CTQ analysis** | Translate the voice of the customer into measurable critical-to-quality specs. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) |
-| 2 · Measure | **Process walk-through (Gemba)** | Capture the process on site: think in systems, observe, document. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) |
-| 2 · Measure | **OEE calculator** | Overall equipment effectiveness = availability × performance × quality – with loss analysis. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) |
-| 3 · Analyze | **Value stream mapping (current & future)** | Make material and information flow visible, find lead time and waste. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) |
-| 3 · Analyze | **Ishikawa diagram** | Collect and rate causes systematically (6M) – instead of treating symptoms. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) |
-| 4 · Improve | **SMED calculator** | Cut changeover time: move internal to external steps, parallelise, standardise. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) |
-| 4 · Improve | **EPEI calculator** | Every part every interval: derive lot size and supermarket from changeover and capacity. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) |
-| 4 · Improve | **Heijunka** | Level production by volume and mix – a steady flow instead of waves. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) |
-| 4 · Improve | **Kanban control loops** | Pull simulation with an animated factory, optimisation to zero shortages and changeover time. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) |
-| 5 · Control | **PDCA cycle** | Plan – Do – Check – Act: secure improvements, standardise and keep turning. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
+| Phase | Tool | What it does | Open | Version |
+|---|---|---|---|---|
+| 0 · Context & strategy | **STEP / PEST analysis** | Scan the macro environment: social, technological, economic and political factors. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) | [v2.0.0](changelog/step-analyse.md) |
+| 0 · Context & strategy | **Five Forces** | Porter's industry structure: rivalry, suppliers, buyers, new entrants, substitutes. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) | [v2.0.0](changelog/five-forces.md) |
+| 0 · Context & strategy | **SWOT analysis (incl. TOWS)** | Strengths, weaknesses, opportunities, threats – turned into strategic options. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) | [v2.0.0](changelog/swot-analyse.md) |
+| 1 · Define | **SIPOC** | Scope the process: suppliers, inputs, process steps, outputs, customers. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) | [v2.0.0](changelog/sipoc.md) |
+| 1 · Define | **Kano model** | Classify customer requirements: basic, performance and delighter features. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) | [v2.0.0](changelog/kano-modell.md) |
+| 1 · Define | **CTQ analysis** | Translate the voice of the customer into measurable critical-to-quality specs. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) | [v2.0.0](changelog/ctq-analyse.md) |
+| 2 · Measure | **Process walk-through (Gemba)** | Capture the process on site: think in systems, observe, document. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) | [v2.0.0](changelog/prozess-begehung.md) |
+| 2 · Measure | **OEE calculator** | Overall equipment effectiveness = availability × performance × quality – with loss analysis. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) | [v2.0.0](changelog/oee-rechner.md) |
+| 3 · Analyze | **Value stream mapping (current & future)** | Make material and information flow visible, find lead time and waste. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) | [v2.0.0](changelog/wertstromanalyse.md) |
+| 3 · Analyze | **Ishikawa diagram** | Collect and rate causes systematically (6M) – instead of treating symptoms. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) | [v2.0.0](changelog/ishikawa.md) |
+| 4 · Improve | **SMED calculator** | Cut changeover time: move internal to external steps, parallelise, standardise. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) | [v2.0.0](changelog/smed-rechner.md) |
+| 4 · Improve | **EPEI calculator** | Every part every interval: derive lot size and supermarket from changeover and capacity. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) | [v2.0.0](changelog/epei-rechner.md) |
+| 4 · Improve | **Heijunka** | Level production by volume and mix – a steady flow instead of waves. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) | [v2.0.0](changelog/heijunka.md) |
+| 4 · Improve | **Kanban control loops** | Pull simulation with an animated factory, optimisation to zero shortages and changeover time. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) | [v2.2.0](changelog/kanban-regelkreislauf.md) |
+| 5 · Control | **PDCA cycle** | Plan – Do – Check – Act: secure improvements, standardise and keep turning. | [Open (DE)](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) | [v2.0.0](changelog/pdca.md) |
 
 
 ---
+
+## Versions & changelog
+
+Every tool has its own version number and change log – what changed and which bugs were fixed compared to John Naska's original:
+see the **Version** column above or the [`changelog/`](changelog/) folder. All versions, including the **unchanged originals (v1.0.0)**,
+can be downloaded as single HTML files from [**Releases**](https://github.com/milad-karami/lean-ci-kaizen-tools/releases) (tags `<tool>-v<version>`, e.g. `oee-rechner-v1.0.0`).
+The complete website is released as `toolkit-v<version>`.
 
 ## Kanban control loops – a guided tour
 
@@ -138,23 +145,30 @@ Using the tools for learning is explicitly welcome. If you develop the tool furt
 
 **15 kostenlose, interaktive Werkzeuge zu Lean, KVP, Six Sigma und Kaizen – entlang des Verbesserungsprozesses (Kontext → Define → Measure → Analyze → Improve → Control), jedes mit PDF-Bericht. Ohne Installation, ohne Konto, auch offline.**
 
-| Phase | Werkzeug | Wofür | Öffnen |
-|---|---|---|---|
-| 0 · Kontext & Strategie | **STEP- / PEST-Analyse** | Makro-Umfeld systematisch scannen: soziale, technologische, ökonomische und politische Einflüsse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) |
-| 0 · Kontext & Strategie | **Five Forces** | Branchenstruktur nach Porter: Rivalität, Lieferanten, Kunden, neue Anbieter, Substitute. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) |
-| 0 · Kontext & Strategie | **SWOT-Analyse (inkl. TOWS)** | Stärken, Schwächen, Chancen, Risiken – und daraus strategische Optionen ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) |
-| 1 · Define · Definieren | **SIPOC** | Den Prozess abgrenzen: Lieferanten, Inputs, Prozessschritte, Outputs, Kunden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) |
-| 1 · Define · Definieren | **Kano-Modell** | Kundenanforderungen einordnen: Basis-, Leistungs- und Begeisterungsmerkmale. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) |
-| 1 · Define · Definieren | **CTQ-Analyse** | Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) |
-| 2 · Measure · Messen | **Prozess-Begehung (Gemba)** | Den Prozess vor Ort erfassen: systemisch denken, beobachten, dokumentieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) |
-| 2 · Measure · Messen | **OEE-Rechner** | Gesamtanlageneffektivität = Verfügbarkeit × Leistung × Qualität – mit Verlustanalyse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) |
-| 3 · Analyze · Analysieren | **Wertstromanalyse (IST & SOLL)** | Material- und Informationsfluss sichtbar machen, Durchlaufzeit und Verschwendung finden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) |
-| 3 · Analyze · Analysieren | **Ishikawa-Diagramm** | Ursachen strukturiert sammeln und bewerten (6M) – statt nur Symptome zu behandeln. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) |
-| 4 · Improve · Verbessern | **SMED-Rechner** | Rüstzeit verkürzen: interne in externe Schritte verlagern, parallelisieren, standardisieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) |
-| 4 · Improve · Verbessern | **EPEI-Rechner** | Every Part Every Interval: Losgröße und Supermarkt aus Rüstzeit und Kapazität ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) |
-| 4 · Improve · Verbessern | **Heijunka** | Produktion nach Menge und Variantenmix nivellieren – gleichmäßiger Fluss statt Wellen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) |
-| 4 · Improve · Verbessern | **Kanban-Regelkreisläufe** | Pull-Simulation mit animierter Fabrik, Optimierung auf 0 Fehlmengen und Rüstzeit. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [Englisch](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) |
-| 5 · Control · Sichern | **PDCA-Zyklus** | Plan – Do – Check – Act: Verbesserungen absichern, standardisieren und weiterdrehen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
+| Phase | Werkzeug | Wofür | Öffnen | Version |
+|---|---|---|---|---|
+| 0 · Kontext & Strategie | **STEP- / PEST-Analyse** | Makro-Umfeld systematisch scannen: soziale, technologische, ökonomische und politische Einflüsse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) | [v2.0.0](changelog/step-analyse.md) |
+| 0 · Kontext & Strategie | **Five Forces** | Branchenstruktur nach Porter: Rivalität, Lieferanten, Kunden, neue Anbieter, Substitute. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) | [v2.0.0](changelog/five-forces.md) |
+| 0 · Kontext & Strategie | **SWOT-Analyse (inkl. TOWS)** | Stärken, Schwächen, Chancen, Risiken – und daraus strategische Optionen ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) | [v2.0.0](changelog/swot-analyse.md) |
+| 1 · Define · Definieren | **SIPOC** | Den Prozess abgrenzen: Lieferanten, Inputs, Prozessschritte, Outputs, Kunden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) | [v2.0.0](changelog/sipoc.md) |
+| 1 · Define · Definieren | **Kano-Modell** | Kundenanforderungen einordnen: Basis-, Leistungs- und Begeisterungsmerkmale. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) | [v2.0.0](changelog/kano-modell.md) |
+| 1 · Define · Definieren | **CTQ-Analyse** | Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) | [v2.0.0](changelog/ctq-analyse.md) |
+| 2 · Measure · Messen | **Prozess-Begehung (Gemba)** | Den Prozess vor Ort erfassen: systemisch denken, beobachten, dokumentieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) | [v2.0.0](changelog/prozess-begehung.md) |
+| 2 · Measure · Messen | **OEE-Rechner** | Gesamtanlageneffektivität = Verfügbarkeit × Leistung × Qualität – mit Verlustanalyse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) | [v2.0.0](changelog/oee-rechner.md) |
+| 3 · Analyze · Analysieren | **Wertstromanalyse (IST & SOLL)** | Material- und Informationsfluss sichtbar machen, Durchlaufzeit und Verschwendung finden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) | [v2.0.0](changelog/wertstromanalyse.md) |
+| 3 · Analyze · Analysieren | **Ishikawa-Diagramm** | Ursachen strukturiert sammeln und bewerten (6M) – statt nur Symptome zu behandeln. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) | [v2.0.0](changelog/ishikawa.md) |
+| 4 · Improve · Verbessern | **SMED-Rechner** | Rüstzeit verkürzen: interne in externe Schritte verlagern, parallelisieren, standardisieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) | [v2.0.0](changelog/smed-rechner.md) |
+| 4 · Improve · Verbessern | **EPEI-Rechner** | Every Part Every Interval: Losgröße und Supermarkt aus Rüstzeit und Kapazität ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/epei-rechner.html) | [v2.0.0](changelog/epei-rechner.md) |
+| 4 · Improve · Verbessern | **Heijunka** | Produktion nach Menge und Variantenmix nivellieren – gleichmäßiger Fluss statt Wellen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) | [v2.0.0](changelog/heijunka.md) |
+| 4 · Improve · Verbessern | **Kanban-Regelkreisläufe** | Pull-Simulation mit animierter Fabrik, Optimierung auf 0 Fehlmengen und Rüstzeit. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [Englisch](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) | [v2.2.0](changelog/kanban-regelkreislauf.md) |
+| 5 · Control · Sichern | **PDCA-Zyklus** | Plan – Do – Check – Act: Verbesserungen absichern, standardisieren und weiterdrehen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) | [v2.0.0](changelog/pdca.md) |
+
+### Versionen & Änderungsprotokoll
+
+Jedes Tool hat eine eigene Versionsnummer und ein eigenes Änderungsprotokoll – was sich gegenüber dem Original von John Naska geändert hat
+und welche Fehler behoben wurden: siehe Spalte **Version** oben oder den Ordner [`changelog/`](changelog/). Alle Versionen, auch die
+**unveränderten Originale (v1.0.0)**, gibt es als einzelne HTML-Datei unter [**Releases**](https://github.com/milad-karami/lean-ci-kaizen-tools/releases) (Tags `<tool>-v<version>`,
+z. B. `oee-rechner-v1.0.0`). Die gesamte Website erscheint als `toolkit-v<version>`.
 
 ### Funktionen
 

@@ -1611,7 +1611,8 @@ function updateInputNotes(){
 
 /* ===== waterfall ===== */
 function renderWaterfall(){
-  const c=calc(), dayMin=c.dayMin||1, dayPcs=dayMin*S.pph/60;
+  // FIX (Toolkit): Bezugsbreite mindestens GPS – bei GPS > Tag gesamt liefen die Balken sonst über 100 % hinaus
+  const c=calc(), dayMin=Math.max(c.dayMin,c.plannedMin)||1, dayPcs=dayMin*S.pph/60;
   const dayLabel=isMin()?Math.round(dayMin)+' min':(Math.round(S.dayH*100)/100)+' h';
   const rows=[
     {name:'Tag gesamt ('+dayLabel+')',pcs:dayPcs,w:1,color:'#8a857a',lossLabel:c.notPlannedMin>0?(S.notPlannedLabel||'Nutzungsverlust')+' '+fmtSpan(c.notPlannedMin):'',lossW:c.notPlannedMin/dayMin,lossColor:'#cfc8ba'},
@@ -1839,7 +1840,8 @@ el('#expMd').addEventListener('click',()=>download('oee-'+curId+'.md',buildMarkd
 el('#expJson').addEventListener('click',()=>download('oee-'+curId+'.json',buildJSON(),'application/json;charset=utf-8'));
 el('#expObs').addEventListener('click',()=>download('oee-'+curId+'-obsidian.md',buildObsidian(),'text/markdown;charset=utf-8'));
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify({S})+' -->';}
+// FIX (Toolkit): »>« im JSON maskieren – sonst beendet ein »-->« in einer Verlust-Bezeichnung den Kommentar vorzeitig und der Import scheitert
+function stateComment(){return '<!-- tool-state: '+JSON.stringify({S}).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -2124,7 +2126,8 @@ const A={
     const liste=a=>(Array.isArray(a)?a:[]).filter(o=>o && typeof o==='object').slice(0,30)
       .map(o=>({ label:String(o.label||'').slice(0,120), min:z(o.min,0,1e6,0) }));
     const dayH=z(x.dayH,0.1,24,24);
-    const o={ dayH, plannedH:z(x.plannedH,0,dayH,Math.min(16,dayH)), pph:z(x.pph,0.01,1e6,60),
+    // FIX (Toolkit): GPS wie bei der Eingabe nur auf 24 h begrenzen – vorher wurde eine GPS > Tag gesamt beim Laden still gekürzt und die OEE änderte sich nach dem Neuladen
+    const o={ dayH, plannedH:z(x.plannedH,0,24,Math.min(16,dayH)), pph:z(x.pph,0.01,1e6,60),
       vLosses:liste(x.vLosses), lLosses:liste(x.lLosses), qLoss:z(x.qLoss,0,1e7,0),
       timeUnit:x.timeUnit==='min'?'min':'h', lMode:x.lMode==='qty'?'qty':'min', producedQty:z(x.producedQty,0,1e7,0),
       notPlannedLabel:String(x.notPlannedLabel||'Nutzungsverlust').slice(0,80) };

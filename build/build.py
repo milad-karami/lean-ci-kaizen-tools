@@ -5,6 +5,7 @@ Usage:  python3 build/build.py
 Die gemeinsame Ebene (Top-Leiste, Hero im Toolkit-Look, Illustration, PDF-Bericht, Footer-Hinweis) wird
 eingefügt, ohne den Code der Tools zu verändern. Änderungen an den Tools selbst gehören nach src/tools/.
 """
+import base64
 import json
 import re
 from pathlib import Path
@@ -81,18 +82,25 @@ def brand_bar(tool, lang):
             f'{nav_link(next_t, "tk-next", "›", t["next"])}</div></div></nav>')
 
 
-def footer_block(lang):
+def footer_block(lang, tool):
+    ver = changelog_link(tool, f'Version {tool["version"]}')
     if lang == "en":
         return ('<div class="fblock tk-credit"><h4>This toolkit version</h4>Further developed by '
                 '<a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> '
-                '(October 2026): unified design, process navigation, PDF report and bug fixes – see the '
-                '<a href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">change log on GitHub</a>. '
+                '(October 2026): unified design, process navigation, PDF report and bug fixes. '
+                f'{ver} ({esc(tool["version_name"])}) – {changelog_link(tool, "change log on GitHub")}. '
                 'Original tool: John Naska (mokka.solutions), published with his permission.</div>')
     return ('<div class="fblock tk-credit"><h4>Diese Toolkit-Fassung</h4>Weiterentwickelt von '
             '<a href="https://www.linkedin.com/in/milad-karami-63075b78/" target="_blank" rel="noopener">Milad Karami</a> '
-            '(Oktober 2026): einheitliches Design, Prozess-Navigation, PDF-Bericht und Fehlerkorrekturen – siehe '
-            '<a href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">Änderungsprotokoll auf GitHub</a>. '
+            '(Oktober 2026): einheitliches Design, Prozess-Navigation, PDF-Bericht und Fehlerkorrekturen. '
+            f'{ver} ({esc(tool["version_name"])}) – {changelog_link(tool, "Änderungsprotokoll auf GitHub")}. '
             'Original-Tool: John Naska (mokka.solutions), veröffentlicht mit seiner Genehmigung.</div>')
+
+
+def changelog_link(tool, text, cls=""):
+    c = f' class="{cls}"' if cls else ""
+    return (f'<a{c} href="https://github.com/milad-karami/lean-ci-kaizen-tools/blob/main/changelog/{tool["id"]}.md" '
+            f'target="_blank" rel="noopener" title="Changelog">{esc(text)}</a>')
 
 
 def once(s, pattern, repl, what, flags=0):
@@ -105,19 +113,22 @@ def once(s, pattern, repl, what, flags=0):
 def build_tool(tool, src_name, out_name, lang="de"):
     s = (ROOT / "src" / "tools" / src_name).read_text(encoding="utf-8")
     phase = PHASES[tool["phase"]]
-    art = read_svg(ROOT / "assets" / "illustrations" / f'{tool["id"]}.svg')
+    art_file = B / "art" / f'{tool["id"]}.webp'  # kleine Codex-Illustration, eingebettet (Tool bleibt eine Datei)
+    art = (f'<img alt="" src="data:image/webp;base64,{base64.b64encode(art_file.read_bytes()).decode()}">'
+           if art_file.exists() else "")
     special = tool.get("special") == "kanban"
     cfg = {"id": tool["id"], "title": tool[lang], "phaseN": phase["n"], "phaseName": phase[lang],
-           "logo": LOGO, "art": art, "lang": lang, "noReport": special}
+           "logo": LOGO, "art": art, "version": tool["version"], "lang": lang, "noReport": special}
     head = (f'<style id="tk-style">{CSS}</style>\n'
             f'<script id="tk-cfg">window.TK_CFG={js_json(cfg)};</script>\n'
             f'<script id="tk-layer">{JS}</script>\n')
     s = once(s, r"<body[^>]*>", lambda m: m.group(0) + "\n" + brand_bar(tool, lang), "<body>")
     chip = (f'<div class="tk-hero-art" aria-hidden="true">{art}</div>' if art else "") + \
-           f'<div class="tk-phase"><i>{phase["n"]}</i>{T[lang]["phase"]} {phase["n"]} · {esc(phase[lang])}</div>'
+           f'<div class="tk-phase"><i>{phase["n"]}</i>{T[lang]["phase"]} {phase["n"]} · {esc(phase[lang])}' \
+           f'{changelog_link(tool, "v" + tool["version"], "tk-ver")}</div>'
     s = once(s, r'<header class="hero"[^>]*>', lambda m: m.group(0) + chip, "header.hero")
     if not special:
-        s = once(s, r'<footer class="foot">', lambda m: m.group(0) + footer_block(lang), "footer.foot")
+        s = once(s, r'<footer class="foot">', lambda m: m.group(0) + footer_block(lang, tool), "footer.foot")
     s = once(s, r"<title>([^<]*)</title>",
              lambda m: f"<title>{m.group(1)} · Lean · CI · Kaizen Toolkit</title>", "<title>")
     # Kopf-Einschub zuletzt: das Layer-Skript enthält selbst Tags wie <body> als Text

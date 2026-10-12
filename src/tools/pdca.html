@@ -2435,7 +2435,8 @@ function deleteCycle(){
   if(!confirm(`Durchlauf ${i+1} mit allen Einträgen entfernen?`)) return;
   D.cycles.splice(i,1); D.cur=Math.min(i,D.cycles.length-1);
   renderAll(); markDirty();
-  toast(`Durchlauf ${i+1} entfernt`,{label:`Rückgängig`,onClick:()=>{ D.cycles.splice(i,0,alt); D.cur=i; renderAll(); markDirty(); }});
+  const D0=D; /* FIX (Toolkit): „Rückgängig“ nur im selben Vorhaben – nach einem Wechsel landete der Durchlauf sonst im anderen Vorhaben */
+  toast(`Durchlauf ${i+1} entfernt`,{label:`Rückgängig`,onClick:()=>{ if(D!==D0||D.cycles.length>=MAX_CYC) return; D.cycles.splice(i,0,alt); D.cur=i; renderAll(); markDirty(); }});
 }
 
 function refreshDropdown(){
@@ -3210,7 +3211,7 @@ function init(){
   loadProjectsFromStorage();
 
   const emb=readEmbedded();
-  let restored=false;
+  let restored=false, fromDraft=false;
 
   if(emb && emb.data){
     if(emb.projects && typeof emb.projects==='object'){
@@ -3236,7 +3237,7 @@ function init(){
       curKey=draftJ.curKey||emb.curKey||'ex:leer';
       if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:leer';
       D=ensureShape(deepClone(draftJ.data));
-      bootNote='Letzter Arbeitsstand wiederhergestellt (neuer als die Daten in der Datei)';
+      bootNote='Letzter Arbeitsstand wiederhergestellt (neuer als die Daten in der Datei)'; fromDraft=true;
     }else{
       curKey=emb.curKey||'ex:leer';
       if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:leer';
@@ -3255,7 +3256,7 @@ function init(){
           curKey=j.curKey||safeGet(K_LAST)||'ex:produktion';
           if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:leer';
           D=ensureShape(deepClone(j.data));
-          bootNote='Letzter Arbeitsstand automatisch wiederhergestellt';
+          bootNote='Letzter Arbeitsstand automatisch wiederhergestellt'; fromDraft=true;
           restored=true;
         }
       }catch(e){}
@@ -3284,6 +3285,14 @@ function init(){
   refreshDropdown();
   renderAll(); renderGloss();
   clearDirty();
+  // FIX (Toolkit): Ein aus dem Entwurf wiederhergestellter, ungespeicherter Stand galt als gespeichert – clearDirty() löschte den Entwurf,
+  // beim nächsten Neuladen waren die Eingaben verloren. Weicht der Entwurf inhaltlich (ohne aktuellen Durchlauf) von der Basis ab, bleibt er „ungespeichert“.
+  if(fromDraft){
+    const pb=curKey.startsWith('p:')&&PROJECTS[curKey.slice(2)];
+    const base=pb?pb.data:(EXAMPLES[curKey.slice(3)]||{}).data;
+    const sig=x=>JSON.stringify(Object.assign({},ensureShape(deepClone(x)),{cur:0}));
+    if(sig(base)!==sig(D)) markDirty();
+  }
 
   if(bootNote){
     setTimeout(()=>{ toast(bootNote); bootNote=null; },500);

@@ -2077,7 +2077,7 @@ function renderOverview(){
     } else {
       const val=nd.mode==='days'
         ? '<span style="color:var(--ink-soft)">direkt als Reichweite erfasst</span>'
-        : 'Menge '+(nd.q||[]).map((q,i)=>de(q)+' Stk'+(variantsArr().length>1&&variantsArr()[i]?' '+variantsArr()[i].name:'')).join(' / ');
+        : 'Menge '+(nd.q||[]).map((q,i)=>de(q)+' Stk'+(variantsArr().length>1&&variantsArr()[i]?' '+esc(variantsArr()[i].name):'')).join(' / '); // FIX (Toolkit): Variantenname escapen
       rows+=`<tr class="inv"><td>${esc(nd.name||'Bestand')}${nd.sm?' · Supermarkt':''}</td><td colspan="4">${val}</td><td>Reichweite ${de(invDays(nd))} Tage</td></tr>`;
     }
   });
@@ -2245,7 +2245,7 @@ function commitOrder(){
   const reordered=order.map(i=>nodes[i]).filter(Boolean);
   // keep any non-dispatch node not captured (safety)
   nodes.forEach((n,i)=>{ if(!n.dispatch && !order.includes(i)) reordered.push(n); });
-  cur().nodes=reordered.concat(disp);
+  remapIdx(cur(),()=>{cur().nodes=reordered.concat(disp);}); // FIX (Toolkit): Indizes mitführen
   dragSrc=null; afterStructural();
 }
 
@@ -2507,16 +2507,24 @@ function addNode(kind){
   let nd; if(kind==='proc') nd=P('Neuer Prozess',30,0,100,params().taktShifts);
   else if(kind==='sm') nd=D('Supermarkt',1,true);
   else nd=Q(variantsArr().map(v=>Math.round(v.demand)));
-  n.splice(at,0,nd); afterStructural();
+  remapIdx(cur(),()=>n.splice(at,0,nd)); afterStructural();
 }
-function delNode(i){cur().nodes.splice(i,1); afterStructural();}
+function delNode(i){remapIdx(cur(),()=>cur().nodes.splice(i,1)); afterStructural();}
+/* FIX (Toolkit): Ausgangswerte (_base) und Szenarien sind nach Knoten-Index abgelegt –
+   nach Einfügen/Löschen/Umsortieren auf die neuen Indizes umschlüsseln */
+function remapIdx(v,mutate){
+  const old=v.nodes.slice(); mutate();
+  const re=o=>{const r={}; Object.keys(o||{}).forEach(i=>{const j=v.nodes.indexOf(old[+i]); if(j>=0)r[j]=o[i];}); return r;};
+  if(v._base) v._base=re(v._base);
+  (v._scen||[]).forEach(s=>{s.vals=re(s.vals);});
+}
 function afterStructural(){markTouched();renderKpis();renderMap();renderOverview();renderChecks();showGb(gbStep);renderProblems();renderSollBanner();}
 
 /* variants (shared across ist/soll) */
 function eachQtyInv(fn){['ist','soll'].forEach(k=>DATA[k].nodes.forEach(nd=>{if(nd.type==='inv'&&nd.mode==='qty'){if(!nd.q)nd.q=[];fn(nd);}}));}
 function addVariant(){DATA.variants.push({name:'Variante '+(DATA.variants.length+1),demand:0}); eachQtyInv(nd=>nd.q.push(0)); afterVariants();}
 function delVariant(i){if(DATA.variants.length<=1)return; DATA.variants.splice(i,1); eachQtyInv(nd=>nd.q.splice(i,1)); afterVariants();}
-function afterVariants(){renderKpis();renderMap();renderOverview();renderChecks();showGb(gbStep);}
+function afterVariants(){renderKpis();renderMap();renderOverview();renderChecks();showGb(gbStep);renderProblems();} // FIX (Toolkit): Probleme folgen dem geänderten Bedarf
 
 /* ===================== events ===================== */
 el('#vtoggle').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
@@ -2549,8 +2557,14 @@ function normalizeData(){
       } else prevCell=nd.cellId>0;
       delete nd.cell;
     });
-    v.nodes.forEach(nd=>{ if(nd.link==null)nd.link='auto'; });
+    v.nodes.forEach(nd=>{
+      // FIX (Toolkit): Zahlenfelder und Übergangsart aus Importen/Speicherständen bereinigen – sie landen unescaped im HTML/SVG
+      ['zz','rz','mz','shifts','workers','los','days'].forEach(f=>{ if(nd[f]!=null) nd[f]=+nd[f]||0; });
+      if(Array.isArray(nd.q)) nd.q=nd.q.map(x=>+x||0);
+      if(!['auto','push','pull','fifo'].includes(nd.link)) nd.link='auto'; });
   });
+  Object.keys(DATA.params||{}).forEach(k=>{ DATA.params[k]=+DATA.params[k]||0; });
+  (DATA.variants||[]).forEach(va=>{ va.demand=+va.demand||0; });
   DATA._sollTouched=false; DATA._istTouched=false; DATA._sollFromIst=false; DATA._sollBackup=null;
 }
 /* Zelle eines Knotens (0 = keine) – Kompatibilität für alte Importe */
@@ -2640,9 +2654,10 @@ function applyFieldInput(t){
   return false;
 }
 el('#gbPanel').addEventListener('input',e=>{const t=e.target;
-  if(t.dataset.pm!=null){let val=t.value.replace(',','.');val=val===''?0:(parseFloat(val)||0);params()[t.dataset.pm]=val;renderKpis();renderMap();renderChecks();updTakt();return;}
+  // FIX (Toolkit): Takt ändert sich – auch Übersicht und »Offene Probleme« (inkl. Balancing) neu berechnen
+  if(t.dataset.pm!=null){let val=t.value.replace(',','.');val=val===''?0:(parseFloat(val)||0);params()[t.dataset.pm]=val;renderKpis();renderMap();renderOverview();renderChecks();updTakt();renderProblems();return;}
   if(t.dataset.vn!=null){DATA.variants[+t.dataset.vn].name=t.value;renderMap();renderOverview();return;}
-  if(t.dataset.vd!=null){let val=t.value.replace(',','.');val=val===''?0:(parseFloat(val)||0);DATA.variants[+t.dataset.vd].demand=val;renderKpis();renderMap();renderOverview();renderChecks();updTakt();refreshFlowFlags();return;}
+  if(t.dataset.vd!=null){let val=t.value.replace(',','.');val=val===''?0:(parseFloat(val)||0);DATA.variants[+t.dataset.vd].demand=val;renderKpis();renderMap();renderOverview();renderChecks();updTakt();refreshFlowFlags();renderProblems();return;}
   if(t.dataset.cs!=null){const v=cur(),k=t.dataset.cs;
     if(k==='cust')v.customer.name=t.value;else if(k==='custDel')v.customer.delivery=t.value;
     else if(k==='sup')v.supplier.name=t.value;else if(k==='supMat')v.supplier.material=t.value;else if(k==='supDel')v.supplier.delivery=t.value;
@@ -2778,7 +2793,7 @@ el('#expJson').addEventListener('click',()=>download(slug()+'-wertstrom.json',bu
 el('#expObs').addEventListener('click',()=>download(slug()+'-wertstrom.md',buildObsidian(),'text/markdown;charset=utf-8'));
 
 /* ---------- import (Datei wieder laden) ---------- */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA)+' -->';}
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA).replace(/>/g,'\\u003e')+' -->';} // FIX (Toolkit): „-->" im Text beendete den Kommentar – Import scheiterte
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -2789,7 +2804,10 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(s,fname){DATA=A.shape(s)||s;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);normalizeData();captureBase();variant='ist';balMode='ist';gbStep=1;balCell='all';
+function applyImport(s,fname){
+  // FIX (Toolkit): ungültige Datei nicht übernehmen – sonst ist der aktuelle Stand zerstört und jedes Neuzeichnen scheitert
+  const d=A.shape(s); if(!d||!['ist','soll'].every(k=>d[k].pps&&d[k].customer&&d[k].supplier)) throw new Error('keine gültige Wertstrom-Analyse');
+  DATA=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);normalizeData();captureBase();variant='ist';balMode='ist';gbStep=1;balCell='all';
   els('button',el('#vtoggle')).forEach(x=>x.classList.toggle('on',x.dataset.v==='ist'));
   el('#vtoggle').querySelector('[data-v="soll"]').classList.remove('soll');
   setBadges(); renderKpis(); renderMap(); renderOverview(); showGb(1); renderProblems(); renderChecks(); renderSollBanner(); renderTaskCtx();
@@ -3302,7 +3320,8 @@ const A={
     el('#vtoggle').querySelector('[data-v="soll"]').classList.remove('soll');
     setBadges(); renderKpis(); renderMap(); renderOverview(); showGb(1); renderProblems(); renderChecks(); renderSollBanner(); renderTaskCtx(); },
   /* Interne Merker des Tools (_sollTouched, _base …) sind keine inhaltliche Änderung */
-  cmp:x=>x?JSON.parse(JSON.stringify(x,(k,v)=>(k&&k.charAt(0)==='_')?undefined:v)):x,
+  /* FIX (Toolkit): eingefrorene Szenarien (_scen) sind Inhalt – zählen als Änderung und bleiben beim Laden erhalten */
+  cmp:x=>x?JSON.parse(JSON.stringify(x,(k,v)=>(k&&k.charAt(0)==='_'&&k!=='_scen')?undefined:v)):x,
   /* Allgemeine Bereinigung: nur JSON-Werte, begrenzte Längen, keine internen Merker */
   shape:x=>{
     if(!x || typeof x!=='object' || !x.ist || !x.soll || !Array.isArray(x.ist.nodes) || !Array.isArray(x.soll.nodes)) return null;
@@ -3311,7 +3330,7 @@ const A={
       if(typeof v==='number') return Number.isFinite(v)?v:0;
       if(typeof v==='boolean' || v===null) return v;
       if(Array.isArray(v)) return v.slice(0,500).map(e=>clean(e,t+1));
-      if(typeof v==='object'){ const o={}; Object.keys(v).slice(0,200).forEach(k=>{ if(k.charAt(0)!=='_' && typeof v[k]!=='function' && v[k]!==undefined) o[k]=clean(v[k],t+1); }); return o; }
+      if(typeof v==='object'){ const o={}; Object.keys(v).slice(0,200).forEach(k=>{ if((k.charAt(0)!=='_'||k==='_scen') && typeof v[k]!=='function' && v[k]!==undefined) o[k]=clean(v[k],t+1); }); return o; }
       return null; };
     const out={};
     ['label','params','variants','ist','soll','problems','balancing'].forEach(k=>{ if(x[k]!==undefined) out[k]=clean(x[k],0); });

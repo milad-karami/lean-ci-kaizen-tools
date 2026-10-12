@@ -1903,7 +1903,8 @@ function loadKey(key, silent){
   safeSet(K_LAST, curKey);
   const sel=el('#exampleSel'); if(sel) sel.value=curKey;
   render();
-  if(!silent) updateDirtyUI();
+  // FIX (Toolkit): nach dem Wechsel blieb »dirty« gesetzt und der alte Entwurf liegen – verworfene Änderungen kamen beim nächsten Öffnen zurück
+  if(!silent) clearDirty();
 }
 function projectBaseKey(){
   if(curKey.startsWith('ex:')) return curKey.slice(3);
@@ -1959,6 +1960,7 @@ function doSaveAs(){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey);   // FIX (Toolkit): sonst öffnete das Tool beim nächsten Start wieder die Vorlage statt der gespeicherten Analyse
   persistProjects(); refreshDropdown(); clearDirty('saved');
   closeSaveDialog();
   toast('Als „'+name+'" gespeichert');
@@ -2088,7 +2090,8 @@ el('#projModal').addEventListener('click',e=>{
     toast('Alle Analysen gelöscht');
     return;
   }
-  if(b.dataset.pmLoad){ loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
+  // FIX (Toolkit): Laden aus der Liste verwarf ungespeicherte Änderungen ohne Rückfrage
+  if(b.dataset.pmLoad){ if(dirty && !confirm('Es gibt noch nicht fest gespeicherte Änderungen.\nTrotzdem wechseln?')) return; loadKey('p:'+b.dataset.pmLoad); closeModal(); toast('Geladen'); return; }
   if(b.dataset.pmRen){ renameProject(b.dataset.pmRen); return; }
   if(b.dataset.pmDel){ deleteProject(b.dataset.pmDel); return; }
   if(b.dataset.pmRestore){ restoreProject(b.dataset.pmRestore); return; }
@@ -2227,7 +2230,7 @@ function buildMarkdown(){
   const L=['# Five-Forces-Analyse','','**Branche:** '+(state.industry||'—'),''];
   ORDER_F.forEach(k=>{const f=FORCES[k],s=state.forces[k];
     L.push('## '+f.name+'  ·  Stärke: '+intWord(s.intensity));
-    if((s.assess||'').trim())L.push('> '+s.assess);
+    if((s.assess||'').trim())L.push('> '+s.assess.replace(/\n/g,'\n> '));   // FIX (Toolkit): mehrzeilige Begründung vollständig im Zitat
     s.drivers.forEach(d=>L.push('- '+dirSym(d.dir)+' '+d.t));
     if(!s.drivers.length)L.push('- _(keine Treiber)_');
     L.push('');
@@ -2250,7 +2253,7 @@ function buildObsidian(){
     '# Five-Forces-Analyse','','> [!info] Branche','> '+(state.industry||'—'),'','## Die fünf Kräfte'];
   ORDER_F.forEach(k=>{const f=FORCES[k],s=state.forces[k];
     L.push('### '+f.name+' #staerke/'+intWord(s.intensity));
-    if((s.assess||'').trim())L.push('> '+s.assess);
+    if((s.assess||'').trim())L.push('> '+s.assess.replace(/\n/g,'\n> '));   // FIX (Toolkit): mehrzeilige Begründung vollständig im Zitat
     s.drivers.forEach(d=>L.push('- '+dirSym(d.dir)+' '+d.t));
     if(!s.drivers.length)L.push('- ');
     L.push('');
@@ -2262,7 +2265,8 @@ function buildObsidian(){
   L.push('> - Bedrohungen (T): '+(high.length?high.join(', '):'—'));
   L.push('> - Chancen / Schutzfaktoren (O): '+(low.length?low.join(', '):'—'));
   L.push('','## Mindmap',FENCE+'mermaid','mindmap','  root(('+mmClean(state.industry||'Branche')+'))');
-  ORDER_F.forEach(k=>{L.push('    '+mmClean(FORCES[k].name)+' ['+intWord(state.forces[k].intensity)+']');
+  // FIX (Toolkit): »[hoch]« ist in Mermaid-Mindmaps eine Knotenform – der Name der Kraft verschwand, sichtbar war nur »hoch«
+  ORDER_F.forEach(k=>{L.push('    '+mmClean(FORCES[k].name)+' · '+intWord(state.forces[k].intensity));
     state.forces[k].drivers.forEach(d=>L.push('      '+dirSym(d.dir)+' '+mmClean(d.t)));});
   L.push(FENCE,'');
   return L.join('\n');
@@ -2303,16 +2307,19 @@ function importJSON(j){
   return s;
 }
 function parseForcesInto(lines,s,headingRe){
-  let cur=null,justHead=false;
+  let cur=null,justHead=false,inAssess=false;
   for(const raw of lines){ const line=raw.replace(/\s+$/,'');
     const hm=line.match(headingRe);
-    if(hm){ const key=FNAME2KEY[hm[1].trim()]; if(key){cur=s.forces[key];cur.intensity=WORD2INT[(hm[2]||'').trim()]||2;cur.assess='';cur.drivers=[];justHead=true;} else {cur=null;justHead=false;} continue; }
-    if(/^#{1,6}\s/.test(line)){cur=null;justHead=false;continue;}
+    if(hm){ const key=FNAME2KEY[hm[1].trim()]; if(key){cur=s.forces[key];cur.intensity=WORD2INT[(hm[2]||'').trim()]||2;cur.assess='';cur.drivers=[];justHead=true;} else {cur=null;justHead=false;} inAssess=false; continue; }
+    if(/^#{1,6}\s/.test(line)){cur=null;justHead=false;inAssess=false;continue;}
     if(!cur)continue;
-    if(justHead&&/^>\s/.test(line)&&!/^>\s*\[!/.test(line)){cur.assess=line.replace(/^>\s?/,'').trim();justHead=false;continue;}
-    justHead=false;
-    const dm=line.match(/^-\s+(↑|↓|▲|▼|○|–|-)\s+(.*)$/);
-    if(dm)cur.drivers.push({t:dm[2].trim(),dir:symDir(dm[1])});
+    if(justHead&&/^>\s/.test(line)&&!/^>\s*\[!/.test(line)){cur.assess=line.replace(/^>\s?/,'').trim();justHead=false;inAssess=true;continue;}
+    // FIX (Toolkit): Folgezeilen einer mehrzeiligen Begründung gingen beim Import verloren
+    if(inAssess&&/^>/.test(line)&&!/^>\s*\[!/.test(line)){cur.assess+='\n'+line.replace(/^>\s?/,'');continue;}
+    justHead=false; inAssess=false;
+    // FIX (Toolkit): Treiber ohne Text (»- ↑«) wurden beim Import verworfen – die Bilanz änderte sich
+    const dm=line.match(/^-\s+(↑|↓|▲|▼|○|–|-)(?:\s+(.*))?$/);
+    if(dm)cur.drivers.push({t:(dm[2]||'').trim(),dir:symDir(dm[1])});
   }
 }
 function importMarkdown(text){
@@ -2371,6 +2378,7 @@ function applyImport(res,fname){
   const ok=safeSet(K_PROJ, JSON.stringify(PROJECTS));
   if(!ok){ delete PROJECTS[id]; showStorageFullWarning(); return; }
   curKey='p:'+id;
+  safeSet(K_LAST, curKey);   // FIX (Toolkit): importierte Analyse auch beim nächsten Start wieder öffnen
   state=deepClone(data);
   refreshDropdown(); render();
   clearDirty();
@@ -2690,7 +2698,7 @@ function init(){
   loadProjectsFromStorage();
 
   const emb=readEmbedded();
-  let restored=false;
+  let restored=false, fromDraft=false;
 
   if(emb && emb.data){
     if(emb.projects && typeof emb.projects==='object'){
@@ -2715,7 +2723,7 @@ function init(){
       if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:tech';
       if(curKey.startsWith('p:')) curId=PROJECTS[curKey.slice(2)].base||'tech'; else curId=curKey.slice(3);
       state=ensureShape(deepClone(draftJ.data));
-      bootNote='Letzter Arbeitsstand wiederhergestellt';
+      bootNote='Letzter Arbeitsstand wiederhergestellt'; fromDraft=true;
       restored=true;
     }else{
       curKey=emb.curKey||'ex:tech';
@@ -2737,7 +2745,7 @@ function init(){
           curKey=j.curKey||safeGet(K_LAST)||'ex:tech';
           if(curKey.startsWith('p:') && !PROJECTS[curKey.slice(2)]) curKey='ex:tech';
           state=ensureShape(deepClone(j.data));
-          bootNote='Letzter Arbeitsstand automatisch wiederhergestellt';
+          bootNote='Letzter Arbeitsstand automatisch wiederhergestellt'; fromDraft=true;
           restored=true;
         }
       }catch(e){}
@@ -2771,6 +2779,11 @@ function init(){
   renderSteps();
   faqRender();
   clearDirty();
+  /* FIX (Toolkit): ein wiederhergestellter Entwurf galt als gespeichert – clearDirty() löschte ihn sogar; weicht er vom gespeicherten Stand ab, bleibt er ungesichert */
+  if(fromDraft){
+    const basis=curKey.startsWith('p:') ? (PROJECTS[curKey.slice(2)]||{}).data : RAW[curKey.slice(3)];
+    if(!basis || JSON.stringify(ensureShape(deepClone(basis)))!==JSON.stringify(state)) markDirty();
+  }
 
   if(bootNote){ setTimeout(()=>{ toast(bootNote); bootNote=null; },500); }
 }

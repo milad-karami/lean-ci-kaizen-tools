@@ -2052,7 +2052,9 @@ function buildMarkdown(){
   const outs=D.outputs.filter(x=>(x.output||``).trim()).map(x=>x.output);
   const proc=inScopeSteps();
   const rows=Math.max(sup.length,ins.length,proc.length,outs.length,cus.length,1);
-  for(let r=0;r<rows;r++){L.push(`| ${sup[r]||``} | ${ins[r]||``} | ${proc[r]?((r+1)+`. `+proc[r]):``} | ${outs[r]||``} | ${cus[r]||``} |`);}
+  // FIX (Toolkit): »|« im Nutzertext zerlegte die Markdown-Tabelle – in Zellen maskieren.
+  const tc=v=>String(v||``).replace(/\|/g,`\\|`);
+  for(let r=0;r<rows;r++){L.push(`| ${tc(sup[r])} | ${tc(ins[r])} | ${proc[r]?tc((r+1)+`. `+proc[r]):``} | ${tc(outs[r])} | ${tc(cus[r])} |`);}
   L.push(``,`## Inputs → Lieferanten`);
   D.inputs.filter(x=>(x.input||``).trim()).forEach(x=>L.push(`- ${x.input} ← ${x.supplier||`(Lieferant?)`}`));
   L.push(``,`## Outputs → Kunden`);
@@ -2095,7 +2097,8 @@ el(`#expJson`).addEventListener(`click`,()=>download(`sipoc-${slug()}.json`,buil
 el(`#expObs`).addEventListener(`click`,()=>download(`sipoc-${slug()}-obsidian.md`,buildObsidian(),`text/markdown;charset=utf-8`));
 
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(D)+' -->';}
+// FIX (Toolkit): »-->« in Nutzertext beendete den HTML-Kommentar vorzeitig – Import scheiterte. '>' als \u003e maskieren (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(D).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
