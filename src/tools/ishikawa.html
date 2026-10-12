@@ -4434,7 +4434,8 @@ function buildObsidian(){
   const FENCE='\u0060\u0060\u0060';
   const today=new Date().toISOString().slice(0,10);
   const L=['---','tags: [ishikawa, ursache-wirkung, qualitaetsmanagement]','erstellt: '+today,'---','',
-           '# Ishikawa-Diagramm','','> [!question] Problem','> '+state.problem,'','## Ursachen nach Kategorien'];
+           /* FIX (Toolkit): mehrzeiliges Problem – jede Zeile im Callout, sonst geht beim Import alles nach Zeile 1 verloren */
+           '# Ishikawa-Diagramm','','> [!question] Problem','> '+String(state.problem).replace(/\n/g,'\n> '),'','## Ursachen nach Kategorien'];
   state.cats.forEach(cat=>{
     L.push('### '+cat.name);
     cat.causes.forEach(u=>{
@@ -4493,17 +4494,20 @@ function importJSON(j){
       t:String(u.text||''),
       p:(typeof u.wahrscheinlichkeit==='number')?u.wahrscheinlichkeit:(PW[u.wahrscheinlichkeit]||0),
       fav:!!u.favorit,
-      subs:Array.isArray(u.unterursachen)?u.unterursachen.map(x=>String(x)):[]
+      /* FIX (Toolkit): Warum-Ketten sind Objekte {t,subs} – nicht zu Text machen (sonst »[object Object]«); whyNorm in ensureShape bereinigt sie */
+      subs:Array.isArray(u.unterursachen)?u.unterursachen:[]
     }))});
   });
   return normState(s);
 }
 function importMarkdown(text){
   const lines=text.split('\n'); const s={problem:'',cats:[]};
-  let cur=null,lastCause=null,inFav=false,m;
+  let cur=null,lastCause=null,inFav=false,inProb=false,m;
   for(const raw of lines){
     const line=raw.replace(/\s+$/,'');
-    if(m=line.match(/^\*\*Problem:\*\*\s*(.*)$/)){s.problem=m[1];continue;}
+    /* FIX (Toolkit): Folgezeilen eines mehrzeiligen Problems bis zur ersten Kategorie mitnehmen (vorher ging alles nach Zeile 1 verloren) */
+    if(inProb){ if(!line.startsWith('## ')){ s.problem+='\n'+line; continue; } inProb=false; }
+    if(m=line.match(/^\*\*Problem:\*\*\s*(.*)$/)){s.problem=m[1];inProb=true;continue;}
     if(line.startsWith('## ')){
       const name=line.slice(3).trim();
       if(name.indexOf('Favoriten')>=0||name.indexOf('⭐')>=0){inFav=true;cur=null;continue;}
@@ -4520,6 +4524,7 @@ function importMarkdown(text){
       lastCause={t:body.trim(),p,fav,subs:[]};cur.causes.push(lastCause);continue;
     }
   }
+  s.problem=s.problem.replace(/\s+$/,'');
   return normState(s);
 }
 function importObsidian(text){

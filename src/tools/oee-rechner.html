@@ -1517,7 +1517,8 @@ let S=normS(EXAMPLES.video.make());
 
 /* ===== calculations (verbatim) ===== */
 function calc(){
-  const pph=S.pph, dayMin=S.dayH*60, plannedMin=S.plannedH*60, plannedPcs=plannedMin*pph/60;
+  // FIX (Toolkit): GPS kann den Tag nicht überschreiten – sonst andere OEE als nach dem Speichern/Laden (shape kappt GPS auf den Tag)
+  const pph=S.pph, dayMin=S.dayH*60, plannedMin=Math.min(S.plannedH,S.dayH)*60, plannedPcs=plannedMin*pph/60;
   const vLossMin=S.vLosses.reduce((a,l)=>a+(+l.min||0),0); const availMin=Math.max(0,plannedMin-vLossMin); const availPcs=availMin*pph/60;
   let lLossMin,usedMin,usedPcs,overQty=false,rawQty=0;
   if(S.lMode==='qty'){
@@ -1839,7 +1840,8 @@ el('#expMd').addEventListener('click',()=>download('oee-'+curId+'.md',buildMarkd
 el('#expJson').addEventListener('click',()=>download('oee-'+curId+'.json',buildJSON(),'application/json;charset=utf-8'));
 el('#expObs').addEventListener('click',()=>download('oee-'+curId+'-obsidian.md',buildObsidian(),'text/markdown;charset=utf-8'));
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify({S})+' -->';}
+// FIX (Toolkit): »>« maskieren – ein »-->« in einer Bezeichnung beendete sonst den Kommentar und der Import scheiterte
+function stateComment(){return '<!-- tool-state: '+JSON.stringify({S}).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}

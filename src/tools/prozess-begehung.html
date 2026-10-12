@@ -3364,6 +3364,8 @@ section.wb-zu > :not(.wb-klappkopf){display:none!important}
 .it-leiste>button:hover{background:var(--blueprint-soft);border-color:var(--blueprint-line);color:var(--blueprint)}
 .it-tipp{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--ink-3)}
 .it-tipp span{white-space:nowrap}
+/* FIX (Toolkit): auf schmalen Bildschirmen umbrechen – sonst werden die Bedienhinweise abgeschnitten */
+@media (max-width:640px){.it-tipp span{white-space:normal}}
 .it-punkt{display:inline-block;width:9px;height:9px;border-radius:50%;border:2px solid var(--blueprint-3);background:#fff;vertical-align:-1px}
 .it-canvas{position:relative;outline:none;touch-action:none;user-select:none;-webkit-user-select:none}
 .it-canvas:focus-visible{box-shadow:var(--ring)}

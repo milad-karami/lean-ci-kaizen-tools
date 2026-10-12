@@ -2778,7 +2778,8 @@ el('#expJson').addEventListener('click',()=>download(slug()+'-wertstrom.json',bu
 el('#expObs').addEventListener('click',()=>download(slug()+'-wertstrom.md',buildObsidian(),'text/markdown;charset=utf-8'));
 
 /* ---------- import (Datei wieder laden) ---------- */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA)+' -->';}
+// FIX (Toolkit): »>« maskieren – ein »-->« in einem Namen beendete sonst den Kommentar und der Import scheiterte
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(DATA).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -3302,7 +3303,8 @@ const A={
     el('#vtoggle').querySelector('[data-v="soll"]').classList.remove('soll');
     setBadges(); renderKpis(); renderMap(); renderOverview(); showGb(1); renderProblems(); renderChecks(); renderSollBanner(); renderTaskCtx(); },
   /* Interne Merker des Tools (_sollTouched, _base …) sind keine inhaltliche Änderung */
-  cmp:x=>x?JSON.parse(JSON.stringify(x,(k,v)=>(k&&k.charAt(0)==='_')?undefined:v)):x,
+  /* FIX (Toolkit): eingefrorene Szenarien (_scen) sind Nutzerinhalt – zählen als Änderung und werden mitgespeichert */
+  cmp:x=>x?JSON.parse(JSON.stringify(x,(k,v)=>(k&&k.charAt(0)==='_'&&!(k==='_scen'&&Array.isArray(v)&&v.length))?undefined:v)):x,
   /* Allgemeine Bereinigung: nur JSON-Werte, begrenzte Längen, keine internen Merker */
   shape:x=>{
     if(!x || typeof x!=='object' || !x.ist || !x.soll || !Array.isArray(x.ist.nodes) || !Array.isArray(x.soll.nodes)) return null;
@@ -3311,7 +3313,7 @@ const A={
       if(typeof v==='number') return Number.isFinite(v)?v:0;
       if(typeof v==='boolean' || v===null) return v;
       if(Array.isArray(v)) return v.slice(0,500).map(e=>clean(e,t+1));
-      if(typeof v==='object'){ const o={}; Object.keys(v).slice(0,200).forEach(k=>{ if(k.charAt(0)!=='_' && typeof v[k]!=='function' && v[k]!==undefined) o[k]=clean(v[k],t+1); }); return o; }
+      if(typeof v==='object'){ const o={}; Object.keys(v).slice(0,200).forEach(k=>{ if((k.charAt(0)!=='_'||k==='_scen') && typeof v[k]!=='function' && v[k]!==undefined) o[k]=clean(v[k],t+1); }); return o; }
       return null; };
     const out={};
     ['label','params','variants','ist','soll','problems','balancing'].forEach(k=>{ if(x[k]!==undefined) out[k]=clean(x[k],0); });
