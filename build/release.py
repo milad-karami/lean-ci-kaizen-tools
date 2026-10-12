@@ -44,7 +44,8 @@ def release(tag, title, body, files, target="main", latest=False):
             else:
                 shutil.copy(src, dst)
             paths.append(str(dst))
-        subprocess.run(["gh", "release", "create", tag, *paths, "--target", target, "--title", title,
+        sha = subprocess.run(["git", "rev-parse", target], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
+        subprocess.run(["gh", "release", "create", tag, *paths, "--target", sha, "--title", title,
                         "--notes", body, f"--latest={'true' if latest else 'false'}"], cwd=ROOT, check=True)
     print(f"+ {tag}")
 
