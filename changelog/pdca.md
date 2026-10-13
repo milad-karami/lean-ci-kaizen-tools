@@ -4,11 +4,19 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.0.0** | Toolkit-Fassung | 2026-10-12 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/pdca-v2.0.0) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
+| **2.1.0** | English | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/pdca-v2.1.0) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca-en.html) |
+| 2.0.0 | Toolkit-Fassung | 2026-10-12 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/pdca-v2.0.0) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) |
 | 1.0.0 | Original (John Naska) | 2026-10 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/pdca-v1.0.0) |
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.1.0 – English (2026-10-13)
+
+- Vollständige englische Fassung `pdca-en.html`: Oberfläche, Beispiele, geführter Modus, Glossar, FAQ, Quiz, Exporte (Markdown, JSON, Obsidian)
+- Sprachumschalter im Kopfbereich (🇬🇧 English / 🇩🇪 Deutsch); die Toolkit-Navigation bleibt in der gewählten Sprache
+- PDF-Bericht der Toolkit-Ebene zweisprachig
+- Gespeicherte Projekte werden zwischen beiden Sprachen geteilt; Importe akzeptieren deutsche und englische Exporte
 
 ## 2.0.0 – Toolkit-Fassung (2026-10-12)
 

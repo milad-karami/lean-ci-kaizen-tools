@@ -19,15 +19,20 @@ def bi(en, de, tag="span"):
 
 def card(t):
     href = f'tools/{t["id"]}.html'
-    langs = '<span class="pill">DE</span>' + ('<span class="pill">EN</span>' if t.get("en_file") else "")
-    en_link = (f'<a class="alt en" href="tools/{t["en_file"]}">English version →</a>'
-               f'<a class="alt de" href="tools/{t["en_file"]}">Englische Version →</a>') if t.get("en_file") else ""
-    return (f'<article class="card"><a class="hit" href="{href}" aria-label="{esc(t["en"])}"></a>'
+    en = t.get("en_file")
+    langs = '<span class="pill">DE</span>' + ('<span class="pill">EN</span>' if en else "")
+    # Karte öffnet die Fassung in der gewählten Sprache, der Zusatzlink die jeweils andere
+    hit = (f'<a class="hit en" href="tools/{en}" aria-label="{esc(t["en"])}"></a>'
+           f'<a class="hit de" href="{href}" aria-label="{esc(t["de"])}"></a>') if en else \
+        f'<a class="hit" href="{href}" aria-label="{esc(t["en"])}"></a>'
+    alt_link = (f'<a class="alt en" href="{href}" hreflang="de">German version →</a>'
+                f'<a class="alt de" href="tools/{en}" hreflang="en">Englische Version →</a>') if en else ""
+    return (f'<article class="card">{hit}'
             f'<div class="art"><img src="assets/illustrations/{t["id"]}.webp" alt="" loading="lazy" width="960" height="600"></div>'
             f'<div class="cb"><h3>{bi(t["en"], t["de"])}</h3><p>{bi(t["sum_en"], t["sum_de"])}</p>'
             f'<div class="meta">{langs}<span class="pill gold">PDF</span>'
             f'<a class="pill ver" href="{REPO}/blob/main/changelog/{t["id"]}.md" title="Changelog">v{t["version"]}</a>'
-            f'<span class="go">{bi("Open →", "Öffnen →")}</span></div>{en_link}</div></article>')
+            f'<span class="go">{bi("Open →", "Öffnen →")}</span></div>{alt_link}</div></article>')
 
 
 def phase_section(p):
@@ -48,6 +53,7 @@ def stepper():
 
 
 N_TOOLS = len(CFG["tools"])
+ALL_EN = all(t.get("en_file") for t in CFG["tools"])
 HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +65,7 @@ HTML = f"""<!DOCTYPE html>
 <meta property="og:url" content="{BASE}">
 <meta property="og:title" content="Lean · CI · Kaizen Toolkit – {N_TOOLS} free interactive tools">
 <meta property="og:description" content="From context to control: STEP, SWOT, SIPOC, Kano, CTQ, Gemba, OEE, value stream, Ishikawa, SMED, EPEI, Heijunka, Kanban, PDCA – each with a PDF report.">
-<meta property="og:image" content="{BASE}docs/screenshots/factory.png">
+<meta property="og:image" content="{BASE}docs/screenshots/hub.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/logo-static.svg" type="image/svg+xml">
 <style>
@@ -119,12 +125,12 @@ HTML = f"""<!DOCTYPE html>
   .cb{{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}}
   .cb h3{{margin:0 0 6px;font-size:17px}}
   .cb p{{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.5;flex:1}}
-  .meta{{display:flex;align-items:center;gap:6px}}
+  .meta{{display:flex;align-items:center;gap:5px;flex-wrap:wrap}}
   .pill{{font-size:11px;font-weight:800;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}}
   .pill.gold{{background:#fff7d9;border-color:#ecddaa;color:#7a5c0c}}
   .pill.ver{{position:relative;z-index:2;text-decoration:none;font-family:"IBM Plex Mono",ui-monospace,monospace}}
   .pill.ver:hover{{color:var(--navy);border-color:var(--navy)}}
-  .go{{margin-left:auto;font-weight:800;color:var(--blue);font-size:14px}}
+  .go{{margin-left:auto;white-space:nowrap;font-weight:800;color:var(--blue);font-size:14px}}
   .alt{{position:relative;z-index:2;margin-top:8px;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none}}
   footer{{margin-top:40px;background:var(--navy);color:#b9c4dc;font-size:13.5px;line-height:1.6}}
   footer .wrap{{padding-top:26px;padding-bottom:30px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}}
@@ -154,7 +160,7 @@ HTML = f"""<!DOCTYPE html>
           <a class="btn primary" href="#phase-context">{bi("Start the journey →", "Los geht's →")}</a>
           <a class="btn" href="https://github.com/milad-karami/lean-ci-kaizen-tools" target="_blank" rel="noopener">⭐ GitHub</a>
         </div>
-        <div class="facts"><span>{bi("Free", "Kostenlos")}</span><span>{bi("No install", "Ohne Installation")}</span><span>{bi("Works offline", "Läuft offline")}</span><span>{bi("PDF report in every tool", "PDF-Bericht in jedem Tool")}</span><span>{bi("Tools in German · Kanban also in English", "Tools auf Deutsch · Kanban auch auf Englisch")}</span></div>
+        <div class="facts"><span>{bi("Free", "Kostenlos")}</span><span>{bi("No install", "Ohne Installation")}</span><span>{bi("Works offline", "Läuft offline")}</span><span>{bi("PDF report in every tool", "PDF-Bericht in jedem Tool")}</span><span>{bi("Every tool in English and German", "Jedes Tool auf Englisch und Deutsch") if ALL_EN else bi("Tools in German · Kanban also in English", "Tools auf Deutsch · Kanban auch auf Englisch")}</span></div>
       </div>
       <div class="hero-art"><img src="assets/illustrations/toolkit-hero.webp" alt="" width="1400" height="875"></div>
     </div>
@@ -165,7 +171,7 @@ HTML = f"""<!DOCTYPE html>
   <div class="intro">
     <div><b>{bi("1 · Follow the path", "1 · Dem Weg folgen")}</b><p>{bi("The phases follow DMAIC – the Six Sigma improvement cycle – with a strategic context phase in front.", "Die Phasen folgen DMAIC – dem Six-Sigma-Verbesserungszyklus – mit einer vorgeschalteten Kontext-Phase.")}</p></div>
     <div><b>{bi("2 · Work in the tool", "2 · Im Tool arbeiten")}</b><p>{bi("Each tool guides you step by step, with examples, a glossary, FAQ and a quiz. Your work is saved in your browser.", "Jedes Tool führt Schritt für Schritt – mit Beispielen, Glossar, FAQ und Quiz. Deine Arbeit wird im Browser gespeichert.")}</p></div>
-    <div><b>{bi("3 · Report the result", "3 · Ergebnis berichten")}</b><p>{bi("Click “Bericht (PDF)” to create a professional report – choose the sections and save it as PDF.", "Klick auf „Bericht (PDF)“ erstellt einen professionellen Bericht – Abschnitte wählen und als PDF sichern.")}</p></div>
+    <div><b>{bi("3 · Report the result", "3 · Ergebnis berichten")}</b><p>{bi("Click “Report (PDF)” to create a professional report – choose the sections and save it as PDF.", "Klick auf „Bericht (PDF)“ erstellt einen professionellen Bericht – Abschnitte wählen und als PDF sichern.")}</p></div>
   </div>
   {"".join(phase_section(p) for p in CFG["phases"])}
 </main>

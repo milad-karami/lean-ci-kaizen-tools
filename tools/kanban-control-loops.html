@@ -1384,6 +1384,7 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
 (function(){
   'use strict';
   var C = window.TK_CFG; if (!C) return;
+  var EN = C.lang === 'en', t = function(de, en){ return EN ? en : de; };
   var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
 
   /* ---------- Markdown → Blöcke ---------- */
@@ -1458,9 +1459,9 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
 
   /* ---------- Daten aus dem Tool ---------- */
   function getMarkdown(){
-    if (typeof window.buildMarkdown !== 'function') throw new Error('Dieses Tool stellt keine Markdown-Ausgabe bereit.');
+    if (typeof window.buildMarkdown !== 'function') throw new Error(t('Dieses Tool stellt keine Markdown-Ausgabe bereit.', 'This tool does not provide Markdown output.'));
     var md = window.buildMarkdown();
-    if (md && typeof md.then === 'function') throw new Error('Asynchrone Ausgabe wird nicht unterstützt.');
+    if (md && typeof md.then === 'function') throw new Error(t('Asynchrone Ausgabe wird nicht unterstützt.', 'Asynchronous output is not supported.'));
     return String(md || '');
   }
   function glossary(){
@@ -1476,7 +1477,7 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
   /* ---------- Bericht-HTML ---------- */
   var REPORT_CSS = [
     '@page{size:A4;margin:16mm 15mm 18mm;@bottom-left{content:"' + esc(C.title).replace(/"/g, '') + ' · Lean · CI · Kaizen Toolkit";font:7.5pt Arial,sans-serif;color:#6b7280}',
-    '@bottom-right{content:"Seite " counter(page) " von " counter(pages);font:7.5pt Arial,sans-serif;color:#6b7280}}',
+    '@bottom-right{content:"' + t('Seite', 'Page') + ' " counter(page) " ' + t('von', 'of') + ' " counter(pages);font:7.5pt Arial,sans-serif;color:#6b7280}}',
     '@page cover{margin:0;@bottom-left{content:none}@bottom-right{content:none}}',
     '*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}',
     'html{font-size:10pt}body{margin:0;color:#14213d;font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5;background:#fff}',
@@ -1518,39 +1519,39 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
 
   function buildReport(o){
     var md = getMarkdown(), doc = split(parse(md));
-    var date = new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'long', year:'numeric'});
+    var date = new Date().toLocaleDateString(t('de-DE', 'en-GB'), {day:'2-digit', month:'long', year:'numeric'});
     var title = C.title, sub = doc.title && doc.title !== C.title ? doc.title : '';
     var chosen = [], n = 0;
-    if (o.method) chosen.push(['method', 'Die Methode kurz erklärt']);
-    if (o.intro && doc.intro.length) chosen.push(['intro', 'Überblick']);
+    if (o.method) chosen.push(['method', t('Die Methode kurz erklärt', 'The method in brief')]);
+    if (o.intro && doc.intro.length) chosen.push(['intro', t('Überblick', 'Overview')]);
     doc.secs.forEach(function(s, i){ if (o['s' + i]) chosen.push(['s' + i, s.title]); });
     var gl = glossary();
-    if (o.gloss && gl.length) chosen.push(['gloss', 'Begriffe einfach erklärt']);
-    if (o.cred) chosen.push(['cred', 'Quellen & Urheberschaft']);
+    if (o.gloss && gl.length) chosen.push(['gloss', t('Begriffe einfach erklärt', 'Key terms explained')]);
+    if (o.cred) chosen.push(['cred', t('Quellen & Urheberschaft', 'Sources & credits')]);
     var body = chosen.map(function(c){
       n++; var id = c[0], inner = '';
       if (id === 'method') inner = '<div class="method">' + (C.art || '') + '<div><p><strong>' + esc(heroText('.kicker')) + '</strong></p><p>' + esc(heroText('p.lede')) + '</p></div></div>';
       else if (id === 'intro') inner = html(doc.intro);
       else if (id === 'gloss') inner = '<div class="gloss">' + gl.map(function(g){ return '<div><b>' + esc(g.t) + '</b>' + esc(g.d) + '</div>'; }).join('') + '</div>';
-      else if (id === 'cred') inner = '<div class="cred"><p><strong>Original-Tool:</strong> John Naska (<a href="https://www.mokka.solutions/">mokka.solutions</a>) – veröffentlicht und weiterentwickelt mit seiner Genehmigung.</p>' +
-        '<p><strong>Weiterentwicklung (Toolkit):</strong> <a href="https://www.linkedin.com/in/milad-karami-63075b78/">Milad Karami</a> – einheitliches Design, Prozess-Navigation, PDF-Bericht, Fehlerkorrekturen.</p>' +
+      else if (id === 'cred') inner = '<div class="cred"><p><strong>' + t('Original-Tool:', 'Original tool:') + '</strong> John Naska (<a href="https://www.mokka.solutions/">mokka.solutions</a>) – ' + t('veröffentlicht und weiterentwickelt mit seiner Genehmigung.', 'published and further developed with his permission.') + '</p>' +
+        '<p><strong>' + t('Weiterentwicklung (Toolkit):', 'Further development (toolkit):') + '</strong> <a href="https://www.linkedin.com/in/milad-karami-63075b78/">Milad Karami</a> – ' + t('einheitliches Design, Prozess-Navigation, PDF-Bericht, Fehlerkorrekturen.', 'unified design, process navigation, PDF report, bug fixes.') + '</p>' +
         '<p><strong>Toolkit:</strong> <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/">milad-karami.github.io/lean-ci-kaizen-tools</a></p>' +
-        '<p>Die Inhalte beruhen auf den im Tool verlinkten Quellen (Videos, Kursunterlagen). Die Rechte daran liegen bei den jeweiligen Urheberinnen und Urhebern.</p></div>';
+        '<p>' + t('Die Inhalte beruhen auf den im Tool verlinkten Quellen (Videos, Kursunterlagen). Die Rechte daran liegen bei den jeweiligen Urheberinnen und Urhebern.', 'The content is based on the sources linked in the tool (videos, course materials). All rights remain with their respective authors.') + '</p></div>';
       else { var s = doc.secs[+id.slice(1)]; inner = html(s.blocks); }
       return '<section class="sec"><div class="sec-h"><span class="no">' + String(n).padStart(2, '0') + '</span><h2>' + esc(c[1]) + '</h2></div>' + inner + '</section>';
     }).join('');
-    var toc = chosen.length > 2 ? '<div class="toc"><h3>Inhalt</h3><ol>' + chosen.map(function(c){ return '<li>' + esc(c[1]) + '</li>'; }).join('') + '</ol></div>' : '';
-    var note = o.note ? '<div class="note"><strong>Anmerkung</strong><br>' + esc(o.note) + '</div>' : '';
+    var toc = chosen.length > 2 ? '<div class="toc"><h3>' + t('Inhalt', 'Contents') + '</h3><ol>' + chosen.map(function(c){ return '<li>' + esc(c[1]) + '</li>'; }).join('') + '</ol></div>' : '';
+    var note = o.note ? '<div class="note"><strong>' + t('Anmerkung', 'Note') + '</strong><br>' + esc(o.note) + '</div>' : '';
     var cover = o.cover ? '<section class="cover"><div class="cv-top">' + (C.logo || '') + '<div><b>Lean · CI · Kaizen</b><br>Toolkit</div><span class="ph">Phase ' + C.phaseN + ' · ' + esc(C.phaseName) + '</span></div>' +
       '<div class="cv-main"><div class="cv-kick">' + esc(heroText('.kicker')) + '</div><h1>' + esc(title) + '</h1>' + (sub ? '<div class="sub">' + esc(sub) + '</div>' : '') +
-      '<div class="cv-meta">Bericht vom ' + esc(date) + (o.by ? ' · erstellt von ' + esc(o.by) : '') + '</div>' +
-      (o.forWhom ? '<div class="cv-for"><span>Erstellt für</span><strong>' + esc(o.forWhom) + '</strong></div>' : '') + '</div>' +
+      '<div class="cv-meta">' + t('Bericht vom ', 'Report of ') + esc(date) + (o.by ? t(' · erstellt von ', ' · prepared by ') + esc(o.by) : '') + '</div>' +
+      (o.forWhom ? '<div class="cv-for"><span>' + t('Erstellt für', 'Prepared for') + '</span><strong>' + esc(o.forWhom) + '</strong></div>' : '') + '</div>' +
       '<div class="cv-art">' + (C.art || '') + '</div>' +
-      '<div class="cv-bottom"><span>Original-Tool: <b>John Naska</b> (mokka.solutions)</span><span>Toolkit: <b>Milad Karami</b> · milad-karami.github.io/lean-ci-kaizen-tools</span></div></section>' : '';
-    var mast = '<header class="mast"><div class="eb">Bericht · Phase ' + C.phaseN + ' · ' + esc(C.phaseName) + '</div><h2>' + esc(title) + '</h2>' +
+      '<div class="cv-bottom"><span>' + t('Original-Tool', 'Original tool') + ': <b>John Naska</b> (mokka.solutions)</span><span>Toolkit: <b>Milad Karami</b> · milad-karami.github.io/lean-ci-kaizen-tools</span></div></section>' : '';
+    var mast = '<header class="mast"><div class="eb">' + t('Bericht', 'Report') + ' · Phase ' + C.phaseN + ' · ' + esc(C.phaseName) + '</div><h2>' + esc(title) + '</h2>' +
       '<div class="meta"><span>' + esc(sub || heroText('.kicker')) + '</span><span>' + esc(date) + '</span></div>' +
-      (o.forWhom ? '<div class="meta"><span>Erstellt für: <strong>' + esc(o.forWhom) + '</strong></span></div>' : '') + '</header>';
-    return '<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>' + esc(title + ' – Bericht – ' + date) + '</title><style>' + REPORT_CSS + '</style></head><body>' +
+      (o.forWhom ? '<div class="meta"><span>' + t('Erstellt für', 'Prepared for') + ': <strong>' + esc(o.forWhom) + '</strong></span></div>' : '') + '</header>';
+    return '<!DOCTYPE html><html lang="' + t('de', 'en') + '"><head><meta charset="utf-8"><title>' + esc(title + t(' – Bericht – ', ' – Report – ') + date) + '</title><style>' + REPORT_CSS + '</style></head><body>' +
       cover + '<main class="page">' + mast + toc + note + body + '</main></body></html>';
   }
 
@@ -1563,26 +1564,26 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
     var doc, err = '';
     try { doc = split(parse(getMarkdown())); } catch (e) { doc = {intro:[], secs:[]}; err = e.message; }
     var gl = glossary(), st = load();
-    var opts = [['cover', 'Deckblatt', 'Titel, Phase, Datum, Logo'], ['method', 'Die Methode kurz erklärt', 'Wofür das Werkzeug da ist']];
-    if (doc.intro.length) opts.push(['intro', 'Überblick', 'Einleitung aus dem aktuellen Stand']);
-    doc.secs.forEach(function(s, i){ opts.push(['s' + i, s.title, 'Inhalt aus dem Tool']); });
-    if (gl.length) opts.push(['gloss', 'Begriffe einfach erklärt', gl.length + ' Begriffe']);
-    opts.push(['cred', 'Quellen & Urheberschaft', 'Original-Tool, Weiterentwicklung, Quellen']);
+    var opts = [['cover', t('Deckblatt', 'Cover page'), t('Titel, Phase, Datum, Logo', 'Title, phase, date, logo')], ['method', t('Die Methode kurz erklärt', 'The method in brief'), t('Wofür das Werkzeug da ist', 'What the tool is for')]];
+    if (doc.intro.length) opts.push(['intro', t('Überblick', 'Overview'), t('Einleitung aus dem aktuellen Stand', 'Introduction from the current state')]);
+    doc.secs.forEach(function(s, i){ opts.push(['s' + i, s.title, t('Inhalt aus dem Tool', 'Content from the tool')]); });
+    if (gl.length) opts.push(['gloss', t('Begriffe einfach erklärt', 'Key terms explained'), gl.length + t(' Begriffe', ' terms')]);
+    opts.push(['cred', t('Quellen & Urheberschaft', 'Sources & credits'), t('Original-Tool, Weiterentwicklung, Quellen', 'Original tool, further development, sources')]);
     if (!back){
       back = document.createElement('div'); back.className = 'tk-rep-back'; back.setAttribute('role', 'dialog'); back.setAttribute('aria-modal', 'true');
       document.body.appendChild(back);
       back.addEventListener('click', function(e){ if (e.target === back) close(); });
       document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && back.classList.contains('open')) close(); });
     }
-    back.innerHTML = '<div class="tk-rep"><div class="tk-rep-head">' + (C.logo || '') + '<div><small>Bericht · Phase ' + C.phaseN + '</small><h2>PDF-Bericht: ' + esc(C.title) + '</h2></div><button class="tk-rep-x" aria-label="Schließen">×</button></div>' +
-      '<div class="tk-rep-body"><div class="tk-rep-row"><div><label class="tk-f" for="tkFor">Erstellt für (optional)</label><input id="tkFor" type="text" placeholder="z. B. Geschäftsführung Muster GmbH"></div>' +
-      '<div><label class="tk-f" for="tkBy">Erstellt von (optional)</label><input id="tkBy" type="text" placeholder="Ihr Name / Team"></div></div>' +
-      '<label class="tk-f" for="tkNote">Anmerkung (optional)</label><textarea id="tkNote" placeholder="z. B. Ziel der Analyse, nächste Schritte …"></textarea>' +
-      '<label class="tk-f">Was soll in den Bericht?</label><div class="tk-rep-presets"><button data-p="all">Alles</button><button data-p="res">Nur Ergebnisse</button><button data-p="none">Nichts</button></div>' +
+    back.innerHTML = '<div class="tk-rep"><div class="tk-rep-head">' + (C.logo || '') + '<div><small>' + t('Bericht', 'Report') + ' · Phase ' + C.phaseN + '</small><h2>' + t('PDF-Bericht', 'PDF report') + ': ' + esc(C.title) + '</h2></div><button class="tk-rep-x" aria-label="' + t('Schließen', 'Close') + '">×</button></div>' +
+      '<div class="tk-rep-body"><div class="tk-rep-row"><div><label class="tk-f" for="tkFor">' + t('Erstellt für (optional)', 'Prepared for (optional)') + '</label><input id="tkFor" type="text" placeholder="' + t('z. B. Geschäftsführung Muster GmbH', 'e.g. Management board, Example Ltd') + '"></div>' +
+      '<div><label class="tk-f" for="tkBy">' + t('Erstellt von (optional)', 'Prepared by (optional)') + '</label><input id="tkBy" type="text" placeholder="' + t('Ihr Name / Team', 'Your name / team') + '"></div></div>' +
+      '<label class="tk-f" for="tkNote">' + t('Anmerkung (optional)', 'Note (optional)') + '</label><textarea id="tkNote" placeholder="' + t('z. B. Ziel der Analyse, nächste Schritte …', 'e.g. goal of the analysis, next steps …') + '"></textarea>' +
+      '<label class="tk-f">' + t('Was soll in den Bericht?', 'What should the report include?') + '</label><div class="tk-rep-presets"><button data-p="all">' + t('Alles', 'Everything') + '</button><button data-p="res">' + t('Nur Ergebnisse', 'Results only') + '</button><button data-p="none">' + t('Nichts', 'Nothing') + '</button></div>' +
       '<div class="tk-rep-grid">' + opts.map(function(o){ return '<label class="tk-rep-opt"><input type="checkbox" value="' + o[0] + '"' + (o[0] === 'gloss' ? '' : ' checked') + '><span><b>' + esc(o[1]) + '</b><small>' + esc(o[2]) + '</small></span></label>'; }).join('') + '</div>' +
-      '<div class="tk-rep-actions"><button class="tk-go">📄 PDF erstellen</button><button class="tk-cancel">Abbrechen</button></div>' +
-      (err ? '<div class="tk-rep-err">Hinweis: ' + esc(err) + '</div>' : '') +
-      '<div class="tk-rep-hint">Es öffnet sich der Druckdialog – dort <b>„Als PDF sichern“</b> wählen. Der Bericht nutzt den aktuellen Stand dieses Tools.</div></div></div>';
+      '<div class="tk-rep-actions"><button class="tk-go">📄 ' + t('PDF erstellen', 'Create PDF') + '</button><button class="tk-cancel">' + t('Abbrechen', 'Cancel') + '</button></div>' +
+      (err ? '<div class="tk-rep-err">' + t('Hinweis', 'Note') + ': ' + esc(err) + '</div>' : '') +
+      '<div class="tk-rep-hint">' + t('Es öffnet sich der Druckdialog – dort <b>„Als PDF sichern“</b> wählen. Der Bericht nutzt den aktuellen Stand dieses Tools.', 'The print dialog opens – choose <b>“Save as PDF”</b> there. The report uses the current state of this tool.') + '</div></div></div>';
     var q = function(s){ return back.querySelector(s); };
     q('#tkFor').value = st.forWhom || ''; q('#tkBy').value = st.by || '';
     var boxes = Array.prototype.slice.call(back.querySelectorAll('.tk-rep-grid input'));
@@ -1592,10 +1593,10 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
     back.querySelector('.tk-go').onclick = function(){
       var o = {forWhom:q('#tkFor').value.trim(), by:q('#tkBy').value.trim(), note:q('#tkNote').value.trim()};
       boxes.forEach(function(b){ o[b.value] = b.checked; });
-      if (!boxes.some(function(b){ return b.checked; })){ alert('Bitte mindestens einen Inhalt auswählen.'); return; }
+      if (!boxes.some(function(b){ return b.checked; })){ alert(t('Bitte mindestens einen Inhalt auswählen.', 'Please select at least one item.')); return; }
       save({forWhom:o.forWhom, by:o.by});
       var html;
-      try { html = buildReport(o); } catch (e) { alert('Bericht konnte nicht erstellt werden: ' + e.message); return; }
+      try { html = buildReport(o); } catch (e) { alert(t('Bericht konnte nicht erstellt werden: ', 'The report could not be created: ') + e.message); return; }
       close(); printHTML(html);
     };
     back.classList.add('open'); setTimeout(function(){ q('#tkFor').focus(); }, 30);
@@ -1617,14 +1618,14 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
     if (C.noReport) return;
     var ha = document.querySelector('header.hero .hero-actions');
     if (ha && !ha.querySelector('.tk-rep-btn')){
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn tk-rep-btn'; b.textContent = '📄 Bericht (PDF)';
-      b.title = 'Professioneller PDF-Bericht aus dem aktuellen Stand – Inhalte wählbar';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn tk-rep-btn'; b.textContent = t('📄 Bericht (PDF)', '📄 Report (PDF)');
+      b.title = t('Professioneller PDF-Bericht aus dem aktuellen Stand – Inhalte wählbar', 'Professional PDF report from the current state – choose the contents');
       b.addEventListener('click', openDialog); ha.insertBefore(b, ha.firstChild ? ha.firstChild.nextSibling : null);
     }
     var fm = document.getElementById('fileMenu');
     if (fm && !fm.querySelector('.tk-rep-item')){
       var it = document.createElement('button'); it.className = 'menu-item tk-rep-item'; it.setAttribute('role', 'menuitem');
-      it.innerHTML = '<span class="lbl">Als PDF-Bericht …<span class="desc">Für Führungskräfte &amp; Kunden, Inhalte wählbar</span></span>';
+      it.innerHTML = '<span class="lbl">' + t('Als PDF-Bericht …', 'As PDF report …') + '<span class="desc">' + t('Für Führungskräfte &amp; Kunden, Inhalte wählbar', 'For managers &amp; clients, choose the contents') + '</span></span>';
       it.addEventListener('click', function(){ fm.hidden = true; openDialog(); });
       var cap = Array.prototype.slice.call(fm.querySelectorAll('.menu-cap')).pop();
       if (cap && cap.nextSibling) fm.insertBefore(it, cap.nextSibling); else fm.appendChild(it);
@@ -1642,7 +1643,7 @@ html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
 @keyframes cycle-turn{to{transform:rotate(360deg)}}
 @keyframes card-lift{0%,35%,65%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
 @media(prefers-reduced-motion:reduce){.cycle,.card{animation:none!important}}
-</style><g class="cycle"><path transform="rotate(0 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#f2c94c"/><path transform="rotate(90 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#ef7fb3"/><path transform="rotate(180 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#3b6fd6"/><path transform="rotate(270 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#4fd1c5"/></g><g class="card"><rect x="22" y="19" width="20" height="27" rx="4" fill="#f6f4ef" stroke="#14213d" stroke-width="2"/><path d="M26 26h12" stroke="#3b6fd6" stroke-width="3" stroke-linecap="round"/><rect x="26" y="32" width="4" height="8" rx="1" fill="#ef7fb3"/><rect x="34" y="32" width="4" height="8" rx="1" fill="#4fd1c5"/></g></svg><span><b>Lean · CI · Kaizen</b><small>TOOLKIT</small></span></a><ol class="tk-steps"><li class="done"><a href="../index.html#phase-context" title="Context &amp; strategy"><i>0</i><span>Context</span></a></li><li class="done"><a href="../index.html#phase-define" title="Define"><i>1</i><span>Define</span></a></li><li class="done"><a href="../index.html#phase-measure" title="Measure"><i>2</i><span>Measure</span></a></li><li class="done"><a href="../index.html#phase-analyze" title="Analyze"><i>3</i><span>Analyze</span></a></li><li class="cur"><a href="../index.html#phase-improve" title="Improve" aria-current="step"><i>4</i><span>Improve</span></a></li><li class=""><a href="../index.html#phase-control" title="Control"><i>5</i><span>Control</span></a></li></ol><div class="tk-nav"><a class="tk-prev" href="heijunka.html" title="Previous tool: Heijunka">‹ <span class="tk-lbl">Heijunka</span></a><a class="tk-all" href="../index.html#tools">All tools</a><a class="tk-next" href="pdca.html" title="Next tool: PDCA cycle"><span class="tk-lbl">PDCA cycle</span> ›</a></div></div></nav>
+</style><g class="cycle"><path transform="rotate(0 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#f2c94c"/><path transform="rotate(90 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#ef7fb3"/><path transform="rotate(180 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#3b6fd6"/><path transform="rotate(270 32 32)" d="M32 4A28 28 0 0 1 58.6 23.4L62 22L57 33L49 25L52 24A21 21 0 0 0 32 11Z" fill="#4fd1c5"/></g><g class="card"><rect x="22" y="19" width="20" height="27" rx="4" fill="#f6f4ef" stroke="#14213d" stroke-width="2"/><path d="M26 26h12" stroke="#3b6fd6" stroke-width="3" stroke-linecap="round"/><rect x="26" y="32" width="4" height="8" rx="1" fill="#ef7fb3"/><rect x="34" y="32" width="4" height="8" rx="1" fill="#4fd1c5"/></g></svg><span><b>Lean · CI · Kaizen</b><small>TOOLKIT</small></span></a><ol class="tk-steps"><li class="done"><a href="../index.html#phase-context" title="Context &amp; strategy"><i>0</i><span>Context</span></a></li><li class="done"><a href="../index.html#phase-define" title="Define"><i>1</i><span>Define</span></a></li><li class="done"><a href="../index.html#phase-measure" title="Measure"><i>2</i><span>Measure</span></a></li><li class="done"><a href="../index.html#phase-analyze" title="Analyze"><i>3</i><span>Analyze</span></a></li><li class="cur"><a href="../index.html#phase-improve" title="Improve" aria-current="step"><i>4</i><span>Improve</span></a></li><li class=""><a href="../index.html#phase-control" title="Control"><i>5</i><span>Control</span></a></li></ol><div class="tk-nav"><a class="tk-prev" href="heijunka-en.html" title="Previous tool: Heijunka">‹ <span class="tk-lbl">Heijunka</span></a><a class="tk-all" href="../index.html#tools">All tools</a><a class="tk-next" href="pdca-en.html" title="Next tool: PDCA cycle"><span class="tk-lbl">PDCA cycle</span> ›</a></div></div></nav>
 <div class="mini" id="mini" hidden>
   <button class="mbtn play" id="mPlay">▶</button>
   <button class="mbtn" id="mStep" title="Step">⏭</button>

@@ -69,7 +69,8 @@ def brand_bar(tool, lang):
         if not t2:
             return f'<a class="{cls}" aria-disabled="true">{arrow}</a>'
         name = t2[lang]
-        return (f'<a class="{cls}" href="{t2["id"]}.html" title="{esc(title)}: {esc(name)}">'
+        href = t2["en_file"] if lang == "en" and t2.get("en_file") else f'{t2["id"]}.html'
+        return (f'<a class="{cls}" href="{href}" title="{esc(title)}: {esc(name)}">'
                 + (f'{arrow} <span class="tk-lbl">{esc(name)}</span>' if cls == "tk-prev" else f'<span class="tk-lbl">{esc(name)}</span> {arrow}')
                 + '</a>')
 
