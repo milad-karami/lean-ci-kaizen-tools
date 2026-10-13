@@ -36,9 +36,11 @@ TOOLS = CFG["tools"]
 
 T = {
     "de": {"all": "Alle Tools", "prev": "Vorheriges Tool", "next": "Nächstes Tool", "phase": "Phase",
-           "toolkit": "Toolkit", "nav": "Toolkit-Navigation"},
+           "toolkit": "Toolkit", "nav": "Toolkit-Navigation",
+           "dl_t": "Dieses Tool als HTML-Datei herunterladen – läuft offline, ohne Installation"},
     "en": {"all": "All tools", "prev": "Previous tool", "next": "Next tool", "phase": "Phase",
-           "toolkit": "Toolkit", "nav": "Toolkit navigation"},
+           "toolkit": "Toolkit", "nav": "Toolkit navigation",
+           "dl_t": "Download this tool as an HTML file – works offline, no installation"},
 }
 
 
@@ -57,6 +59,7 @@ def brand_bar(tool, lang):
     prev_t = TOOLS[idx - 1] if idx > 0 else None
     next_t = TOOLS[idx + 1] if idx < len(TOOLS) - 1 else None
     cur_n = PHASES[tool["phase"]]["n"]
+    own = tool["en_file"] if lang == "en" and tool.get("en_file") else f'{tool["id"]}.html'
     steps = []
     for p in CFG["phases"]:
         cls = "cur" if p["n"] == cur_n else ("done" if p["n"] < cur_n else "")
@@ -78,7 +81,8 @@ def brand_bar(tool, lang):
             f'<a class="tk-brand" href="../index.html" title="Lean · CI · Kaizen Toolkit">{LOGO}'
             f'<span><b>Lean · CI · Kaizen</b><small>{t["toolkit"].upper()}</small></span></a>'
             f'<ol class="tk-steps">{"".join(steps)}</ol>'
-            f'<div class="tk-nav">{nav_link(prev_t, "tk-prev", "‹", t["prev"])}'
+            f'<div class="tk-nav"><a class="tk-dl" href="{own}" download="{own}" title="{esc(t["dl_t"])}">⬇ HTML</a>'
+            f'{nav_link(prev_t, "tk-prev", "‹", t["prev"])}'
             f'<a class="tk-all" href="../index.html#tools">{t["all"]}</a>'
             f'{nav_link(next_t, "tk-next", "›", t["next"])}</div></div></nav>')
 

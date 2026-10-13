@@ -4,7 +4,8 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.2.1** | Sprachwechsel | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.2.1) |
+| **2.2.2** | HTML-Download | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.2.2) |
+| 2.2.1 | Sprachwechsel | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.2.1) |
 | 2.2.0 | Toolkit-Fassung | 2026-10-12 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.2.0) · [Live DE](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) |
 | 2.1.0 | English & Rüstzeit | 2026-10-10 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.1.0) |
 | 2.0.0 | Pro | 2026-10-09 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/kanban-regelkreislauf-v2.0.0) |
@@ -12,6 +13,10 @@
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.2.2 – HTML-Download (2026-10-13)
+
+- Knopf „⬇ HTML“ in der Kopfleiste und auf der Startseite: das Tool als HTML-Datei herunterladen und offline nutzen
 
 ## 2.2.1 – Sprachwechsel (2026-10-13)
 

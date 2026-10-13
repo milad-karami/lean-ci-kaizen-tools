@@ -4,7 +4,8 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.1.2** | Sprachwechsel | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.1.2) |
+| **2.1.3** | HTML-Download | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.1.3) |
+| 2.1.2 | Sprachwechsel | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.1.2) |
 | 2.1.1 | Einheitlicher Kopf | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.1.1) |
 | 2.1.0 | English | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.1.0) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa-en.html) |
 | 2.0.0 | Toolkit-Fassung | 2026-10-12 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/ishikawa-v2.0.0) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) |
@@ -12,6 +13,10 @@
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.1.3 – HTML-Download (2026-10-13)
+
+- Knopf „⬇ HTML“ in der Kopfleiste und auf der Startseite: das Tool als HTML-Datei herunterladen und offline nutzen
 
 ## 2.1.2 – Sprachwechsel (2026-10-13)
 

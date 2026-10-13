@@ -25,6 +25,8 @@
   border-radius:9px;padding:5px 10px;font-weight:700;font-size:12.5px;white-space:nowrap;transition:background .2s}
 .tk-nav a:hover{background:rgba(255,255,255,.16)}
 .tk-nav a[aria-disabled="true"]{opacity:.35;pointer-events:none}
+.tk-nav a.tk-dl{border-color:rgba(242,201,76,.55);background:rgba(242,201,76,.14)}
+.tk-nav a.tk-dl:hover{background:rgba(242,201,76,.28)}
 @media(max-width:860px){.tk-bar-in{gap:10px;padding:8px 14px}.tk-steps{order:3;flex-basis:100%}.tk-nav .tk-lbl{display:none}}
 
 /* --- Hero im Toolkit-Look (dunkel, wie Kanban-Tool und Website) --- */

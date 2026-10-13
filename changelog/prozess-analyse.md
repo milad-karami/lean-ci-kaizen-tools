@@ -4,11 +4,16 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.1.2** | Toolkit-Fassung | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/prozess-analyse-v2.1.2) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse.html) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse-en.html) |
+| **2.1.3** | HTML-Download | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/prozess-analyse-v2.1.3) |
+| 2.1.2 | Toolkit-Fassung | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/prozess-analyse-v2.1.2) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse.html) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse-en.html) |
 | 1.0.0 | Original (John Naska) | 2026-10 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/prozess-analyse-v1.0.0) |
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.1.3 – HTML-Download (2026-10-13)
+
+- Knopf „⬇ HTML“ in der Kopfleiste und auf der Startseite: das Tool als HTML-Datei herunterladen und offline nutzen
 
 ## 2.1.2 – Toolkit-Fassung (2026-10-13)
 

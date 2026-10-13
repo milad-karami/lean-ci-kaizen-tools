@@ -25,6 +25,15 @@ def art(t):
     return f'<div class="art ph"><span>{n}</span></div>'
 
 
+def dl_links(de_href, en_href=None):
+    """⬇ HTML: lädt die Tool-Datei herunter (in der gerade gewählten Sprache), läuft danach offline."""
+    one = lambda h, cls, title: f'<a class="pill dl{cls}" href="{h}" download title="{title}">⬇ HTML</a>'
+    if en_href:
+        return (one(en_href, " en", "Download as HTML file – works offline")
+                + one(de_href, " de", "Als HTML-Datei herunterladen – läuft offline"))
+    return one(de_href, "", "Als HTML-Datei herunterladen – läuft offline / Download as HTML file")
+
+
 def card(t):
     href = f'tools/{t["id"]}.html'
     en = t.get("en_file")
@@ -40,6 +49,7 @@ def card(t):
             f'<div class="cb"><h3>{bi(t["en"], t["de"])}</h3><p>{bi(t["sum_en"], t["sum_de"])}</p>'
             f'<div class="meta">{langs}<span class="pill gold">PDF</span>'
             f'<a class="pill ver" href="{REPO}/blob/main/changelog/{t["id"]}.md" title="Changelog">v{t["version"]}</a>'
+            + dl_links(href, f'tools/{en}' if en else None) +
             f'<span class="go">{bi("Open →", "Öffnen →")}</span></div>{alt_link}</div></article>')
 
 
@@ -59,7 +69,8 @@ def my_tools():
             f'<article class="card"><a class="hit" href="my-tools/prozessnavigator.html" aria-label="Prozessnavigator"></a>'
             f'<div class="art ph"><span>★</span></div><div class="cb"><h3>{bi("Process navigator", "Prozessnavigator")}</h3>'
             f'<p>{bi("Process description (ISO 9001), RASIC matrix and flowcharts – exported as Excel with collapsible groups (+ / −).", "Prozessbeschreibung (ISO 9001), RASIC-Matrix und Flowcharts – Export als Excel mit aufklappbarer Gliederung (+ / −).")}</p>'
-            f'<div class="meta"><span class="pill">DE</span><span class="pill gold">Excel</span><span class="pill ver">v1.0.0</span>'
+            f'<div class="meta"><span class="pill">DE</span><span class="pill gold">Excel</span><span class="pill ver">v1.1.0</span>'
+            f'{dl_links("my-tools/prozessnavigator.html")}'
             f'<span class="go">{bi("Open →", "Öffnen →")}</span></div></div></article></div></section>')
 
 
@@ -152,6 +163,8 @@ HTML = f"""<!DOCTYPE html>
   .pill.gold{{background:#fff7d9;border-color:#ecddaa;color:#7a5c0c}}
   .pill.ver{{position:relative;z-index:2;text-decoration:none;font-family:"IBM Plex Mono",ui-monospace,monospace}}
   .pill.ver:hover{{color:var(--navy);border-color:var(--navy)}}
+  .pill.dl{{position:relative;z-index:2;text-decoration:none;color:var(--blue);border-color:#c9d6f2;background:#f3f6fd}}
+  .pill.dl:hover{{color:#fff;background:var(--blue);border-color:var(--blue)}}
   .go{{margin-left:auto;white-space:nowrap;font-weight:800;color:var(--blue);font-size:14px}}
   .alt{{position:relative;z-index:2;margin-top:8px;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none}}
   footer{{margin-top:40px;background:var(--navy);color:#b9c4dc;font-size:13.5px;line-height:1.6}}
