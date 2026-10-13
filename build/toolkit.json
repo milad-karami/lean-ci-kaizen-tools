@@ -159,6 +159,18 @@
       "en_file": "oee-rechner-en.html"
     },
     {
+      "id": "prozess-analyse",
+      "phase": "measure",
+      "src": "prozess-analyse.html",
+      "de": "Prozess-Analyse (Toyota Kata)",
+      "en": "Process analysis (Toyota Kata)",
+      "sum_de": "Ist-Zustand einer Linie in fünf Schritten aufnehmen: Ausbringung, Kundentakt, Ablaufmuster, Anlagenkapazität, Kern-Arbeitsinhalt.",
+      "sum_en": "Capture a line's current condition in five steps: output, customer takt, work patterns, equipment capacity, core work content.",
+      "version": "2.1.2",
+      "version_name": "Toolkit-Fassung",
+      "en_file": "prozess-analyse-en.html"
+    },
+    {
       "id": "wertstromanalyse",
       "phase": "analyze",
       "src": "wertstromanalyse.html",

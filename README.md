@@ -2,10 +2,10 @@
 
 <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/"><img src="assets/logo-wordmark.svg" alt="Lean · CI · Kaizen Toolkit" width="300"></a>
 
-### 15 free, interactive tools for Lean, continuous improvement, Six Sigma and Kaizen – organised along the improvement process.
+### 16 free, interactive tools for Lean, continuous improvement, Six Sigma and Kaizen – organised along the improvement process.
 
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20Live%20demo-open%20in%20browser-f2c94c?style=for-the-badge&labelColor=14213d)](https://milad-karami.github.io/lean-ci-kaizen-tools/)
-[![Tools](https://img.shields.io/badge/tools-15-3b6fd6?style=for-the-badge&labelColor=14213d)](#the-tools-along-the-improvement-process)
+[![Tools](https://img.shields.io/badge/tools-16-3b6fd6?style=for-the-badge&labelColor=14213d)](#the-tools-along-the-improvement-process)
 [![Releases](https://img.shields.io/badge/versions-releases-ef7fb3?style=for-the-badge&labelColor=14213d)](https://github.com/milad-karami/lean-ci-kaizen-tools/releases)
 
 **🇬🇧 English** · 🇩🇪 [Deutsch](#deutsch)
@@ -16,7 +16,7 @@
 
 ## Why this toolkit
 
-Improvement projects fail less often because of missing knowledge than because of missing structure. This toolkit puts 15
+Improvement projects fail less often because of missing knowledge than because of missing structure. This toolkit puts 16
 proven methods in the order you actually need them – from understanding the context to sustaining the result – and makes
 each one hands-on: enter your own data, see the result immediately and hand over a clean PDF report.
 
@@ -49,7 +49,7 @@ The phases follow **DMAIC** – the Six Sigma improvement cycle – with a strat
 *How does the process really perform today – in numbers?*
 
 <table>
-<tr><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung-en.html"><img src="assets/illustrations/prozess-begehung.webp" alt="Process walk-through (Gemba)" width="100%"></a><br><b>Process walk-through (Gemba)</b><br><sub>Capture the process on site: think in systems, observe, document.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html">Deutsch</a> · <a href="changelog/prozess-begehung.md">v2.1.2</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner-en.html"><img src="assets/illustrations/oee-rechner.webp" alt="OEE calculator" width="100%"></a><br><b>OEE calculator</b><br><sub>Overall equipment effectiveness = availability × performance × quality – with loss analysis.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html">Deutsch</a> · <a href="changelog/oee-rechner.md">v2.1.2</a></td></tr>
+<tr><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung-en.html"><img src="assets/illustrations/prozess-begehung.webp" alt="Process walk-through (Gemba)" width="100%"></a><br><b>Process walk-through (Gemba)</b><br><sub>Capture the process on site: think in systems, observe, document.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html">Deutsch</a> · <a href="changelog/prozess-begehung.md">v2.1.2</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner-en.html"><img src="assets/illustrations/oee-rechner.webp" alt="OEE calculator" width="100%"></a><br><b>OEE calculator</b><br><sub>Overall equipment effectiveness = availability × performance × quality – with loss analysis.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html">Deutsch</a> · <a href="changelog/oee-rechner.md">v2.1.2</a></td><td width="33%" valign="top"><b>Process analysis (Toyota Kata)</b><br><sub>Capture a line's current condition in five steps: output, customer takt, work patterns, equipment capacity, core work content.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse.html">Deutsch</a> · <a href="changelog/prozess-analyse.md">v2.1.2</a></td></tr>
 </table>
 
 ### 3 · Analyze
@@ -117,7 +117,7 @@ origin visible: John Naska (mokka.solutions) → this version (Milad Karami), ea
 
 ## Deutsch
 
-**15 kostenlose, interaktive Werkzeuge für Lean, KVP, Six Sigma und Kaizen – geordnet entlang des Verbesserungsprozesses.**
+**16 kostenlose, interaktive Werkzeuge für Lean, KVP, Six Sigma und Kaizen – geordnet entlang des Verbesserungsprozesses.**
 [Live-Demo öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/) und oben rechts „🇩🇪 Deutsch“ wählen.
 
 - **Kostenlos und privat** – läuft komplett im Browser, ohne Konto und Server; deine Daten bleiben auf deinem Gerät
@@ -140,6 +140,7 @@ Die Phasen folgen **DMAIC** mit vorgeschalteter Kontext-Phase: **0 Kontext** →
 | 1 · Define | **CTQ-Analyse** | Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html) | [v2.1.2](changelog/ctq-analyse.md) |
 | 2 · Measure | **Prozess-Begehung (Gemba)** | Den Prozess vor Ort erfassen: systemisch denken, beobachten, dokumentieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-begehung-en.html) | [v2.1.2](changelog/prozess-begehung.md) |
 | 2 · Measure | **OEE-Rechner** | Gesamtanlageneffektivität = Verfügbarkeit × Leistung × Qualität – mit Verlustanalyse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/oee-rechner-en.html) | [v2.1.2](changelog/oee-rechner.md) |
+| 2 · Measure | **Prozess-Analyse (Toyota Kata)** | Ist-Zustand einer Linie in fünf Schritten aufnehmen: Ausbringung, Kundentakt, Ablaufmuster, Anlagenkapazität, Kern-Arbeitsinhalt. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/prozess-analyse-en.html) | [v2.1.2](changelog/prozess-analyse.md) |
 | 3 · Analyze | **Wertstromanalyse (IST & SOLL)** | Material- und Informationsfluss sichtbar machen, Durchlaufzeit und Verschwendung finden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/wertstromanalyse-en.html) | [v2.1.2](changelog/wertstromanalyse.md) |
 | 3 · Analyze | **Ishikawa-Diagramm** | Ursachen strukturiert sammeln und bewerten (6M) – statt nur Symptome zu behandeln. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ishikawa-en.html) | [v2.1.2](changelog/ishikawa.md) |
 | 4 · Improve | **SMED-Rechner** | Rüstzeit verkürzen: interne in externe Schritte verlagern, parallelisieren, standardisieren. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner-en.html) | [v2.1.2](changelog/smed-rechner.md) |

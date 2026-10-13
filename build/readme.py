@@ -45,8 +45,9 @@ def cell(t, lang):
             links += f' · <a href="{en_href(t)}">English</a>'
         name, summ, main = t["de"], t["sum_de"], de_href(t)
     links += f' · <a href="changelog/{t["id"]}.md">v{t["version"]}</a>'
-    return (f'<td width="33%" valign="top"><a href="{main}"><img src="assets/illustrations/{t["id"]}.webp" '
-            f'alt="{name}" width="100%"></a><br><b>{name}</b><br><sub>{summ}</sub><br>{links}</td>')
+    img = (f'<a href="{main}"><img src="assets/illustrations/{t["id"]}.webp" alt="{name}" width="100%"></a><br>'
+           if (ROOT / "assets" / "illustrations" / f'{t["id"]}.webp').exists() else "")  # ohne Codex-Bild nur Text
+    return (f'<td width="33%" valign="top">{img}<b>{name}</b><br><sub>{summ}</sub><br>{links}</td>')
 
 
 def phases(lang):

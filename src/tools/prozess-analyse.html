@@ -1488,10 +1488,11 @@ let P=EXAMPLES.ist.make();
 
 /* ===== compute ===== */
 function calc(){
-  const verfMin=P.std*P.schichten*60 - P.pause;          // 920
+  // FIX (Toolkit): Zeiten nicht negativ werden lassen – bei Pause/Verlusten über der Arbeitszeit standen dort negative Takt- und Zykluszeiten
+  const verfMin=Math.max(0,P.std*P.schichten*60 - P.pause);          // 920
   const verfSec=verfMin*60;
   const takt=P.bedarf>0?Math.round(verfSec/P.bedarf):0;  // 30 (ganze Sekunden, wie im Video)
-  const effMin=verfMin-P.verluste;                        // 820
+  const effMin=Math.max(0,verfMin-P.verluste);                        // 820
   const gzz=P.bedarf>0?Math.round(effMin*60/P.bedarf):0; // 27
   const sumMA=P.ma.reduce((a,b)=>a+(+b||0),0);            // 63
   const kern=gzz>0?sumMA/gzz:0;                           // 2,3
@@ -1617,7 +1618,7 @@ function renderKpis(){
   el("#kpis").innerHTML=
     kpi("Kundentakt",r1(C.takt)+" s",`${P.bedarf} Stk/Tag`,"")+
     kpi("Geplante Zykluszeit",r1(C.gzz)+" s",`${C.effMin} min nutzbar`,"")+
-    kpi("Gesamt-Arbeitsinhalt",C.sumMA+" s",`MA 1–3 summiert`,"")+
+    kpi("Gesamt-Arbeitsinhalt",C.sumMA+" s",P.ma.length>1?`MA 1–${P.ma.length} summiert`:`MA 1`,"")/* FIX (Toolkit): Anzahl war fest »MA 1–3« */+
     kpi("Kern-Arbeitsinhalt",de(r1(C.kern))+" MA",`theoretisch nötig (${P.ma.length} im Einsatz)`,kernCls)+
     kpi("Anlagen-Engpass",engpass?"Ja":"Nein",engpass?engpass.name.split("·")[0].trim():"Kapazität reicht",engpass?"bad":"good");
 }
@@ -1648,11 +1649,12 @@ function renderMaInputs(){
   el("#kernBig").innerHTML=`<div class="rb"><div class="l">Kern-Arbeitsinhalt</div><div class="v">${de(r1(C.kern))} MA</div></div>`+
     `<div class="rb"><div class="l">Im Einsatz</div><div class="v">${P.ma.length} MA</div></div>`;
 }
+// FIX (Toolkit): Urteil nannte immer »Engpass beim Schweißen«, auch bei anderen Anlagen/Szenarien
 function renderKapVerdict(){
   const C=calc();
   const eng=P.masch.filter(m=>(m.z+m.ea)>C.gzz);
   const v=el("#kapVerdict");
-  if(eng.length){v.className="verdict bad";v.innerHTML=`<b>Kapazität reicht nicht.</b> ${eng.map(m=>esc(m.name.split("·")[0].trim())+" ("+(m.z+m.ea)+" s)").join(", ")} liegt über der geplanten Zykluszeit von ${r1(C.gzz)} s. Engpass beim Schweißen – aber Achtung: in der Ist-Aufnahme nur erkennen, noch nicht lösen.`;}
+  if(eng.length){v.className="verdict bad";v.innerHTML=`<b>Kapazität reicht nicht.</b> ${eng.map(m=>esc(m.name.split("·")[0].trim())+" ("+(m.z+m.ea)+" s)").join(", ")} ${eng.length>1?'liegen':'liegt'} über der geplanten Zykluszeit von ${r1(C.gzz)} s. Engpass erkannt – aber Achtung: in der Ist-Aufnahme nur erkennen, noch nicht lösen.`;}
   else{v.className="verdict good";v.innerHTML=`<b>Kapazität reicht.</b> Alle Anlagenzeiten liegen unter der geplanten Zykluszeit von ${r1(C.gzz)} s.`;}
 }
 
@@ -1739,6 +1741,7 @@ document.addEventListener("input",e=>{
     const C=calc(), item=t.closest('.cycitem');
     if(item){item.classList.toggle('over',v>C.gzz);item.classList.toggle('ok',v<=C.gzz);}
     const c=el("#zykChart"); if(c)c.innerHTML=chartZyklen(440,210,true);
+    renderStory();
     return;
   }
   if(t.dataset&&t.dataset.ow!==undefined){
@@ -1749,8 +1752,12 @@ document.addEventListener("input",e=>{
     const c=el("#outChart"); if(c)c.innerHTML=chartOutput(900,230,true);
     const rowSum=P.output[wi].reduce((a,b)=>a+(+b||0),0);
     const cell=t.closest('tr').querySelector('.sum'); if(cell)cell.textContent=rowSum.toLocaleString('de-DE');
+    renderKpis();renderStory();
   }
 });
+// FIX (Toolkit): Zahlen in den Tabellen aktualisierten nur die Kurve – Storyboard, T-Formular, Summen und Min/Ø/Max blieben veraltet.
+// Während der Eingabe Storyboard/Kennzahlen nachführen, beim Verlassen des Felds alles neu zeichnen.
+document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&(t.dataset.zy!==undefined||t.dataset.ow!==undefined))render();});
 function cycTableHtml(){
   const C=calc(), d=P.zyklen, n=d.length;
   const items=d.map((v,i)=>{
@@ -1926,6 +1933,7 @@ function renderGloss(){el("#glossList").innerHTML=Object.values(GLOSS).map(g=>`<
 
 /* ===== export ===== */
 function download(name,text,mime){const blob=new Blob([text],{type:mime||"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},100);}
+// FIX (Toolkit): »|« im Anlagennamen zerbrach die Markdown-Tabelle – wird maskiert (mdCell).
 function buildMarkdown(){const C=calc();const eng=P.masch.filter(m=>(m.z+m.ea)>C.gzz);
   const L=["# Prozess-Analyse · "+EXAMPLES[curId].label,"",P.istDesc,"",
     "## Kennzahlen","| Kennzahl | Wert |","|---|---|",
@@ -1940,7 +1948,7 @@ function buildMarkdown(){const C=calc();const eng=P.masch.filter(m=>(m.z+m.ea)>C
     "## Zykluszeiten (niedrigste wiederholbare)","| Mitarbeiter | s |","|---|---|"];
   P.ma.forEach((v,i)=>L.push("| MA "+(i+1)+" | "+v+" |"));
   L.push("","## Anlagenkapazität","| Anlage | Zyklus | Ein/Aus | Gesamt | Status |","|---|---|---|---|---|");
-  P.masch.forEach(m=>L.push("| "+m.name+" | "+m.z+" | "+m.ea+" | "+(m.z+m.ea)+" s | "+((m.z+m.ea)>C.gzz?"Engpass":"ok")+" |"));
+  P.masch.forEach(m=>L.push("| "+mdCell(m.name)+" | "+m.z+" | "+m.ea+" | "+(m.z+m.ea)+" s | "+((m.z+m.ea)>C.gzz?"Engpass":"ok")+" |"));
   L.push("",eng.length?"> Engpass: "+eng.map(m=>m.name.split("·")[0].trim()).join(", ")+" liegt über der geplanten Zykluszeit.":"> Anlagenkapazität reicht für die geplante Zykluszeit.");
   const of=obsFilled();
   if(of.length){L.push("","## Beobachtungen (Auffälligkeiten)");of.forEach(t=>L.push("- "+t));}
@@ -1970,7 +1978,9 @@ el("#expJson").addEventListener("click",()=>download("prozess-analyse-"+curId+".
 el("#expObs").addEventListener("click",()=>download("prozess-analyse-"+curId+"-obsidian.md",buildObsidian(),"text/markdown;charset=utf-8"));
 
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify(P)+' -->';}
+// FIX (Toolkit): »-->« in einem Text (z. B. Beobachtung) beendete den Kommentar vorzeitig – Re-Import scheiterte. »>« als \u003e (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify(P).replace(/>/g,'\\u003e')+' -->';}
+const mdCell=s=>String(s==null?'':s).replace(/\|/g,'\\|');
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -1981,7 +1991,8 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(s,fname){P=A.shape(s)||s;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);if(!Array.isArray(P.obs))P.obs=[];render();setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
+// FIX (Toolkit): Ungültige Daten überschrieben P (A.shape(s)||s) und ließen das Tool kaputt zurück – jetzt Fehler vor dem Überschreiben.
+function applyImport(s,fname){const d=A.shape(s);if(!d)throw new Error('ungültige Daten');P=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);if(!Array.isArray(P.obs))P.obs=[];render();setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
 el('#importBtn').addEventListener('click',()=>el('#importFile').click());
 el('#importFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{applyImport(importFromText(r.result),file.name);}catch(err){setImpNote('\u26a0 Datei konnte nicht gelesen werden',true);}finally{e.target.value='';}};r.onerror=()=>{setImpNote('\u26a0 Lesefehler',true);};r.readAsText(file);});
 

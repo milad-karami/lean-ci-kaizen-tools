@@ -17,6 +17,14 @@ def bi(en, de, tag="span"):
     return f'<{tag} class="en">{esc(en)}</{tag}><{tag} class="de">{esc(de)}</{tag}>'
 
 
+def art(t):
+    # Illustration (Codex); solange keine vorhanden ist, ein schlichter Platzhalter mit der Phasennummer
+    if (ROOT / "assets" / "illustrations" / f'{t["id"]}.webp').exists():
+        return f'<div class="art"><img src="assets/illustrations/{t["id"]}.webp" alt="" loading="lazy" width="960" height="600"></div>'
+    n = next(p["n"] for p in CFG["phases"] if p["id"] == t["phase"])
+    return f'<div class="art ph"><span>{n}</span></div>'
+
+
 def card(t):
     href = f'tools/{t["id"]}.html'
     en = t.get("en_file")
@@ -28,7 +36,7 @@ def card(t):
     alt_link = (f'<a class="alt en" href="{href}" hreflang="de">German version →</a>'
                 f'<a class="alt de" href="tools/{en}" hreflang="en">Englische Version →</a>') if en else ""
     return (f'<article class="card">{hit}'
-            f'<div class="art"><img src="assets/illustrations/{t["id"]}.webp" alt="" loading="lazy" width="960" height="600"></div>'
+            + art(t) +
             f'<div class="cb"><h3>{bi(t["en"], t["de"])}</h3><p>{bi(t["sum_en"], t["sum_de"])}</p>'
             f'<div class="meta">{langs}<span class="pill gold">PDF</span>'
             f'<a class="pill ver" href="{REPO}/blob/main/changelog/{t["id"]}.md" title="Changelog">v{t["version"]}</a>'
@@ -122,6 +130,8 @@ HTML = f"""<!DOCTYPE html>
   .card .art{{background:#f7f4ee;aspect-ratio:1.6;overflow:hidden}}
   .card .art img{{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s}}
   .card:hover .art img{{transform:scale(1.04)}}
+  .card .art.ph{{display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),var(--navy-2))}}
+  .card .art.ph span{{font:800 64px/1 system-ui,sans-serif;color:var(--gold);opacity:.85}}
   .cb{{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}}
   .cb h3{{margin:0 0 6px;font-size:17px}}
   .cb p{{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.5;flex:1}}
