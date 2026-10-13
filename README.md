@@ -74,11 +74,6 @@ The phases follow **DMAIC** – the Six Sigma improvement cycle – with a strat
 <tr><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca-en.html"><img src="assets/illustrations/pdca.webp" alt="PDCA cycle" width="100%"></a><br><b>PDCA cycle</b><br><sub>Plan – Do – Check – Act: secure improvements, standardise and keep turning.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html">Deutsch</a> · <a href="changelog/pdca.md">v2.1.3</a></td></tr>
 </table>
 
-### ★ My own tools
-*Developed by Milad Karami, outside the improvement path.*
-
-- **[Prozessnavigator](https://milad-karami.github.io/lean-ci-kaizen-tools/my-tools/prozessnavigator.html)** – process description (ISO 9001), RASIC matrix and flowcharts in one place; exports a complete Excel file with real flowchart shapes and collapsible groups (+ / −), optionally only for clean-room or grey-room customers. *(German)*
-
 ## Inside the tools
 
 <table>
@@ -153,8 +148,6 @@ Die Phasen folgen **DMAIC** mit vorgeschalteter Kontext-Phase: **0 Kontext** →
 | 4 · Improve | **Heijunka** | Produktion nach Menge und Variantenmix nivellieren – gleichmäßiger Fluss statt Wellen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/heijunka-en.html) | [v2.1.3](changelog/heijunka.md) |
 | 4 · Improve | **Kanban-Regelkreisläufe** | Pull-Simulation mit animierter Fabrik, Optimierung auf 0 Fehlmengen und Rüstzeit. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-regelkreislauf.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kanban-control-loops.html) | [v2.2.2](changelog/kanban-regelkreislauf.md) |
 | 5 · Control | **PDCA-Zyklus** | Plan – Do – Check – Act: Verbesserungen absichern, standardisieren und weiterdrehen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/pdca-en.html) | [v2.1.3](changelog/pdca.md) |
-
-**★ Eigene Tools** (von Milad Karami, außerhalb des Verbesserungswegs): [Prozessnavigator](https://milad-karami.github.io/lean-ci-kaizen-tools/my-tools/prozessnavigator.html) – Prozessbeschreibung, RASIC und Flowcharts, Export als Excel mit aufklappbarer Gliederung.
 
 ### Einblick in die Tools
 

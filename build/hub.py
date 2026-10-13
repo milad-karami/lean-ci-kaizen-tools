@@ -61,19 +61,6 @@ def phase_section(p):
             f'<div class="grid">{"".join(card(t) for t in tools)}</div></section>')
 
 
-def my_tools():
-    """Eigene Tools von Milad Karami – bewusst außerhalb des DMAIC-Wegs und ohne die Toolkit-Ebene."""
-    return (f'<section class="phase" id="my-tools"><div class="ph-head"><span class="ph-n">★</span>'
-            f'<div><h2>{bi("My own tools", "Eigene Tools")}</h2><p class="q">{bi("Developed by Milad Karami – outside the improvement path.", "Von Milad Karami entwickelt – außerhalb des Verbesserungswegs.")}</p></div>'
-            f'<span class="ph-count">1 {bi("tool", "Tool")}</span></div><div class="grid">'
-            f'<article class="card"><a class="hit" href="my-tools/prozessnavigator.html" aria-label="Prozessnavigator"></a>'
-            f'<div class="art ph"><span>★</span></div><div class="cb"><h3>{bi("Process navigator", "Prozessnavigator")}</h3>'
-            f'<p>{bi("Process description (ISO 9001), RASIC matrix and flowcharts – exported as Excel with collapsible groups (+ / −).", "Prozessbeschreibung (ISO 9001), RASIC-Matrix und Flowcharts – Export als Excel mit aufklappbarer Gliederung (+ / −).")}</p>'
-            f'<div class="meta"><span class="pill">DE</span><span class="pill gold">Excel</span><span class="pill ver">v1.1.0</span>'
-            f'{dl_links("my-tools/prozessnavigator.html")}'
-            f'<span class="go">{bi("Open →", "Öffnen →")}</span></div></div></article></div></section>')
-
-
 def stepper():
     items = []
     for p in CFG["phases"]:
@@ -209,7 +196,6 @@ HTML = f"""<!DOCTYPE html>
     <div><b>{bi("3 · Report the result", "3 · Ergebnis berichten")}</b><p>{bi("Click “Report (PDF)” to create a professional report – choose the sections and save it as PDF.", "Klick auf „Bericht (PDF)“ erstellt einen professionellen Bericht – Abschnitte wählen und als PDF sichern.")}</p></div>
   </div>
   {"".join(phase_section(p) for p in CFG["phases"])}
-  {my_tools()}
 </main>
 <footer>
   <div class="wrap">

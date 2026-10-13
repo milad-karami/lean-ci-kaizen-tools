@@ -120,11 +120,6 @@ The phases follow **DMAIC** – the Six Sigma improvement cycle – with a strat
 {path_line("en")}. Click a picture to open the tool.
 
 {phases("en")}
-### ★ My own tools
-*Developed by Milad Karami, outside the improvement path.*
-
-- **[Prozessnavigator](https://milad-karami.github.io/lean-ci-kaizen-tools/my-tools/prozessnavigator.html)** – process description (ISO 9001), RASIC matrix and flowcharts in one place; exports a complete Excel file with real flowchart shapes and collapsible groups (+ / −), optionally only for clean-room or grey-room customers. *(German)*
-
 ## Inside the tools
 
 {gallery("en")}
@@ -178,8 +173,6 @@ origin visible: John Naska (mokka.solutions) → this version (Milad Karami), ea
 Die Phasen folgen **DMAIC** mit vorgeschalteter Kontext-Phase: {path_line("de")}.
 
 {table_de()}
-
-**★ Eigene Tools** (von Milad Karami, außerhalb des Verbesserungswegs): [Prozessnavigator](https://milad-karami.github.io/lean-ci-kaizen-tools/my-tools/prozessnavigator.html) – Prozessbeschreibung, RASIC und Flowcharts, Export als Excel mit aufklappbarer Gliederung.
 
 ### Einblick in die Tools
 
