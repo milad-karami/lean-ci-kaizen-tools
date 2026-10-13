@@ -1446,8 +1446,26 @@ html body header.hero:has(.tk-cred) .hero-actions a[hreflang]{display:none}
       if (cap && cap.nextSibling) fm.insertBefore(it, cap.nextSibling); else fm.appendChild(it);
     }
   }
+  /* ---------- Sprachwechsel: gleiche Stelle und gleicher Reiter in der anderen Sprache ---------- */
+  // Die Daten selbst teilen sich DE/EN über denselben localStorage-Namensraum; hier geht nur die Position mit.
+  function langSwitch(){
+    var tabs = function(){ return Array.prototype.slice.call(document.querySelectorAll('.tabbar .vsmtab')); };
+    document.querySelectorAll('header.hero a[hreflang]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var h = document.documentElement.scrollHeight - innerHeight, ti = tabs().findIndex(function(x){ return x.classList.contains('active'); });
+        location.href = a.getAttribute('href').split('?')[0] + '?tkpos=' + (h > 0 ? (scrollY / h).toFixed(4) : 0) + ',' + Math.max(ti, 0);
+      });
+    });
+    var m = /[?&]tkpos=([\d.]+),(\d+)/.exec(location.search);
+    if (!m) return;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+    var tb = tabs()[+m[2]]; if (+m[2] > 0 && tb) tb.click();
+    setTimeout(function(){ scrollTo(0, (document.documentElement.scrollHeight - innerHeight) * +m[1]); }, 350);
+  }
   window.TK_REPORT = {open:openDialog, build:buildReport, parse:parse};
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+  var boot = function(){ mount(); langSwitch(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
 </head>
