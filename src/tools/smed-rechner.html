@@ -1309,6 +1309,8 @@ const GLOSS={
   ruesten:{t:"Rüsten",d:"Umstellen eines Prozesses auf ein anderes Produkt/Werkzeug (z. B. Werkzeugwechsel, Vorbereiten). Im Beispiel: eine Maschine für die nächste Kanne Kaffee vorbereiten."},
   wertschoepfend:{t:"Wertschöpfend",d:"Tätigkeit, für die der Kunde zahlt (das eigentliche Produzieren). Rüsten ist nicht wertschöpfend – deshalb stört es, wenn die Maschine dafür steht."},
   parallel:{t:"Parallel rüsten",d:"Rüstschritte ausführen, während der Prozess weiterläuft – durch einen zweiten Mitarbeiter oder vorbereitete Teile (z. B. ein zweiter Aufsatz)."},
+  // FIX (Toolkit): eigener Glossar-Eintrag – der EPEI-Begriff zeigte vorher die EKUV-Erklärung
+  epei:{t:"EPEI",d:"Every Part Every Interval – die Zeit, bis jede Variante einmal produziert wurde. Kürzere Rüstzeiten senken das EPEI und damit Losgrößen und Bestände."},
   ekuv:{t:"EKUV-Analyse",d:"Eliminieren · Kombinieren · Umstellen · Vereinfachen. Eine Kategorisierung von Verbesserungsmöglichkeiten – hauptsächlich zur Rüstzeitoptimierung (entspricht dem englischen ECRS)."},
   eliminieren:{t:"Eliminieren",d:"Einen Rüstschritt ganz weglassen. Beispiel: die Kaffeemaschine direkt an den Wasseranschluss anschließen – das Wasser-Einfüllen entfällt."},
   kombinieren:{t:"Kombinieren",d:"Schritte zusammenfassen oder fest verbinden. Beispiel: Aufsatz und Filter als feste Einheit statt jedes Mal Filter wechseln."},
@@ -1713,7 +1715,7 @@ const FAQ=[
   a:`<p>Weil kurze Rüstzeiten kleine `+tip('Lose','los')+` wirtschaftlich machen. Solange ein Umbau lange dauert, muss man große Mengen am Stück fertigen, damit sich der Aufwand „lohnt".</p>
   <ul><li>Große Lose → viel Bestand → lange Durchlaufzeiten → gebundenes Kapital.</li>
   <li>Kurze Rüstzeit → kleine Lose → schnellere Reaktion auf Kundenwünsche.</li></ul>
-  <p class="faq-tip"><b>Zusammenhang zum Kurs:</b> SMED ist die Voraussetzung für Pull, Supermärkte und ein niedriges `+tip('EPEI','ekuv')+`. Ohne kurze Rüstzeiten bleibt jeder Fluss-Ansatz Theorie.</p>`},
+  <p class="faq-tip"><b>Zusammenhang zum Kurs:</b> SMED ist die Voraussetzung für Pull, Supermärkte und ein niedriges `+tip('EPEI','epei')+`. Ohne kurze Rüstzeiten bleibt jeder Fluss-Ansatz Theorie.</p>`},
 
  {g:'v2',q:'Brauche ich dafür eine teure Schulung?',
   a:`<p>Das Video ist da erfrischend deutlich: Der Autor fragt sich, <em>warum man dafür Schulungen anbietet, die mehrere hundert oder tausend Euro kosten</em>. Die Methode besteht aus drei Schritten und lässt sich am eigenen Prozess sofort ausprobieren.</p>

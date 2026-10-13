@@ -104,6 +104,24 @@ def changelog_link(tool, text, cls=""):
             f'target="_blank" rel="noopener" title="Changelog">{esc(text)}</a>')
 
 
+LI_SVG = ('<svg class="li" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 '
+          '2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.2c0-1.24'
+          '-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75V21h-4z"/></svg>')
+
+
+def credit_row(tool, lang):
+    """Kopfzeile wie im Kanban-Tool: LinkedIn, Sprachwechsel, Original-Tool."""
+    if lang == "en":
+        dev, li_t, other = "Development", "Milad Karami on LinkedIn", f'<a class="tm" href="{tool["id"]}.html" hreflang="de" title="Deutsche Version">🇩🇪 Deutsch</a>'
+        orig, month = "Original tool", "October 2026"
+    else:
+        dev, li_t, orig, month = "Entwicklung", "Milad Karami auf LinkedIn", "Original-Tool", "Oktober 2026"
+        other = f'<a class="tm" href="{tool["en_file"]}" hreflang="en" title="English version">🇬🇧 English</a>' if tool.get("en_file") else ""
+    return (f'<div class="credit tk-cred"><span class="cl">{dev}</span><a class="tm dev" href="https://www.linkedin.com/in/milad-karami-63075b78/" '
+            f'target="_blank" rel="noopener" title="{li_t}">{LI_SVG}Milad Karami</a>{other}'
+            f'<span class="cl orig">{orig}: <b>John Naska</b> (<a href="https://www.mokka.solutions/" target="_blank" rel="noopener">mokka.solutions</a>) · {month}</span></div>')
+
+
 def once(s, pattern, repl, what, flags=0):
     new, n = re.subn(pattern, repl, s, count=1, flags=flags)
     if n != 1:
@@ -129,6 +147,8 @@ def build_tool(tool, src_name, out_name, lang="de"):
            f'{changelog_link(tool, "v" + tool["version"], "tk-ver")}</div>'
     s = once(s, r'<header class="hero"[^>]*>', lambda m: m.group(0) + chip, "header.hero")
     if not special:
+        s = once(s, r'(<header class="hero".*?<div class="kicker">.*?</div>)', lambda m: m.group(1) + credit_row(tool, lang),
+                 "kicker", flags=re.S)
         s = once(s, r'<footer class="foot">', lambda m: m.group(0) + footer_block(lang, tool), "footer.foot")
     s = once(s, r"<title>([^<]*)</title>",
              lambda m: f"<title>{m.group(1)} · Lean · CI · Kaizen Toolkit</title>", "<title>")

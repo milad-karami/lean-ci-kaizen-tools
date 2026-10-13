@@ -97,3 +97,14 @@ html body header.hero:has(.tk-hero-art) h1,html body header.hero:has(.tk-hero-ar
 @media print{.tk-bar{display:none}}
 
 html body header.hero:has(> .tk-hero-art) .hero-cards{display:none!important}
+
+/* --- Kopfzeile Entwicklung / Sprache / Original (wie im Kanban-Tool) --- */
+html body header.hero .tk-cred{margin:10px 0 4px;font-size:12.5px;color:rgba(255,255,255,.72);display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;position:relative;z-index:1}
+html body header.hero .tk-cred a.tm{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;text-decoration:none;font-weight:700;transition:background .2s,border-color .2s}
+html body header.hero .tk-cred a.tm:hover{background:rgba(10,102,194,.35);border-color:#5aa0e6}
+html body header.hero .tk-cred a.tm.dev{background:rgba(242,201,76,.18);border-color:#f2c94c;font-size:13.5px;padding:5px 12px 5px 7px}
+html body header.hero .tk-cred .orig{flex-basis:100%}
+html body header.hero .tk-cred .li{width:16px;height:16px;border-radius:3px;background:#0a66c2;color:#fff;padding:2px}
+html body header.hero .tk-cred b{color:#fff}
+html body header.hero .tk-cred .orig a{color:inherit;text-decoration:underline}
+html body header.hero:has(.tk-cred) .hero-actions a[hreflang]{display:none}

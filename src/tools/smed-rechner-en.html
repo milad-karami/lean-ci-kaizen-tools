@@ -1309,6 +1309,8 @@ const GLOSS={
   ruesten:{t:"Changeover",d:"Switching a process over to another product/tool (e.g. tool change, preparation). In the example: preparing a machine for the next pot of coffee."},
   wertschoepfend:{t:"Value-adding",d:"An activity the customer pays for (the actual production). Changeover is not value-adding – which is why it hurts when the machine is stopped for it."},
   parallel:{t:"Parallel changeover",d:"Carrying out changeover steps while the process keeps running – by a second employee or with prepared parts (e.g. a second brew basket)."},
+  // FIX (Toolkit): eigener Glossar-Eintrag – der EPEI-Begriff zeigte vorher die EKUV-Erklärung
+  epei:{t:"EPEI",d:"Every Part Every Interval – the time until every variant has been produced once. Shorter changeover times lower the EPEI and with it lot sizes and inventory."},
   ekuv:{t:"ECRS analysis",d:"Eliminate · Combine · Rearrange · Simplify. A way of categorising improvement opportunities – mainly used for optimising changeover time (in German known as EKUV: Eliminieren · Kombinieren · Umstellen · Vereinfachen)."},
   eliminieren:{t:"Eliminate",d:"Leave out a changeover step entirely. Example: connect the coffee machine directly to the water supply – filling with water is no longer needed."},
   kombinieren:{t:"Combine",d:"Merge steps or join them permanently. Example: brew basket and filter as a fixed unit instead of changing the filter every time."},
@@ -1715,7 +1717,7 @@ const FAQ=[
   a:`<p>Because short changeover times make small `+tip('lots','los')+` economical. As long as a changeover takes a long time, large quantities have to be produced in one go to make the effort “worthwhile”.</p>
   <ul><li>Large lots → lots of inventory → long lead times → tied-up capital.</li>
   <li>Short changeover time → small lots → faster response to customer requirements.</li></ul>
-  <p class="faq-tip"><b>Connection to the course:</b> SMED is the prerequisite for pull, supermarkets and a low `+tip('EPEI','ekuv')+`. Without short changeover times, every flow approach remains theory.</p>`},
+  <p class="faq-tip"><b>Connection to the course:</b> SMED is the prerequisite for pull, supermarkets and a low `+tip('EPEI','epei')+`. Without short changeover times, every flow approach remains theory.</p>`},
 
  {g:'v2',q:'Do I need expensive training for this?',
   a:`<p>The video is refreshingly clear on this: the author wonders <em>why training courses costing several hundred or thousand euros are offered for this</em>. The method consists of three steps and can be tried out on your own process straight away.</p>

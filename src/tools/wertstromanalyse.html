@@ -2099,7 +2099,7 @@ function gbContent(step){
   if(step===1){
     const explain=explainBlock([
       {l:'Worum geht\u2019s?',p:'Zuerst klären wir, wie viel der Kunde pro Tag braucht und wie viel Zeit zum Arbeiten zur Verfügung steht. Daraus ergibt sich der '+'Kundentakt'+' – das Tempo, in dem produziert werden muss.'},
-      {l:'So rechnest du',calc:'Betriebszeit = '+p.taktShifts+' Schichten × ('+p.shiftMin+' − '+p.pause+' min Pause) = '+de(betriebszeitSec()/60)+' min/Tag<br>Kundentakt = '+de(betriebszeitSec()/60)+' min ÷ '+de(totalDemand())+' Stk = <b>'+de(takt())+' Sek/Stk</b>'},
+      {l:'So rechnest du',calc:'Betriebszeit = '+p.taktShifts+' Schichten × ('+p.shiftMin+' − '+p.pause+' min Pause) = '+de(betriebszeitSec()/60)+' min/Tag<br>Kundentakt = '+de(betriebszeitSec()/60)+' min × 60 s ÷ '+de(totalDemand())+' Stk = <b>'+de(takt())+' Sek/Stk</b>'},
       {l:'Tipp',k:'tip',p:'Lege je Produktvariante einen eigenen Tagesbedarf fest (z. B. »links« und »rechts«). Der Gesamtbedarf ist ihre Summe.'},
     ]);
     const vchips=vs.map((va,i)=>`<span class="vchip"><input class="name" data-vn="${i}" value="${esc(va.name)}"><input class="num" type="number" data-vd="${i}" value="${va.demand}"><span class="u">Stk/Tag</span>${vs.length>1?`<button data-vdel="${i}">✕</button>`:''}</span>`).join('');
@@ -2630,7 +2630,7 @@ const TASKCTX={
     auftrag:'Berechnen Sie den Kundentakt. Identifizieren Sie zwei Hauptprobleme im Ist-Wertstrom (Hinweis: Taktabstimmung der Stationen? Überflüssige Bestände?). Formulieren Sie Maßnahmen für den Soll-Wertstrom (Takt, Pull, Losgröße 1 …) und skizzieren Sie den Soll-Wertstrom.',
     steps:[
       {t:'Aufgabe im IST nachbauen – ist bereits fertig',d:'Das Beispiel ist 1:1 hinterlegt: Station A/B/C mit 40/30/35 Sek, Puffer 2 und 1 Tag, Fertigwarenlager 5 Tage, Los 200, Push. Schau dir in <b>Schritt 3 (Fluss)</b> an, wo diese Zahlen stehen.'},
-      {t:'Kundentakt ablesen',d:'Im Kennzahlen-Block oben: 1 Schicht × (480 − 30 min Pause) = 450 min ÷ 100 Stk = <b>270 Sek/Stk</b>. Alle drei Stationen liegen weit darunter – Kapazität ist also <i>nicht</i> das Problem.'},
+      {t:'Kundentakt ablesen',d:'Im Kennzahlen-Block oben: 1 Schicht × (480 − 30 min Pause) = 450 min × 60 s ÷ 100 Stk = <b>270 Sek/Stk</b>. Alle drei Stationen liegen weit darunter – Kapazität ist also <i>nicht</i> das Problem.'},
       {t:'Problem 1 finden: ungleiche Stationen',d:'Station A ist mit 40 Sek die langsamste (B 30, C 35). Sie ist der <b>relative Engpass</b> innerhalb der Linie – nicht gegenüber dem Kunden. Die Konsistenz-Checks markieren das automatisch.'},
       {t:'Problem 2 finden: Bestände &amp; Überproduktion',d:'2 + 1 + 5 = <b>8 Tage Liegezeit = 800 Stk</b> bei nur 105 Sek Bearbeitungszeit (Flussgrad ≈ 0 %). Dazu Los 200 bei 100 Stk/Tag Abruf → pro Los bleiben 100 Stk liegen, das Lager wächst dauerhaft.'},
       {t:'Auf SOLL wechseln und gestalten',d:'Der SOLL ist hinterlegt: A/B/C auf je 35 Sek austariert, zu einer <b>Zelle</b> verbunden, Los 1, Supermarkt statt Fertigwarenlager, Pull statt Push. Ergebnis: <b>2 Tage statt 8</b> (−75 %).'},

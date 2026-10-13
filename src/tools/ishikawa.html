@@ -7139,7 +7139,7 @@ function netzOeffnen(){
   const box=$('#netzBox'); if(!box) return;
   if(!$('#netzSvg')){
     box.innerHTML='<div class="nz-leiste"><input type="search" id="netzSuche" placeholder="Begriff oder Karte suchen …" aria-label="Im Wissensnetz suchen">'
-      +'<span class="nz-filter">'+['karte','phase','begriff','exkurs'].map(t=>'<button type="button" class="nz-f an" data-nz-typ="'+t+'"><i style="background:'+NZ_TYP[t][1]+'"></i>'+{karte:'Werkzeug 1',phase:'Werkzeug 2',begriff:'Begriffe',exkurs:'Exkurs'}[t]+'</button>').join('')+'</span>'
+      +'<span class="nz-filter">'+['karte','phase','begriff','exkurs'].map(t=>'<button type="button" class="nz-f an" data-nz-typ="'+t+'"><i style="background:'+NZ_TYP[t][1]+'"></i>'+{karte:'Karten',phase:'Phasen',begriff:'Begriffe',exkurs:'Exkurs'}[t]+'</button>').join('')+'</span>'
       +'<span class="nz-knoepfe"><button type="button" class="btn sm" data-nz="alle">Alles aufklappen</button><button type="button" class="btn sm" data-nz="zu">Zuklappen</button><button type="button" class="btn sm" data-nz="fit" title="Zoom so einstellen, dass alle sichtbaren Punkte ins Bild passen">Ganzes Netz zeigen</button></span></div>'
       +'<div class="nz-flaeche"><svg id="netzSvg" class="nz-svg" role="img" aria-label="Wissensnetz"></svg><div class="nz-zoom"><button type="button" data-nz="+" aria-label="Vergrößern">+</button><button type="button" data-nz="-" aria-label="Verkleinern">−</button></div><aside class="nz-info" id="netzInfo"></aside></div>'
       +'<div class="nz-fuss"><span id="netzStand"></span><span class="nz-fuss-a"><button type="button" class="btn sm" data-nz="export">Netz exportieren (JSON)</button><button type="button" class="btn sm" data-nz="import">Weiteres Tool-Netz laden …</button></span></div>';

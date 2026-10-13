@@ -70,8 +70,8 @@
       "en": "STEP / PEST analysis",
       "sum_de": "Makro-Umfeld systematisch scannen: soziale, technologische, ökonomische und politische Einflüsse.",
       "sum_en": "Scan the macro environment: social, technological, economic and political factors.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "step-analyse-en.html"
     },
     {
@@ -82,8 +82,8 @@
       "en": "Five Forces",
       "sum_de": "Branchenstruktur nach Porter: Rivalität, Lieferanten, Kunden, neue Anbieter, Substitute.",
       "sum_en": "Porter's industry structure: rivalry, suppliers, buyers, new entrants, substitutes.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "five-forces-en.html"
     },
     {
@@ -94,8 +94,8 @@
       "en": "SWOT analysis (incl. TOWS)",
       "sum_de": "Stärken, Schwächen, Chancen, Risiken – und daraus strategische Optionen ableiten.",
       "sum_en": "Strengths, weaknesses, opportunities, threats – turned into strategic options.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "swot-analyse-en.html"
     },
     {
@@ -106,8 +106,8 @@
       "en": "SIPOC",
       "sum_de": "Den Prozess abgrenzen: Lieferanten, Inputs, Prozessschritte, Outputs, Kunden.",
       "sum_en": "Scope the process: suppliers, inputs, process steps, outputs, customers.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "sipoc-en.html"
     },
     {
@@ -118,8 +118,8 @@
       "en": "Kano model",
       "sum_de": "Kundenanforderungen einordnen: Basis-, Leistungs- und Begeisterungsmerkmale.",
       "sum_en": "Classify customer requirements: basic, performance and delighter features.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "kano-modell-en.html"
     },
     {
@@ -130,8 +130,8 @@
       "en": "CTQ analysis",
       "sum_de": "Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen.",
       "sum_en": "Translate the voice of the customer into measurable critical-to-quality specs.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "ctq-analyse-en.html"
     },
     {
@@ -142,8 +142,8 @@
       "en": "Process walk-through (Gemba)",
       "sum_de": "Den Prozess vor Ort erfassen: systemisch denken, beobachten, dokumentieren.",
       "sum_en": "Capture the process on site: think in systems, observe, document.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "prozess-begehung-en.html"
     },
     {
@@ -154,8 +154,8 @@
       "en": "OEE calculator",
       "sum_de": "Gesamtanlageneffektivität = Verfügbarkeit × Leistung × Qualität – mit Verlustanalyse.",
       "sum_en": "Overall equipment effectiveness = availability × performance × quality – with loss analysis.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "oee-rechner-en.html"
     },
     {
@@ -166,8 +166,8 @@
       "en": "Value stream mapping (current & future)",
       "sum_de": "Material- und Informationsfluss sichtbar machen, Durchlaufzeit und Verschwendung finden.",
       "sum_en": "Make material and information flow visible, find lead time and waste.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "wertstromanalyse-en.html"
     },
     {
@@ -178,8 +178,8 @@
       "en": "Ishikawa diagram",
       "sum_de": "Ursachen strukturiert sammeln und bewerten (6M) – statt nur Symptome zu behandeln.",
       "sum_en": "Collect and rate causes systematically (6M) – instead of treating symptoms.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "ishikawa-en.html"
     },
     {
@@ -190,8 +190,8 @@
       "en": "SMED calculator",
       "sum_de": "Rüstzeit verkürzen: interne in externe Schritte verlagern, parallelisieren, standardisieren.",
       "sum_en": "Cut changeover time: move internal to external steps, parallelise, standardise.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "smed-rechner-en.html"
     },
     {
@@ -202,8 +202,8 @@
       "en": "EPEI calculator",
       "sum_de": "Every Part Every Interval: Losgröße und Supermarkt aus Rüstzeit und Kapazität ableiten.",
       "sum_en": "Every part every interval: derive lot size and supermarket from changeover and capacity.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "epei-rechner-en.html"
     },
     {
@@ -214,8 +214,8 @@
       "en": "Heijunka",
       "sum_de": "Produktion nach Menge und Variantenmix nivellieren – gleichmäßiger Fluss statt Wellen.",
       "sum_en": "Level production by volume and mix – a steady flow instead of waves.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "heijunka-en.html"
     },
     {
@@ -239,8 +239,8 @@
       "en": "PDCA cycle",
       "sum_de": "Plan – Do – Check – Act: Verbesserungen absichern, standardisieren und weiterdrehen.",
       "sum_en": "Plan – Do – Check – Act: secure improvements, standardise and keep turning.",
-      "version": "2.1.0",
-      "version_name": "English",
+      "version": "2.1.1",
+      "version_name": "Einheitlicher Kopf",
       "en_file": "pdca-en.html"
     }
   ]

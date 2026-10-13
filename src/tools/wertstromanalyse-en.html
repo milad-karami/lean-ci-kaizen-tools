@@ -2099,7 +2099,7 @@ function gbContent(step){
   if(step===1){
     const explain=explainBlock([
       {l:'What is this about?',p:'First we clarify how much the customer needs per day and how much time is available for work. This gives the '+'customer takt time'+' – the pace at which production has to run.'},
-      {l:'How to calculate it',calc:'Operating time = '+p.taktShifts+' shifts × ('+p.shiftMin+' − '+p.pause+' min break) = '+de(betriebszeitSec()/60)+' min/day<br>Customer takt time = '+de(betriebszeitSec()/60)+' min ÷ '+de(totalDemand())+' pcs = <b>'+de(takt())+' s/pc</b>'},
+      {l:'How to calculate it',calc:'Operating time = '+p.taktShifts+' shifts × ('+p.shiftMin+' − '+p.pause+' min break) = '+de(betriebszeitSec()/60)+' min/day<br>Customer takt time = '+de(betriebszeitSec()/60)+' min × 60 s ÷ '+de(totalDemand())+' pcs = <b>'+de(takt())+' s/pc</b>'},
       {l:'Tip',k:'tip',p:'Set a separate daily demand for each product variant (e.g. »left« and »right«). The total demand is their sum.'},
     ]);
     const vchips=vs.map((va,i)=>`<span class="vchip"><input class="name" data-vn="${i}" value="${esc(va.name)}"><input class="num" type="number" data-vd="${i}" value="${va.demand}"><span class="u">pcs/day</span>${vs.length>1?`<button data-vdel="${i}">✕</button>`:''}</span>`).join('');
@@ -2630,7 +2630,7 @@ const TASKCTX={
     auftrag:'Calculate the customer takt time. Identify two main problems in the current-state value stream (hint: takt alignment of the stations? Excess inventory?). Formulate measures for the future-state value stream (takt, pull, lot size 1 …) and sketch the future-state value stream.',
     steps:[
       {t:'Rebuild the task in the current state – already done',d:'The example is stored 1:1: stations A/B/C with 40/30/35 s, buffers of 2 and 1 days, finished goods store 5 days, lot 200, push. Take a look at <b>step 3 (flow)</b> to see where these numbers are.'},
-      {t:'Read off the customer takt time',d:'In the key figures block above: 1 shift × (480 − 30 min break) = 450 min ÷ 100 pcs = <b>270 s/pc</b>. All three stations are far below it – so capacity is <i>not</i> the problem.'},
+      {t:'Read off the customer takt time',d:'In the key figures block above: 1 shift × (480 − 30 min break) = 450 min × 60 s ÷ 100 pcs = <b>270 s/pc</b>. All three stations are far below it – so capacity is <i>not</i> the problem.'},
       {t:'Find problem 1: uneven stations',d:'At 40 s, station A is the slowest (B 30, C 35). It is the <b>relative bottleneck</b> within the line – not compared with the customer. The consistency checks flag this automatically.'},
       {t:'Find problem 2: inventories &amp; overproduction',d:'2 + 1 + 5 = <b>8 days of waiting time = 800 pcs</b> with only 105 s of processing time (flow efficiency ≈ 0 %). On top of that, lot 200 against a call-off of 100 pcs/day → 100 pcs are left over per lot, so the store keeps growing.'},
       {t:'Switch to FUTURE and design',d:'The future state is stored: A/B/C balanced to 35 s each, linked into a <b>cell</b>, lot 1, supermarket instead of finished goods store, pull instead of push. Result: <b>2 days instead of 8</b> (−75 %).'},

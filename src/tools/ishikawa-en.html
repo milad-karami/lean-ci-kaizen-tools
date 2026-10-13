@@ -7139,7 +7139,7 @@ function netzOeffnen(){
   const box=$('#netzBox'); if(!box) return;
   if(!$('#netzSvg')){
     box.innerHTML='<div class="nz-leiste"><input type="search" id="netzSuche" placeholder="Search for a term or card …" aria-label="Search the knowledge map">'
-      +'<span class="nz-filter">'+['karte','phase','begriff','exkurs'].map(t=>'<button type="button" class="nz-f an" data-nz-typ="'+t+'"><i style="background:'+NZ_TYP[t][1]+'"></i>'+{karte:'Tool 1',phase:'Tool 2',begriff:'Terms',exkurs:'Aside'}[t]+'</button>').join('')+'</span>'
+      +'<span class="nz-filter">'+['karte','phase','begriff','exkurs'].map(t=>'<button type="button" class="nz-f an" data-nz-typ="'+t+'"><i style="background:'+NZ_TYP[t][1]+'"></i>'+{karte:'Cards',phase:'Phases',begriff:'Terms',exkurs:'Aside'}[t]+'</button>').join('')+'</span>'
       +'<span class="nz-knoepfe"><button type="button" class="btn sm" data-nz="alle">Expand all</button><button type="button" class="btn sm" data-nz="zu">Collapse</button><button type="button" class="btn sm" data-nz="fit" title="Set the zoom so that all visible points fit in the view">Show whole map</button></span></div>'
       +'<div class="nz-flaeche"><svg id="netzSvg" class="nz-svg" role="img" aria-label="Knowledge map"></svg><div class="nz-zoom"><button type="button" data-nz="+" aria-label="Zoom in">+</button><button type="button" data-nz="-" aria-label="Zoom out">−</button></div><aside class="nz-info" id="netzInfo"></aside></div>'
       +'<div class="nz-fuss"><span id="netzStand"></span><span class="nz-fuss-a"><button type="button" class="btn sm" data-nz="export">Export map (JSON)</button><button type="button" class="btn sm" data-nz="import">Load another tool map …</button></span></div>';

@@ -4,12 +4,18 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.1.0** | English | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/smed-rechner-v2.1.0) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner-en.html) |
+| **2.1.1** | Einheitlicher Kopf | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/smed-rechner-v2.1.1) |
+| 2.1.0 | English | 2026-10-13 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/smed-rechner-v2.1.0) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner-en.html) |
 | 2.0.0 | Toolkit-Fassung | 2026-10-12 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/smed-rechner-v2.0.0) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/smed-rechner.html) |
 | 1.0.0 | Original (John Naska) | 2026-10 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/smed-rechner-v1.0.0) |
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.1.1 – Einheitlicher Kopf (2026-10-13)
+
+- Kopfzeile wie im Kanban-Tool: Entwicklung mit LinkedIn-Link, Sprachwechsel, Hinweis auf das Original-Tool
+- Fehler behoben: Der Begriff „EPEI“ im FAQ zeigte die EKUV-Erklärung – jetzt eigener Glossar-Eintrag
 
 ## 2.1.0 – English (2026-10-13)
 
