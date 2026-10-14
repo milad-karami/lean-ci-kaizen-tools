@@ -4,11 +4,16 @@
 
 | Version | Name | Datum | Download |
 |---|---|---|---|
-| **2.1.3** | Toolkit-Fassung | 2026-10-14 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/dmaic-dmadv-v2.1.3) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv.html) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv-en.html) |
+| **2.1.4** | Illustration | 2026-10-14 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/dmaic-dmadv-v2.1.4) |
+| 2.1.3 | Toolkit-Fassung | 2026-10-14 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/dmaic-dmadv-v2.1.3) · [Live](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv.html) · [Live EN](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv-en.html) |
 | 1.0.0 | Original (John Naska) | 2026-10 | [Release](https://github.com/milad-karami/lean-ci-kaizen-tools/releases/tag/dmaic-dmadv-v1.0.0) |
 
 Original-Tool: John Naska ([mokka.solutions](https://www.mokka.solutions/)), veröffentlicht mit seiner Genehmigung.
 Weiterentwicklung: [Milad Karami](https://www.linkedin.com/in/milad-karami-63075b78/).
+
+## 2.1.4 – Illustration (2026-10-14)
+
+- Eigene 3D-Illustration (erstellt mit Codex) im Kopfbereich, auf der Startseite und im README – statt des Platzhalters
 
 ## 2.1.3 – Toolkit-Fassung (2026-10-14)
 
