@@ -2,10 +2,10 @@
 
 <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/"><img src="assets/logo-wordmark.svg" alt="Lean · CI · Kaizen Toolkit" width="300"></a>
 
-### 16 free, interactive tools for Lean, continuous improvement, Six Sigma and Kaizen – organised along the improvement process.
+### 17 free, interactive tools for Lean, continuous improvement, Six Sigma and Kaizen – organised along the improvement process.
 
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20Live%20demo-open%20in%20browser-f2c94c?style=for-the-badge&labelColor=14213d)](https://milad-karami.github.io/lean-ci-kaizen-tools/)
-[![Tools](https://img.shields.io/badge/tools-16-3b6fd6?style=for-the-badge&labelColor=14213d)](#the-tools-along-the-improvement-process)
+[![Tools](https://img.shields.io/badge/tools-17-3b6fd6?style=for-the-badge&labelColor=14213d)](#the-tools-along-the-improvement-process)
 [![Releases](https://img.shields.io/badge/versions-releases-ef7fb3?style=for-the-badge&labelColor=14213d)](https://github.com/milad-karami/lean-ci-kaizen-tools/releases)
 
 **🇬🇧 English** · 🇩🇪 [Deutsch](#deutsch)
@@ -16,7 +16,7 @@
 
 ## Why this toolkit
 
-Improvement projects fail less often because of missing knowledge than because of missing structure. This toolkit puts 16
+Improvement projects fail less often because of missing knowledge than because of missing structure. This toolkit puts 17
 proven methods in the order you actually need them – from understanding the context to sustaining the result – and makes
 each one hands-on: enter your own data, see the result immediately and hand over a clean PDF report.
 
@@ -42,7 +42,8 @@ The phases follow **DMAIC** – the Six Sigma improvement cycle – with a strat
 *Which process, which problem, what does the customer need?*
 
 <table>
-<tr><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc-en.html"><img src="assets/illustrations/sipoc.webp" alt="SIPOC" width="100%"></a><br><b>SIPOC</b><br><sub>Scope the process: suppliers, inputs, process steps, outputs, customers.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html">Deutsch</a> · <a href="changelog/sipoc.md">v2.1.3</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell-en.html"><img src="assets/illustrations/kano-modell.webp" alt="Kano model" width="100%"></a><br><b>Kano model</b><br><sub>Classify customer requirements: basic, performance and delighter features.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html">Deutsch</a> · <a href="changelog/kano-modell.md">v2.1.3</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html"><img src="assets/illustrations/ctq-analyse.webp" alt="CTQ analysis" width="100%"></a><br><b>CTQ analysis</b><br><sub>Translate the voice of the customer into measurable critical-to-quality specs.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html">Deutsch</a> · <a href="changelog/ctq-analyse.md">v2.1.3</a></td></tr>
+<tr><td width="33%" valign="top"><b>DMAIC & DMADV</b><br><sub>The two Six Sigma paths: improve what exists (DMAIC) or design something new (DMADV) – with project charter, metric and tollgates.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv.html">Deutsch</a> · <a href="changelog/dmaic-dmadv.md">v2.1.3</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc-en.html"><img src="assets/illustrations/sipoc.webp" alt="SIPOC" width="100%"></a><br><b>SIPOC</b><br><sub>Scope the process: suppliers, inputs, process steps, outputs, customers.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html">Deutsch</a> · <a href="changelog/sipoc.md">v2.1.3</a></td><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell-en.html"><img src="assets/illustrations/kano-modell.webp" alt="Kano model" width="100%"></a><br><b>Kano model</b><br><sub>Classify customer requirements: basic, performance and delighter features.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html">Deutsch</a> · <a href="changelog/kano-modell.md">v2.1.3</a></td></tr>
+<tr><td width="33%" valign="top"><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html"><img src="assets/illustrations/ctq-analyse.webp" alt="CTQ analysis" width="100%"></a><br><b>CTQ analysis</b><br><sub>Translate the voice of the customer into measurable critical-to-quality specs.</sub><br><a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html"><b>Open</b></a> · <a href="https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html">Deutsch</a> · <a href="changelog/ctq-analyse.md">v2.1.3</a></td></tr>
 </table>
 
 ### 2 · Measure
@@ -117,7 +118,7 @@ origin visible: John Naska (mokka.solutions) → this version (Milad Karami), ea
 
 ## Deutsch
 
-**16 kostenlose, interaktive Werkzeuge für Lean, KVP, Six Sigma und Kaizen – geordnet entlang des Verbesserungsprozesses.**
+**17 kostenlose, interaktive Werkzeuge für Lean, KVP, Six Sigma und Kaizen – geordnet entlang des Verbesserungsprozesses.**
 [Live-Demo öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/) und oben rechts „🇩🇪 Deutsch“ wählen.
 
 - **Kostenlos und privat** – läuft komplett im Browser, ohne Konto und Server; deine Daten bleiben auf deinem Gerät
@@ -135,6 +136,7 @@ Die Phasen folgen **DMAIC** mit vorgeschalteter Kontext-Phase: **0 Kontext** →
 | 0 · Kontext | **STEP- / PEST-Analyse** | Makro-Umfeld systematisch scannen: soziale, technologische, ökonomische und politische Einflüsse. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/step-analyse-en.html) | [v2.1.3](changelog/step-analyse.md) |
 | 0 · Kontext | **Five Forces** | Branchenstruktur nach Porter: Rivalität, Lieferanten, Kunden, neue Anbieter, Substitute. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/five-forces-en.html) | [v2.1.3](changelog/five-forces.md) |
 | 0 · Kontext | **SWOT-Analyse (inkl. TOWS)** | Stärken, Schwächen, Chancen, Risiken – und daraus strategische Optionen ableiten. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/swot-analyse-en.html) | [v2.1.3](changelog/swot-analyse.md) |
+| 1 · Define | **DMAIC & DMADV** | Die zwei Six-Sigma-Wege: Bestehendes verbessern (DMAIC) oder Neues entwerfen (DMADV) – mit Project Charter, Kennzahl und Tollgates. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/dmaic-dmadv-en.html) | [v2.1.3](changelog/dmaic-dmadv.md) |
 | 1 · Define | **SIPOC** | Den Prozess abgrenzen: Lieferanten, Inputs, Prozessschritte, Outputs, Kunden. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/sipoc-en.html) | [v2.1.3](changelog/sipoc.md) |
 | 1 · Define | **Kano-Modell** | Kundenanforderungen einordnen: Basis-, Leistungs- und Begeisterungsmerkmale. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/kano-modell-en.html) | [v2.1.3](changelog/kano-modell.md) |
 | 1 · Define | **CTQ-Analyse** | Die Stimme des Kunden in messbare, qualitätskritische Merkmale übersetzen. | [Öffnen](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse.html) · [English](https://milad-karami.github.io/lean-ci-kaizen-tools/tools/ctq-analyse-en.html) | [v2.1.3](changelog/ctq-analyse.md) |

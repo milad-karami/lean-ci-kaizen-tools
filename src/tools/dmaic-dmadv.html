@@ -1575,7 +1575,7 @@ function renderKpi(){
   let pct=0, txt="Trage Baseline und Ziel ein – der Fortschritt erscheint automatisch.";
   if(!isNaN(b)&&!isNaN(g)&&!isNaN(n)&&b!==g){
     pct=Math.max(0,Math.min(100,(n-b)/(g-b)*100));
-    txt=`Fortschritt: <b>${pct.toFixed(0)} %</b> des Weges von ${k.base} auf ${k.goal} ${esc(k.unit||"")}`;
+    txt=`Fortschritt: <b>${pct.toFixed(0)} %</b> des Weges von ${esc(k.base)} auf ${esc(k.goal)} ${esc(k.unit||"")}`; // FIX (Toolkit): Baseline/Ziel maskieren – sonst landete HTML aus importierten Dateien ungefiltert im Tool
     if(pct>=100)txt+=" · <b style='color:var(--pos-d)'>Ziel erreicht</b>";
   }
   box.innerHTML=`<div class="dmblock">
@@ -1768,7 +1768,7 @@ function buildJSON(){const ex=curEx();
 }
 function buildObsidian(){const ex=curEx();const today=new Date().toISOString().slice(0,10);const F="\u0060\u0060\u0060";
   const tl=(mk,tr)=>METHODS[mk].steps.map((s,i)=>"- **"+s.lab+"** ("+s.de+"): "+s.what+"\n\t- Im Fallbeispiel: "+(tr.ex[i]||"(leer)")+"\n\t- Werkzeuge: "+s.tools.map(t=>t[0]).join(", ")).join("\n");
-  return ["---","tags: [six-sigma, dmaic, dmadv, dfss, lean, prozessverbesserung]","fallbeispiel: "+ex.label,"erstellt: "+today,"---","",
+  return ["---","tags: [six-sigma, dmaic, dmadv, dfss, lean, prozessverbesserung]","fallbeispiel: "+JSON.stringify(String(ex.label||"")),/* FIX (Toolkit): Wert als YAML-String, »:« im Namen zerbrach den Kopf */"erstellt: "+today,"---","",
     "# DMAIC & DMADV — die zwei Six-Sigma-Methodiken","",
     "> [!info] Kernidee","> DMAIC verbessert Bestehendes (…Improve·Control), DMADV entwirft Neues (…Design·Verify). Gemeinsamer Start: Define·Measure·Analyze.","",
     "## Methodenwahl",F+"mermaid","flowchart TD","  A{Prozess existiert schon?} -->|Ja, verbessern| B[DMAIC]","  A -->|Nein, neu bauen| C[DMADV / DFSS]","  B --> D[D-M-A-Improve-Control]","  C --> E[D-M-A-Design-Verify]",F,"",
@@ -1782,7 +1782,8 @@ el("#expJson").addEventListener("click",()=>download("dmaic-dmadv.json",buildJSO
 el("#expObs").addEventListener("click",()=>download("dmaic-dmadv-obsidian.md",buildObsidian(),"text/markdown;charset=utf-8"));
 
 /* ===== Import ===== */
-function stateComment(){return '<!-- tool-state: '+JSON.stringify({ex:STATE.ex,method:STATE.method,data:curEx()})+' -->';}
+// FIX (Toolkit): »-->« in einem Text (z. B. Szenario) beendete den Kommentar vorzeitig – Re-Import scheiterte. »>« als \u003e (gültiges JSON).
+function stateComment(){return '<!-- tool-state: '+JSON.stringify({ex:STATE.ex,method:STATE.method,data:curEx()}).replace(/>/g,'\\u003e')+' -->';}
 function importFromText(text){
   text=String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let j=null; try{j=JSON.parse(text);}catch(e){}
@@ -1793,7 +1794,8 @@ function importFromText(text){
 }
 let impTimer=null,impTimer2=null;
 function setImpNote(msg,err){const n=el('#impNote');if(!n)return;n.style.color=err?'var(--neg-d)':'var(--pos-strong)';n.textContent=msg;n.title=msg;n.style.opacity='1';if(impTimer)clearTimeout(impTimer);if(impTimer2)clearTimeout(impTimer2);impTimer=setTimeout(()=>{n.style.opacity='0';impTimer2=setTimeout(()=>{n.textContent='';n.title='';n.style.opacity='1';},850);},10000);}
-function applyImport(st,fname){const id=(st&&st.ex&&EXAMPLES[st.ex])?st.ex:STATE.ex;const d=A.shape(st);STATE.ex=id;if(d)WORK[id]=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);STATE.phase=0;el("#exampleSel").value=id;renderScenobar();renderStepper();renderPhase();setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
+// FIX (Toolkit): Ungültige Daten meldeten »geladen« und schalteten auf »Import (ungespeichert)« um, obwohl nichts übernommen wurde – jetzt Fehlermeldung.
+function applyImport(st,fname){const id=(st&&st.ex&&EXAMPLES[st.ex])?st.ex:STATE.ex;const d=A.shape(st);if(!d)throw new Error('ungültige Daten');STATE.ex=id;WORK[id]=d;setTimeout(()=>{curKey='orphan';orphanName='Import – '+String(fname||'Datei').replace(/\.[^.]+$/,'');SNAP='';markDirty();refreshDropdown();},0);STATE.phase=0;el("#exampleSel").value=id;renderScenobar();renderStepper();renderPhase();setImpNote('\u2713 \u201e'+(fname||'Datei')+'\u201c geladen',false);}
 el('#importBtn').addEventListener('click',()=>el('#importFile').click());
 el('#importFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{applyImport(importFromText(r.result),file.name);}catch(err){setImpNote('\u26a0 Datei konnte nicht gelesen werden',true);}finally{e.target.value='';}};r.onerror=()=>{setImpNote('\u26a0 Lesefehler',true);};r.readAsText(file);});
 

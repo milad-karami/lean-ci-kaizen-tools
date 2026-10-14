@@ -21,7 +21,7 @@ process (DMAIC with a strategic context phase).
 | Phase | Tools (`src/tools/…`) |
 |---|---|
 | 0 · Context & strategy | `step-analyse.html`, `five-forces.html`, `swot-analyse.html` |
-| 1 · Define | `sipoc.html`, `kano-modell.html`, `ctq-analyse.html` |
+| 1 · Define | `dmaic-dmadv.html`, `sipoc.html`, `kano-modell.html`, `ctq-analyse.html` |
 | 2 · Measure | `prozess-begehung.html`, `oee-rechner.html`, `prozess-analyse.html` |
 | 3 · Analyze | `wertstromanalyse.html`, `ishikawa.html` |
 | 4 · Improve | `smed-rechner.html`, `epei-rechner.html`, `heijunka.html`, `kanban-regelkreislauf.html` |
