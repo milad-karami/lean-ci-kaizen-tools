@@ -166,8 +166,8 @@
       "en": "Process analysis (Toyota Kata)",
       "sum_de": "Ist-Zustand einer Linie in fünf Schritten aufnehmen: Ausbringung, Kundentakt, Ablaufmuster, Anlagenkapazität, Kern-Arbeitsinhalt.",
       "sum_en": "Capture a line's current condition in five steps: output, customer takt, work patterns, equipment capacity, core work content.",
-      "version": "2.1.3",
-      "version_name": "HTML-Download",
+      "version": "2.1.4",
+      "version_name": "Illustration",
       "en_file": "prozess-analyse-en.html"
     },
     {
